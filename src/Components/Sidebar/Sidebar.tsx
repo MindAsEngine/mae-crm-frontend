@@ -1,91 +1,99 @@
-import { cn } from '@bem-react/classname'
 import { NavLink } from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
 import { Button } from '../Button/Button.tsx'
+import * as React from 'react'
+import styles from './Sidebar.module.scss'
+import clsx from "clsx";
 
+const userImage = '/public/images/user.png'
 export default function Sidebar() {
-	const cnSidebar = cn('Sidebar')
-	const cnNavigation = cn('Navigation')
-	const cnLogo = cn('Logo')
-	const cnUserBlock = cn('UserBlock')
-	const linkClassName = (isActive: boolean) =>
-		isActive ? cnNavigation('Link', { active: true }) : cnNavigation('Link')
+	const [isOpened, setIsOpened] = React.useState<boolean>(false)
+	const listItemClassName = (isActive: boolean) =>
+		isActive ? clsx(styles.list__item, styles.list__item_active) : styles.list__item
+
+	console.log(isOpened);
 	return (
-		<aside className={cnSidebar()}>
-			<img
-				className={cnLogo({ placed: cnSidebar() })}
-				alt={'Golden House Logo'}
-			/>
-			<nav className={cnNavigation()}>
-				<ul className={cnNavigation('List')}>
+		<aside className={styles.sidebar}>
+			{/*<img*/}
+			{/*	className={clsx(styles.logo)}*/}
+			{/*	alt={'Logo'}*/}
+			{/*/>*/}
+			<nav className={styles.navigation}>
+				<ul className={styles.list}>
 					<li>
 						<NavLink
 							to={'/tasks'}
 							children={routerNames['/tasks']}
-							className={({ isActive }) => linkClassName(isActive)}
+							className={({ isActive }) =>
+								clsx(listItemClassName(isActive), styles.list__item_requests)}
 						/>
 					</li>
 					<li>
 						<NavLink
 							to={'/audience'}
 							children={routerNames['/audience']}
-							className={({ isActive }) => linkClassName(isActive)}
+							className={({ isActive }) =>
+								clsx(listItemClassName(isActive), styles.list__item_audience)}
 						/>
 					</li>
 					<li>
 						<NavLink
 							to={'/advertisement'}
 							children={routerNames['/advertisement']}
-							className={({ isActive }) => linkClassName(isActive)}
+							className={({ isActive }) =>
+								clsx(listItemClassName(isActive), styles.list__item_advertisement)}
 						/>
 					</li>
-					<li>
-						<span className={cnNavigation('Link')}>
-							{routerNames['/reports']}
-						</span>
-						<span>
-							<img alt={'>'} />
-						</span>
-						<ul>
-							<li>
-								<NavLink
-									to={'/reports/call-center'}
-									children={routerNames['/reports/call-center']}
-									className={({ isActive }) => linkClassName(isActive)}
-								/>
-							</li>
+					<li onClick={(e) => e.target.tagName === 'SPAN' && setIsOpened(!isOpened)}>
+
+						<span className={clsx(styles.list__item,  styles.list__item_reports,isOpened && styles.list__item_opened)}
+						>{routerNames['/reports']}</span>
+
+
+						<ul className={clsx(styles.sublist, isOpened && styles.sublist_opened, styles.list)}>
+
 							<li>
 								<NavLink
 									to={'/reports/regions'}
 									children={routerNames['/reports/regions']}
-									className={({ isActive }) => linkClassName(isActive)}
+									className={({isActive}) => listItemClassName(isActive)}
 								/>
 							</li>
 							<li>
 								<NavLink
 									to={'/reports/processed-requests-speed'}
 									children={routerNames['/reports/processed-requests-speed']}
-									className={({ isActive }) => linkClassName(isActive)}
+									className={({isActive}) => listItemClassName(isActive)}
+								/>
+							</li>
+							<li>
+								<NavLink
+									to={'/reports/call-center'}
+									children={routerNames['/reports/call-center']}
+									className={({isActive}) => listItemClassName(isActive)}
 								/>
 							</li>
 						</ul>
 					</li>
 				</ul>
 			</nav>
-			<div className={cnUserBlock()}>
-				<div className={cnUserBlock('Info')}>
-					<div className={cnUserBlock('Avatar')}>
-						<img alt={'User Avatar'} />
+			<div className={styles.profile}>
+				<div className={styles.profile__info}>
+					<div className={styles.profile__avatar}>
+						<img alt={'Avatar'} src={userImage} />
 					</div>
-					<div className={cnUserBlock('Name')}>
-						<span>Иван Иванов</span>
-						<span>Менеджер</span>
+					<div className={styles.profile__text}>
+						<span className={styles.profile__name}>Алина Иванова</span>
+						<span className={styles.profile__role}>менеджер</span>
 					</div>
 				</div>
-				<Button className={cnUserBlock('Logout')}>
-					<img alt={'Logout'} />
-					Выйти
-				</Button>
+				<div className={styles.profile__settings}>
+					<Button className={styles.profile__button}>
+						<span className={styles.profile__logout}>
+							Выйти
+						</span>
+					</Button>
+				</div>
 			</div>
 		</aside>
 	)

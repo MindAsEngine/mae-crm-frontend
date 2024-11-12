@@ -5,15 +5,16 @@ import Layout from './Components/Layout/Layout.tsx'
 import RegionsReport from './Pages/Reports/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/ProcessedRequestsSpeedReport.tsx'
 import NotFoundPage from './Pages/NotFoundPage.tsx'
+import * as React from 'react'
 export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
-	'/tasks': 'Задачи/Заявки',
+	'/tasks': 'Заявки',
 	'/audience': 'Аудитория',
 	'/advertisement': 'Реклама',
 	'/reports': 'Отчеты',
-	'/reports/call-center': 'Колл-центр',
 	'/reports/regions': 'Регионы покупки недвижимости',
 	'/reports/processed-requests-speed': 'Скорость отработанных заявок',
+	'/reports/call-center': 'Колл-центр',
 }
 
 export const router = createBrowserRouter([
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/tasks',
-				element: <Navigate to={'/'} />,
+				element: <HomePage />,
 			},
 			{
 				path: '/audience',
@@ -64,4 +65,12 @@ export const router = createBrowserRouter([
 			},
 		],
 	},
-])
+], {
+  future: {
+	  v7_relativeSplatPath: true,
+	  v7_fetcherPersist: true,
+	  v7_normalizeFormMethod: true,
+	  v7_partialHydration: true,
+	  v7_skipActionErrorRevalidation: true,
+  },
+});

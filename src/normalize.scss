@@ -1,9 +1,9 @@
 /* Подключаем стили со шрифтами, так как они нужны на всех страницах */
 
-body{
-  box-sizing: border-box;
-  margin: 0;
-  line-height: 1;
+body {
+	box-sizing: border-box;
+	margin: 0;
+	line-height: 1;
 }
 
 /* Отключаем браузерные дефолтные стили для всех элементов */
@@ -89,13 +89,13 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  font: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-  border: 0;
-  text-rendering: optimizelegibility;
+	margin: 0;
+	padding: 0;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
+	border: 0;
+	text-rendering: optimizelegibility;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -111,34 +111,34 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+	display: block;
 }
-
 
 ol,
 ul {
-  list-style: none;
+	list-style: none;
 }
 
 blockquote,
 q {
-  quotes: none;
+	quotes: none;
 }
 
 blockquote::before,
 blockquote::after,
 q::before,
 q::after {
-  content: "";
-  content: none;
+	content: '';
+	content: none;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
-html, body {
-  height: 100vh;
-  height: 100dvh;
+html,
+body {
+	height: 100vh;
+	height: 100dvh;
 }

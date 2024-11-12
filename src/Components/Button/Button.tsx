@@ -1,8 +1,11 @@
 import { IClassNameProps } from '@bem-react/core'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import React, { FC } from 'react'
-import { cn } from '@bem-react/classname'
+import styles from './button.module.scss'
+import clsx from "clsx";
 
-export interface IButtonProps extends IClassNameProps {
+interface IButtonProps extends IClassNameProps {
 	as?: React.ElementType
 	children: React.ReactNode
 	onClick?: () => void
@@ -14,9 +17,9 @@ export const Button: FC<IButtonProps> = ({
 	as: Component = 'button',
 	...props
 }) => {
-	const cnButton = cn('Button')
+
 	return (
-		<Component {...props} className={cnButton({}, [className])}>
+		<Component {...props} className={clsx(className, styles.button)}>
 			{children}
 		</Component>
 	)

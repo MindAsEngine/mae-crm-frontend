@@ -1,39 +1,46 @@
-import { cn } from '@bem-react/classname'
 import { NavLink, useLocation } from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
+import * as React from 'react'
+import styles from './Header.module.scss'
+import clsx from "clsx";
 
 export default function Header() {
 	const location = useLocation()
 	const pathnames = location.pathname.split('/').filter((x) => x)
-	const cnHeader = cn('Header')
-	const cnBreadcrumb = cn('Breadcrumb')
 
 	return (
-		<header className={cnHeader()}>
-			<nav className={cnBreadcrumb()}>
+		<header className={styles.header}>
+			<nav className={styles.breadcrumb}>
 				<NavLink
 					to={'/'}
-					className={cnBreadcrumb('Link')}
+					className={({ isActive }) =>
+								isActive
+									? clsx(styles.breadcrumb__link, styles.breadcrumb__link_active)
+									: styles.breadcrumb__link
+							}
 					children={'Главная'}
 				/>
 
 				{pathnames.map((name, index) => {
 					const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`
+					if (routerNames[routeTo] === undefined || routerNames[routeTo] === 'Отчеты') {
+						return null
+					}
 					return (
 						<NavLink
 							to={routeTo}
 							key={name}
 							className={({ isActive }) =>
 								isActive
-									? cnBreadcrumb('Link', { active: true })
-									: cnBreadcrumb('Link')
+									? clsx(styles.breadcrumb__link, styles.breadcrumb__link_active)
+									: styles.breadcrumb__link
 							}
 							children={routerNames[routeTo]}
 						/>
 					)
 				})}
 			</nav>
-			<h1 className={cnHeader('Title')}>{routerNames[location.pathname]}</h1>
+			<h1 className={styles.title}>{routerNames[location.pathname]}</h1>
 		</header>
 	)
 }

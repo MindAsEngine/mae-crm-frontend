@@ -1,11 +1,21 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
-import './index.scss'
+import './normalize.scss'
+import './font.scss'
 import { router } from './router'
+import * as React from 'react'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<RouterProvider router={router}></RouterProvider>
+		<RouterProvider
+			router={router}
+			future={{
+				v7_startTransition: true,
+				
+			}}
+		/>
 	</StrictMode>
 )

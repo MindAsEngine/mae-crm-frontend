@@ -1,14 +1,14 @@
 import Sidebar from '../Sidebar/Sidebar.tsx'
-import { cn } from '@bem-react/classname'
 import Header from '../Header/Header.tsx'
 import { Outlet } from 'react-router-dom'
+import * as React from 'react'
+import styles from './Layout.module.scss'
 
 export default function Layout() {
-	const cnContent = cn('Content')
 	return (
-		<div>
+		<div className={styles.layout}>
 			<Sidebar />
-			<div className={cnContent()}>
+			<div className={styles.layout__content}>
 				<Header />
 				<Outlet />
 			</div>
