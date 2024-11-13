@@ -15,15 +15,16 @@ export default function TableRow({ row, isChecked, setCheckedRows, header }: Tab
 			{header.map((headerCell, index) => (
 				(headerCell.is_visible || headerCell.is_id)  &&
 				<td key={index} className={style.tableCell}>
+					<span className={style.cellElement}>
 					{headerCell.name !== 'id' ? (
 						headerCell.format === 'percent' ? (
 							`${(row[headerCell.name] as number) * 100}%`
 						) : (
+
 							row[headerCell.name]
 						)
 					) : (
-						<div>
-							{headerCell.is_visible && row['id']}
+<>
 						<input
 							type="checkbox"
 							className={style.checkbox}
@@ -37,8 +38,12 @@ export default function TableRow({ row, isChecked, setCheckedRows, header }: Tab
 								)
 							}
 						/>
-						</div>
-					)}
+
+					{headerCell.is_visible && row['id']}
+</>
+
+						)}
+						</span>
 				</td>
 			))}
 		</tr>

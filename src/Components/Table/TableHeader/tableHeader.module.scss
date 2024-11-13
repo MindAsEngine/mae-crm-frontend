@@ -1,3 +1,28 @@
-.header{
+.tableRow{
+  background-color: rgba(249, 250, 251, 1);
   box-sizing: border-box;
+}
+.cellElement{
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-wrap: nowrap;
+}
+.cellElement::after{
+  content: url("/src/assets/imgs/filterbar/sort.svg");
+  width: 16px;
+  height: 16px;
+}
+
+.isInVisible{
+  opacity: 0;
+  visibility: hidden;
+}
+.isAdditional{
+
+}
+.isId{
+  display: flex;
 }

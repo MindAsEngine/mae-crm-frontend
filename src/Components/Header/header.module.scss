@@ -2,11 +2,13 @@
 @import url('/src/font-variables.scss');
 
 .header {
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 
 	.title {
+		box-sizing: border-box;
 		color: var(--header-h1-color);
 		font: var(--font-weight-semibold) var(--font-size-l) / 1
 			var(--font-family-inter-bold);
@@ -14,7 +16,9 @@
 }
 
 .breadcrumb {
+	box-sizing: border-box;
 	.breadcrumb__link {
+		box-sizing: border-box;
 		color: var(--header-breadcrumb-color);
 		font: var(--font-weight-medium) var(--font-size-xs) / 1
 			var(--font-family-inter-bold);

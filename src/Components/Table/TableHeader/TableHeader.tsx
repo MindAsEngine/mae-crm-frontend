@@ -33,17 +33,20 @@ export default function
 					key={index}
 					className={clsx(
 						styles.tableCell,
-						cellData.is_visible && styles.isVisible,
+						!cellData.is_visible && styles.isInVisible,
 						cellData.is_additional && styles.isAdditional,
 						cellData.is_id && styles.isId
 					)}
 				>
 					{!cellData.is_id ? (
-						cellData.title
+						<span className={styles.cellElement}>
+						{cellData.title}
+						</span>
 					) : (
-						<div>
-							{cellData.is_visible && cellData.title}
+						<div className={styles.cellElement}>
+
 						<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
+							{cellData.is_visible && cellData.title}
 						</div>
 					)}
 				</th>

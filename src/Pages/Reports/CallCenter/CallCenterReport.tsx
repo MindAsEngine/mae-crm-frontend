@@ -19,7 +19,7 @@ export default function CallCenterReport() {
     const [isOpen, setIsOpen] = useState(false)
 
 	const header = [
-		{name: "id",is_id:true, title: "№", is_visible: false, is_additional: false, format: 'number'},
+		{name: "id",is_id:true, title: "№", is_visible: true, is_additional: false, format: 'number'},
 		{name: "fio",is_id:false, title: "ФИО", is_visible: true, is_additional: false, format: 'string'},
 		{name: "count1",is_id:false, title: "Общее количество обращений", is_visible: true, is_additional: false, format: 'number'},
 		{name: "count2",is_id:false, title: "Общее количество целевых обращений", is_visible: true, is_additional: false, format: 'number'},
@@ -67,7 +67,7 @@ export default function CallCenterReport() {
 					className={styles.additional}
 					onClick={() => setIsOpen(true)}
 				>
-					Дополнительно
+					Custom
 				</Button>
 				<Button
 					stylizedAs={'blue-dark'}

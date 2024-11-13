@@ -1,4 +1,12 @@
-.row{
+.tableRow{
   box-sizing: border-box;
-
+  border-bottom: rgba(234, 236, 240, 1) solid 1px;
+  border-top: rgba(234, 236, 240, 1) solid 1px;
+}
+.cellElement{
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-wrap: nowrap;
 }

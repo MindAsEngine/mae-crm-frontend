@@ -1,5 +1,28 @@
-.tableWrapper{
+.tableWrapper {
   box-sizing: border-box;
-  width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 236, 240, 1) transparent;
+}
+/* WebKit-браузеры (Chrome, Safari, Edge) */
+.tableWrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.tableWrapper::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(234, 236, 240, 1);
+  border-radius: 10px;
+}
+
+
+.table{
+  min-height: 0;
+  box-sizing: border-box;
 }
