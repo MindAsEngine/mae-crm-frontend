@@ -11,13 +11,16 @@ type FilterBarProps = {
 		filters: any
 	) => void
 	filters: any
-	children?: React.ReactNode
+	children?: React.ReactNode,
+	noDataRange?: boolean
 }
 
 export default function FilterBar({
 	setFilters,
 	filters,
 	children,
+	noDataRange=false
+
 }: FilterBarProps) {
 	const handleSearch = (e) => {
 		setFilters((prevFilters: any) => ({
@@ -45,7 +48,7 @@ export default function FilterBar({
 					before={(<i className={styles.search_icon}></i>)}
 					// after={(<i className={styles.close_icon}></i>)}
 				/>
-				<RangeDate handleDateRange={handleDateRange} filters={filters} />
+				{!noDataRange && <RangeDate handleDateRange={handleDateRange} filters={filters} />}
 			</div>
 			{children}
 

@@ -11,7 +11,9 @@ type RangeDateProps = {
 export default function RangeDate({handleDateRange, filters}: RangeDateProps) {
     return(
 		<div className={styles.datepicker}>
+			{/*todo stylizing calendar*/}
 		<RangeDatePicker
+
 					onChange={(start, end) => handleDateRange(start, end)}
 					dateFormat={'DD.MM.YYYY'}
 					startPlaceholder={'DD.MM.YYYY'}

@@ -17,6 +17,7 @@ export type TableHeaderCell = {
 	is_additional: boolean;
 	is_id: boolean;
 	format: string;
+	is_hidden_by_user?: boolean;
 };
 
 export default function
@@ -24,16 +25,16 @@ export default function
 	const handleAllChecked = () => {
 		setAllChecked(!isAllChecked);
 	};
-
+	console.log(row);
 	return (
 		<tr className={styles.tableRow}>
 			{row.map((cellData, index) => (
-				(cellData.is_visible || cellData.is_id)  &&
+				(!cellData.is_hidden_by_user || cellData.is_id)  &&
 				<th
 					key={index}
 					className={clsx(
 						styles.tableCell,
-						!cellData.is_visible && styles.isInVisible,
+						cellData.is_hidden_by_user && styles.isInVisible,
 						cellData.is_additional && styles.isAdditional,
 						cellData.is_id && styles.isId
 					)}
@@ -44,9 +45,8 @@ export default function
 						</span>
 					) : (
 						<div className={styles.cellElement}>
-
-						<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
-							{cellData.is_visible && cellData.title}
+							<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
+							{!cellData.is_hidden_by_user && cellData.title}
 						</div>
 					)}
 				</th>

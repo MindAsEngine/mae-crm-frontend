@@ -1,0 +1,70 @@
+@import url('/src/font-variables.scss');
+.container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.red{
+  background-color: rgba(254, 243, 242, 1);
+}
+.grey{
+  background-color: rgba(242, 244, 247, 1);
+}
+.green{
+  background-color: rgba(234, 248, 228, 1);
+}
+.yellow{
+  background-color: rgba(255, 250, 235, 1);
+}
+
+
+.text{
+  font: var(--font-weight-medium) var(--font-size-xs)/1.2 var(--font-family-inter-bold);
+}
+.red .text{
+  color: rgba(217, 45, 32, 1);
+}
+
+.grey .text{
+  color: rgba(71, 84, 103, 1);
+}
+.green .text{
+  color: rgba(61, 150, 18, 1);
+}
+.yellow .text{
+  color: rgba(191, 115, 1, 1);
+}
+
+.close::before, .close::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 1.5px;
+}
+.close::before{
+  transform: rotate(45deg);
+}
+.close::after{
+  transform: rotate(-45deg);
+}
+.red .close{
+  background-color: rgba(217, 45, 32, 1);
+}
+
+.grey .close{
+  background-color: rgba(71, 84, 103, 1);
+}
+.green .close{
+  background-color: rgba(61, 150, 18, 1);
+}
+.yellow .close{
+  background-color: rgba(191, 115, 1, 1);
+}
+
+
+

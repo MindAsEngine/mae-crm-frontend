@@ -1,8 +1,22 @@
 import {useEffect} from "react";
 import * as React from "react";
 import styles from './modal.module.scss'
-
-export default function Modal({children, isOpen, setIsOpen}: {children: React.ReactNode, isOpen: boolean, setIsOpen: (isOpen: boolean) => void}) {
+import clsx from "clsx";
+import {Button} from "../FormComponents/Button/Button.tsx";
+type ModalProps = {
+    isOpen: boolean;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    title: string;
+    children: React.ReactNode;
+    whiteButtonText?: string;
+    onClickWhiteButton: (one: any) => void;
+    argWhiteButton: any;
+    darkBlueButtonText?: string;
+    onClickDarkBlueButton: () => void;
+    className?: string;
+    //
+}
+export default function Modal({isOpen, className,setIsOpen, title, children, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -18,9 +32,32 @@ export default function Modal({children, isOpen, setIsOpen}: {children: React.Re
         }
     });
     return (
-        <dialog open={isOpen} className={styles.modal}>
-            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                {children}
+        <dialog open={isOpen} className={clsx(styles.modal, isOpen && styles.isOpen)}>
+            <div className={styles.window} onClick={(e) => e.stopPropagation()}>
+                <header className={styles.header}>
+                    <h2 className={styles.title}>{title}</h2>
+                    <span className={styles.close} onClick={() => setIsOpen(false)}/>
+                </header>
+
+                <div className={clsx(styles.content, className)}
+                >{children}</div>
+                <footer className={styles.footer}>
+                <Button stylizedAs={"white"}
+                onClick={() => {
+                onClickWhiteButton(argWhiteButton);
+                setIsOpen(false);
+                }
+                }
+                >
+                    {whiteButtonText}
+            </Button>
+                <Button
+                stylizedAs={'blue-dark'}
+                onClick={onClickDarkBlueButton}
+                    >
+                    {darkBlueButtonText}
+                </Button>
+        </footer>
             </div>
         </dialog>
 

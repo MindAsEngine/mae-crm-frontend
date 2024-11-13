@@ -10,6 +10,9 @@ interface IButtonProps extends IClassNameProps {
 	children: React.ReactNode
 	onClick?: () => void
 	stylizedAs?: 'blue-dark' | 'blue-light' | 'white'
+	exportButton?: 'blue' | 'white',
+	createButton?: 'blue' | 'white',
+	filterButton?: 'grey',
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -17,15 +20,32 @@ export const Button: FC<IButtonProps> = ({
 	className,
 	as: Component = 'button',
 	stylizedAs,
+	exportButton,
+	createButton,
+	filterButton,
 	...props
 }) => {
 	return (
-		<Component {...props} className={clsx(className, styles.button,
+		<Component {...props} className={
+			clsx(className, styles.button,
+				(exportButton || createButton || filterButton) && styles.withBefore,
 			{
 				[styles.blueDark]: stylizedAs === 'blue-dark',
 				[styles.blueLight]: stylizedAs === 'blue-light',
 				[styles.white]: stylizedAs === 'white',
-			})}>
+			},
+				{
+					[styles.exportWhite]: exportButton === 'white',
+					[styles.exportBlue]: exportButton === 'blue',
+				},
+				{
+					[styles.createWhite]: createButton === 'white',
+					[styles.exportBlue]: createButton === 'blue',
+				},
+				{
+					[styles.filterGrey]: filterButton === 'grey',
+				}
+			)}>
 			{children}
 		</Component>
 	)

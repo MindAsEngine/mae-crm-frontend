@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import HomePage from './Pages/HomePage'
+import TasksPage from './Pages/TaskPage/TasksPage.tsx'
 import CallCenterReport from './Pages/Reports/CallCenter/CallCenterReport.tsx'
 import Layout from './Components/Layout/Layout.tsx'
-import RegionsReport from './Pages/Reports/RegionsReport.tsx'
+import RegionsReport from './Pages/Reports/Regions/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/ProcessedRequestsSpeedReport.tsx'
 import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
@@ -29,15 +29,15 @@ export const router = createBrowserRouter(
 			children: [
 				{
 					index: true,
-					element: <HomePage />,
+					element: <Navigate to={'/tasks'}/>
 				},
 				{
 					path: '/tasks',
-					element: <HomePage />,
+					element: <TasksPage />,
 				},
 				{
 					path: '/audience',
-					element: <Navigate to={'/'} />,
+					element: <Navigate to={'/'}/>,
 				},
 				{
 					path: '/advertisement',

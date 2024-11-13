@@ -1,3 +1,5 @@
+@import url('/src/font-variables.scss');
+
 .tableRow{
   background-color: rgba(249, 250, 251, 1);
   box-sizing: border-box;
@@ -9,6 +11,8 @@
   justify-content: space-between;
   gap: 8px;
   text-wrap: nowrap;
+  font: var(--font-weight-medium) var(--font-size-s)/1.2 var(--font-family-inter-bold);
+
 }
 .cellElement::after{
   content: url("/src/assets/imgs/filterbar/sort.svg");
@@ -25,4 +29,8 @@
 }
 .isId{
   display: flex;
+}
+.isId.isInVisible{
+  opacity: 1;
+  visibility: visible;
 }

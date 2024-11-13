@@ -11,11 +11,12 @@ type ReportProps = {
     header: Array<TableHeaderCell>
     children?: React.ReactNode
     filters: any,
-    setFilters: (prev:any) => void
+    setFilters: (prev:any) => void,
+    onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void
 
 }
 
-export default function Report({data, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
+export default function Report({data, onClickCell, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
 
 	return (
 		<main className={styles.report}>
@@ -28,6 +29,7 @@ export default function Report({data, header, children, filters, setFilters, cho
                 header={header}
                 checkedRows={chosenData}
                 setCheckedRows={setChosenData}
+                onClickCell={onClickCell}
             />
 		</main>
 
