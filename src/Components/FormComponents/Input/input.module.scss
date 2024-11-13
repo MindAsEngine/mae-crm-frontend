@@ -1,0 +1,46 @@
+@import url('/src/font-variables.scss');
+@import url('/src/Components/FormComponents/variables.scss');
+
+.inputContainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 300px;
+  padding: var(--input-padding);
+  border: var(--input-border-color) solid 1px;
+  border-radius: var(--border-radius);
+  transition: border 0.3s;
+}
+
+.focused{
+    border: var(--input-border-color) solid 2px;
+
+}
+
+.input{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  color: var(--input-text-color);
+  background-color: transparent;
+  border: none;
+
+}
+
+.input::placeholder{
+  color: var(--input-text-color);
+  font: var(--font-weight-medium) var(--font-size-s)/1.2 var(--font-family-inter-bold);
+}
+
+.input:focus{
+  box-sizing: border-box;
+  outline-width: 0;
+  outline-color: transparent;
+}
+
+.input:focus::placeholder{
+  box-sizing: border-box;
+  color: rgb(71 84 103 / 100%);
+}

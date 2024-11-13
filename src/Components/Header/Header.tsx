@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
 import * as React from 'react'
 import styles from './Header.module.scss'
-import clsx from "clsx";
+import clsx from 'clsx'
 
 export default function Header() {
 	const location = useLocation()
@@ -14,16 +14,19 @@ export default function Header() {
 				<NavLink
 					to={'/'}
 					className={({ isActive }) =>
-								isActive
-									? clsx(styles.breadcrumb__link, styles.breadcrumb__link_active)
-									: styles.breadcrumb__link
-							}
+						isActive
+							? clsx(styles.breadcrumb__link, styles.breadcrumb__link_active)
+							: styles.breadcrumb__link
+					}
 					children={'Главная'}
 				/>
 
 				{pathnames.map((name, index) => {
 					const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`
-					if (routerNames[routeTo] === undefined || routerNames[routeTo] === 'Отчеты') {
+					if (
+						routerNames[routeTo] === undefined ||
+						routerNames[routeTo] === 'Отчеты'
+					) {
 						return null
 					}
 					return (
@@ -32,7 +35,10 @@ export default function Header() {
 							key={name}
 							className={({ isActive }) =>
 								isActive
-									? clsx(styles.breadcrumb__link, styles.breadcrumb__link_active)
+									? clsx(
+											styles.breadcrumb__link,
+											styles.breadcrumb__link_active
+										)
 									: styles.breadcrumb__link
 							}
 							children={routerNames[routeTo]}

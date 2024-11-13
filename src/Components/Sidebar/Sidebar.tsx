@@ -1,17 +1,19 @@
 import { NavLink } from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
-import { Button } from '../Button/Button.tsx'
+import { Button } from '../FormComponents/Button/Button.tsx'
 import * as React from 'react'
 import styles from './Sidebar.module.scss'
-import clsx from "clsx";
+import clsx from 'clsx'
 
-const userImage = '/public/images/user.png'
+const userImage = '/images/user.png'
 export default function Sidebar() {
 	const [isOpened, setIsOpened] = React.useState<boolean>(false)
 	const listItemClassName = (isActive: boolean) =>
-		isActive ? clsx(styles.list__item, styles.list__item_active) : styles.list__item
+		isActive
+			? clsx(styles.list__item, styles.list__item_active)
+			: styles.list__item
 
-	console.log(isOpened);
+	console.log(isOpened)
 	return (
 		<aside className={styles.sidebar}>
 			{/*<img*/}
@@ -25,7 +27,8 @@ export default function Sidebar() {
 							to={'/tasks'}
 							children={routerNames['/tasks']}
 							className={({ isActive }) =>
-								clsx(listItemClassName(isActive), styles.list__item_requests)}
+								clsx(listItemClassName(isActive), styles.list__item_requests)
+							}
 						/>
 					</li>
 					<li>
@@ -33,7 +36,8 @@ export default function Sidebar() {
 							to={'/audience'}
 							children={routerNames['/audience']}
 							className={({ isActive }) =>
-								clsx(listItemClassName(isActive), styles.list__item_audience)}
+								clsx(listItemClassName(isActive), styles.list__item_audience)
+							}
 						/>
 					</li>
 					<li>
@@ -41,36 +45,54 @@ export default function Sidebar() {
 							to={'/advertisement'}
 							children={routerNames['/advertisement']}
 							className={({ isActive }) =>
-								clsx(listItemClassName(isActive), styles.list__item_advertisement)}
+								clsx(
+									listItemClassName(isActive),
+									styles.list__item_advertisement
+								)
+							}
 						/>
 					</li>
-					<li onClick={(e) => e.target.tagName === 'SPAN' && setIsOpened(!isOpened)}>
+					<li
+						onClick={(e) =>
+							e.target.tagName === 'SPAN' && setIsOpened(!isOpened)
+						}
+					>
+						<span
+							className={clsx(
+								styles.list__item,
+								styles.list__item_reports,
+								isOpened && styles.list__item_opened
+							)}
+						>
+							{routerNames['/reports']}
+						</span>
 
-						<span className={clsx(styles.list__item,  styles.list__item_reports,isOpened && styles.list__item_opened)}
-						>{routerNames['/reports']}</span>
-
-
-						<ul className={clsx(styles.sublist, isOpened && styles.sublist_opened, styles.list)}>
-
+						<ul
+							className={clsx(
+								styles.sublist,
+								isOpened && styles.sublist_opened,
+								styles.list
+							)}
+						>
 							<li>
 								<NavLink
 									to={'/reports/regions'}
 									children={routerNames['/reports/regions']}
-									className={({isActive}) => listItemClassName(isActive)}
+									className={({ isActive }) => listItemClassName(isActive)}
 								/>
 							</li>
 							<li>
 								<NavLink
 									to={'/reports/processed-requests-speed'}
 									children={routerNames['/reports/processed-requests-speed']}
-									className={({isActive}) => listItemClassName(isActive)}
+									className={({ isActive }) => listItemClassName(isActive)}
 								/>
 							</li>
 							<li>
 								<NavLink
 									to={'/reports/call-center'}
 									children={routerNames['/reports/call-center']}
-									className={({isActive}) => listItemClassName(isActive)}
+									className={({ isActive }) => listItemClassName(isActive)}
 								/>
 							</li>
 						</ul>
@@ -89,9 +111,7 @@ export default function Sidebar() {
 				</div>
 				<div className={styles.profile__settings}>
 					<Button className={styles.profile__button}>
-						<span className={styles.profile__logout}>
-							Выйти
-						</span>
+						<span className={styles.profile__logout}>Выйти</span>
 					</Button>
 				</div>
 			</div>

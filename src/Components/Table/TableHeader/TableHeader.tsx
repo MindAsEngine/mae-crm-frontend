@@ -1,21 +1,53 @@
-import {cn} from "@bem-react/classname";
-import * as React from "react";
+import * as React from 'react';
+import styles from './tableHeader.module.scss';
+import clsx from 'clsx';
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 type TableHeaderProps = {
-    row: { [key: string]: string }
-}
+	row: Array<TableHeaderCell>;
+	isAllChecked: boolean;
+	setAllChecked: (isChecked: boolean) => void;
+};
 
-export default function TableHeader({ row }: TableHeaderProps) {
-    const cnTable = cn("Table");
-    return (
-        <tr className={cnTable("HeaderRow")}>
-        {Object.entries(row).map(([key, cellData]) => {
-            return (
-                <th key={key} className={cnTable("HeaderCell")}>
-                    <span className={cnTable("HeaderCellText")}>{cellData}</span>
-                    <span className={cnTable("HeaderCellSort")}></span>
-                </th>);})}
+export type TableHeaderCell = {
+	name: string;
+	title: string;
+	is_visible: boolean;
+	is_additional: boolean;
+	is_id: boolean;
+	format: string;
+};
 
-        </tr>
-    );
+export default function
+	TableHeader({ row, isAllChecked, setAllChecked }: TableHeaderProps) {
+	const handleAllChecked = () => {
+		setAllChecked(!isAllChecked);
+	};
+
+	return (
+		<tr className={styles.tableRow}>
+			{row.map((cellData, index) => (
+				(cellData.is_visible || cellData.is_id)  &&
+				<th
+					key={index}
+					className={clsx(
+						styles.tableCell,
+						cellData.is_visible && styles.isVisible,
+						cellData.is_additional && styles.isAdditional,
+						cellData.is_id && styles.isId
+					)}
+				>
+					{!cellData.is_id ? (
+						cellData.title
+					) : (
+						<div>
+							{cellData.is_visible && cellData.title}
+						<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
+						</div>
+					)}
+				</th>
+			))}
+		</tr>
+	);
 }

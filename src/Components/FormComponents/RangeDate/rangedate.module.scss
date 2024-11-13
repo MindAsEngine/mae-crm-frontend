@@ -1,0 +1,25 @@
+@import url('/src/font-variables.scss');
+@import url('/src/Components/FormComponents/variables.scss');
+
+.datepicker > div > div > div{
+  border: var(--input-border-color) solid 1.5px;
+  border-radius: var(--border-radius);
+
+}
+
+.datepicker > div > div > div input{
+  box-sizing: border-box;
+  padding: var(--input-padding);
+  color: var(--input-text-color);
+  background-color: transparent;
+}
+
+.datepicker > div > div > div input:focus{
+    color: var(--focused-text-color);
+    border: var(--input-border-color) solid 2px;
+}
+
+.datepicker > div > div > div > span {
+    color: var(--input-text-color);
+
+}

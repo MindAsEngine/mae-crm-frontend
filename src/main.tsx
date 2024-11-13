@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')!).render(
 			router={router}
 			future={{
 				v7_startTransition: true,
-				
 			}}
 		/>
 	</StrictMode>

@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import HomePage from './Pages/HomePage'
-import CallCenterReport from './Pages/Reports/CallCenterReport.tsx'
+import CallCenterReport from './Pages/Reports/CallCenter/CallCenterReport.tsx'
 import Layout from './Components/Layout/Layout.tsx'
 import RegionsReport from './Pages/Reports/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/ProcessedRequestsSpeedReport.tsx'
@@ -17,60 +17,63 @@ export const routerNames: { [key: string]: string } = {
 	'/reports/call-center': 'Колл-центр',
 }
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+	[
+		{
+			path: '*',
+			element: <NotFoundPage />,
+		},
+		{
+			path: '/',
+			element: <Layout />,
+			children: [
+				{
+					index: true,
+					element: <HomePage />,
+				},
+				{
+					path: '/tasks',
+					element: <HomePage />,
+				},
+				{
+					path: '/audience',
+					element: <Navigate to={'/'} />,
+				},
+				{
+					path: '/advertisement',
+					element: <Navigate to={'/'} />,
+				},
+				{
+					path: '/reports',
+					children: [
+						{
+							index: true,
+							element: <Navigate to={'regions'} />,
+						},
+						{
+							path: 'regions',
+							element: <RegionsReport />,
+						},
+						{
+							path: 'call-center',
+							element: <CallCenterReport />,
+						},
+						{
+							path: 'processed-requests-speed',
+							element: <ProcessedRequestsSpeedReport />,
+						},
+					],
+				},
+			],
+		},
+	],
 	{
-		path: '*',
-		element: <NotFoundPage />,
-	},
-	{
-		path: '/',
-		element: <Layout />,
-		children: [
-			{
-				index: true,
-				element: <HomePage />,
-			},
-			{
-				path: '/tasks',
-				element: <HomePage />,
-			},
-			{
-				path: '/audience',
-				element: <Navigate to={'/'} />,
-			},
-			{
-				path: '/advertisement',
-				element: <Navigate to={'/'} />,
-			},
-			{
-				path: '/reports',
-				children: [
-					{
-						index: true,
-						element: <Navigate to={'regions'} />,
-					},
-					{
-						path: 'regions',
-						element: <RegionsReport />,
-					},
-					{
-						path: 'call-center',
-						element: <CallCenterReport />,
-					},
-					{
-						path: 'processed-requests-speed',
-						element: <ProcessedRequestsSpeedReport />,
-					},
-				],
-			},
-		],
-	},
-], {
-  future: {
-	  v7_relativeSplatPath: true,
-	  v7_fetcherPersist: true,
-	  v7_normalizeFormMethod: true,
-	  v7_partialHydration: true,
-	  v7_skipActionErrorRevalidation: true,
-  },
-});
+		future: {
+			v7_relativeSplatPath: true,
+			v7_fetcherPersist: true,
+			v7_normalizeFormMethod: true,
+			v7_partialHydration: true,
+			v7_skipActionErrorRevalidation: true,
+		},
+	}
+)

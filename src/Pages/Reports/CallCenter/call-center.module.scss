@@ -1,0 +1,21 @@
+.custom{
+  display: flex;
+  flex-shrink: 1;
+  align-items: center;
+  gap: 12px;
+
+  .export::before{
+    content: url('/src/assets/imgs/filterbar/export.svg');
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+  }
+
+  .additional::before{
+    content: url('/src/Assets/imgs/filterbar/notebook.svg');
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+  }
+
+}
