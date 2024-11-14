@@ -13,11 +13,13 @@ type ModalProps = {
     argWhiteButton: any;
     darkBlueButtonText?: string;
     onClickDarkBlueButton: () => void;
-    className?: string;
+    classNameModal?: string;
+    classNameContent?: string;
+    classNameWindow?: string;
     isDropDown?: boolean;
     //
 }
-export default function Modal({isOpen, className,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
+export default function Modal({isOpen, classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -36,15 +38,17 @@ export default function Modal({isOpen, className,setIsOpen, title, children, isD
         <dialog open={isOpen} className={clsx(
             styles.modal,
             isOpen && styles.isOpen,
-            isDropDown ? styles.dropDown : styles.windowMode
+            isDropDown ? styles.dropDown : styles.windowMode,
+            classNameModal
             )}>
-            <div className={styles.window} onClick={(e) => e.stopPropagation()}>
+            <div className={clsx(styles.window, classNameWindow)}
+                 onClick={(e) => e.stopPropagation()}>
                 <header className={styles.header}>
                     <h2 className={styles.title}>{title}</h2>
                     <span className={styles.close} onClick={() => setIsOpen(false)}/>
                 </header>
 
-                <div className={clsx(styles.content, className)}
+                <div className={clsx(styles.content, classNameContent)}
                 >{children}</div>
                 <footer className={styles.footer}>
                 <Button stylizedAs={"white"}

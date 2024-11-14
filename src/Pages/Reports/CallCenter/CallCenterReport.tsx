@@ -91,7 +91,9 @@ export default function CallCenterReport() {
 						   onClickWhiteButton={setDefaultCustomSettings}
 						   argWhiteButton={header}
 						   onClickDarkBlueButton={onCustomSettingApplied}
-						   className={styles.modal}
+						   classNameModal={styles.modal}
+						   classNameContent={styles.modalContent}
+						   classNameWindow={styles.modalWindow}
 						   isDropDown={true}
 					>
 						{customSettings.map((item, index) => (

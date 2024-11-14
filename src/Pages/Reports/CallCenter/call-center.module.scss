@@ -12,8 +12,16 @@
     height: 16px;
     object-fit: contain;
   }
-
   .modal{
+    top: calc(100% - 13px + 8px);
+    left: calc(100% - 13px - 516px);
+  }
+  .modalWindow{
+    width: 516px;
+    height: 408px;
+  }
+
+  .modalContent{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
