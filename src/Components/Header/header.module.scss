@@ -2,10 +2,10 @@
 @import url('/src/font-variables.scss');
 
 .header {
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	box-sizing: border-box;
 
 	.title {
 		box-sizing: border-box;
@@ -17,6 +17,7 @@
 
 .breadcrumb {
 	box-sizing: border-box;
+
 	.breadcrumb__link {
 		box-sizing: border-box;
 		color: var(--header-breadcrumb-color);

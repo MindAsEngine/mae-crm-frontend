@@ -2,17 +2,19 @@
 
 .tableRow{
   box-sizing: border-box;
-  border-bottom: rgba(234, 236, 240, 1) solid 1.5px;
-  border-top: rgba(234, 236, 240, 1) solid 1.5px;
+  border-top: rgb(234 236 240 / 100%) solid 1.5px;
+  border-bottom: rgb(234 236 240 / 100%) solid 1.5px;
 }
+
 .cellElement{
-  padding: 8px 24px;
   display: flex;
   align-items: center;
   gap: 8px;
-  text-wrap: nowrap;
+  padding: 8px 24px;
   font: var(--font-weight-light) var(--font-size-s)/1.2 var(--font-family-inter-regular);
+  text-wrap: nowrap;
 }
+
 .onClickCell{
   cursor: pointer;
 }

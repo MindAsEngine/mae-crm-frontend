@@ -1,59 +1,61 @@
 @import url('/src/font-variables.scss');
+
 .modal{
-  //display: none;
+  visibility: hidden;
   opacity: 0;
   transition: all 1s ease;
-  visibility: hidden;
-
 }
-.modal.isOpen{
-  opacity: 1;
-  visibility: visible;
 
-  box-sizing: border-box;
-  border: none;
-  width: 100%;
-  height: 100%;
+.modal.isOpen{
   position: fixed;
   top: 0;
   left: 0;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 50%);
+  border: none;
+  visibility: visible;
+  backdrop-filter: blur(10px);
+  opacity: 1;
 }
 
 .window{
   position: relative;
-  width: 500px;
-  min-height: 50%;
-  background-color: rgba(242, 244, 247, 1);
-  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  //padding: 20px;
+  width: 500px;
+  min-height: 50%;
+  background-color: rgb(242 244 247 / 100%);
+  border-radius: 12px;
 }
+
 .header{
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: rgba(234, 236, 240, 1) solid 2px;
-  flex-shrink: 0;
+  border-bottom: rgb(234 236 240 / 100%) solid 2px;
 }
+
 .title{
-  color:rgba(52, 64, 84, 1);
+  color:rgb(52 64 84 / 100%);
   font: var(--font-weight-semibold) var(--font-size-l)/1.25 var(--font-family-inter-bold);
 }
+
 .close{
   position: relative;
-  cursor: pointer;
   width: 16px;
   height: 16px;
+  cursor: pointer;
 }
+
 .close::before, .close::after{
   content: '';
   position: absolute;
@@ -61,25 +63,28 @@
   left: 50%;
   width: 16px;
   height: 1.5px;
-  background-color: rgba(71, 84, 103, 1);
+  background-color: rgb(71 84 103 / 100%);
 }
+
 .close::before{
   transform: rotate(45deg);
 }
+
 .close::after{
   transform: rotate(-45deg);
 }
 
 .content{
-  padding: 4px 20px;
   flex-grow: 2;
+  padding: 4px 20px;
 }
+
 .footer{
-  padding: 20px;
-  border-top: rgba(234, 236, 240, 1) solid 2px;
   display: flex;
-  justify-content: flex-end;
-  gap:8px;
   flex-shrink: 0;
+  justify-content: flex-end;
   align-items: center;
+  gap:8px;
+  padding: 20px;
+  border-top: rgb(234 236 240 / 100%) solid 2px;
 }

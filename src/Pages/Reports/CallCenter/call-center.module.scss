@@ -5,24 +5,27 @@
   flex-shrink: 1;
   align-items: center;
   gap: 12px;
+
   .additional::before{
     content: url('/src/Assets/imgs/filterbar/notebook.svg');
     width: 16px;
     height: 16px;
     object-fit: contain;
   }
+
   .modal{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 4px;
   }
+
   .label{
-    padding: 12px 0;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 12px;
+    padding: 12px 0;
     font: var(--font-weight-light) var(--font-size-m)/1.25 var(--font-family-inter-regular);
   }
 

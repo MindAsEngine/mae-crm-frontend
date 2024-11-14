@@ -1,4 +1,5 @@
 @import url('/src/font-variables.scss');
+
 .container{
   display: flex;
   justify-content: space-between;
@@ -7,35 +8,42 @@
   padding: 4px 8px;
   border-radius: 6px;
 }
+
 .red{
-  background-color: rgba(254, 243, 242, 1);
+  background-color: rgb(254 243 242 / 100%);
 }
+
 .grey{
-  background-color: rgba(242, 244, 247, 1);
+  background-color: rgb(242 244 247 / 100%);
 }
+
 .green{
-  background-color: rgba(234, 248, 228, 1);
+  background-color: rgb(234 248 228 / 100%);
 }
+
 .yellow{
-  background-color: rgba(255, 250, 235, 1);
+  background-color: rgb(255 250 235 / 100%);
 }
 
 
 .text{
   font: var(--font-weight-medium) var(--font-size-xs)/1.2 var(--font-family-inter-bold);
 }
+
 .red .text{
-  color: rgba(217, 45, 32, 1);
+  color: rgb(217 45 32 / 100%);
 }
 
 .grey .text{
-  color: rgba(71, 84, 103, 1);
+  color: rgb(71 84 103 / 100%);
 }
+
 .green .text{
-  color: rgba(61, 150, 18, 1);
+  color: rgb(61 150 18 / 100%);
 }
+
 .yellow .text{
-  color: rgba(191, 115, 1, 1);
+  color: rgb(191 115 1 / 100%);
 }
 
 .close::before, .close::after{
@@ -46,24 +54,29 @@
   width: 10px;
   height: 1.5px;
 }
+
 .close::before{
   transform: rotate(45deg);
 }
+
 .close::after{
   transform: rotate(-45deg);
 }
+
 .red .close{
-  background-color: rgba(217, 45, 32, 1);
+  background-color: rgb(217 45 32 / 100%);
 }
 
 .grey .close{
-  background-color: rgba(71, 84, 103, 1);
+  background-color: rgb(71 84 103 / 100%);
 }
+
 .green .close{
-  background-color: rgba(61, 150, 18, 1);
+  background-color: rgb(61 150 18 / 100%);
 }
+
 .yellow .close{
-  background-color: rgba(191, 115, 1, 1);
+  background-color: rgb(191 115 1 / 100%);
 }
 
 

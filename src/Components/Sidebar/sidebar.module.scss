@@ -2,32 +2,31 @@
 @import url('/src/font-variables.scss');
 
 .sidebar {
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	box-sizing: border-box;
 	background-color: var(--sidebar-bg-color);
 
 	.navigation {
-		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
+		box-sizing: border-box;
 	}
 }
 
 .list {
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	box-sizing: border-box;
 	padding: 16px;
 
 	.list__item {
-		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		gap: 12px;
-
+		box-sizing: border-box;
 		min-width: 196px;
 		padding: 8px 12px;
 		color: var(--sidebar-text-color);
@@ -79,27 +78,29 @@
 	.list__item_opened.list__item_reports::after {
 		transform: rotate(0deg) translate(0, 0);
 	}
+
 	.sublist{
 		box-sizing: border-box;
+		padding-top: 0;
 		visibility: hidden;
+		transform: translateY(-20%);
 		opacity: 0;
 		transition: opacity 0.6s;
-		transform: translateY(-20%);
-		padding-top: 0;
 	}
+
 	.sublist_opened{
 		visibility: visible;
+		transform: translateY(0);
 		opacity: 1;
 		transition: transform 0.3s;
-		transform: translateY(0);
 	}
 }
 
 .profile {
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	box-sizing: border-box;
 	padding: 16px 24px;
 	border-top: rgb(255 255 255 / 20%) 1px solid;
 

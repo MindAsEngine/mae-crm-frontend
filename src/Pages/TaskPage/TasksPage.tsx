@@ -18,6 +18,7 @@ export default function TasksPage() {
 	const [chosenData, setChosenData] = useState([])
 	console.log(chosenData)
 	console.log(filters)
+	// todo create forms modal for audience? task? filters
 	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
 	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
@@ -36,7 +37,7 @@ export default function TasksPage() {
 				filters={filters}
 				setFilters={setFilters}
 
-		>{/*todo onClick with open curtain*/}
+		>
 			<div className={styles.custom}>
 
 				<Button

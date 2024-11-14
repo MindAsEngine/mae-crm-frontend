@@ -46,7 +46,7 @@ export default function
 					) : (
 						<div className={styles.cellElement}>
 							<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
-							{!cellData.is_hidden_by_user && cellData.title}
+							{cellData.is_visible && cellData.title}
 						</div>
 					)}
 				</th>

@@ -1,19 +1,21 @@
 @import url('/src/font-variables.scss');
 
 .tableRow{
-  background-color: rgba(249, 250, 251, 1);
   box-sizing: border-box;
+  background-color: rgb(249 250 251 / 100%);
 }
+
 .cellElement{
-  padding: 12px 24px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 8px;
-  text-wrap: nowrap;
+  padding: 12px 24px;
   font: var(--font-weight-medium) var(--font-size-s)/1.2 var(--font-family-inter-bold);
+  text-wrap: nowrap;
 
 }
+
 .cellElement::after{
   content: url("/src/assets/imgs/filterbar/sort.svg");
   width: 16px;
@@ -21,16 +23,15 @@
 }
 
 .isInVisible{
-  opacity: 0;
   visibility: hidden;
+  opacity: 0;
 }
-.isAdditional{
 
-}
 .isId{
   display: flex;
 }
+
 .isId.isInVisible{
-  opacity: 1;
   visibility: visible;
+  opacity: 1;
 }

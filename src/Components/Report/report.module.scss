@@ -1,12 +1,11 @@
 .report{
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-
   box-sizing: border-box;
-  border: rgb(234 236 240 / 100%) solid 1px;
-  border-radius: 12px;
   min-width: 0;
   overflow-y: hidden;
-  flex: 1 1 auto;
+  border: rgb(234 236 240 / 100%) solid 1px;
+  border-radius: 12px;
 
 }

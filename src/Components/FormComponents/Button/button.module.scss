@@ -38,21 +38,26 @@
 	padding: var(--input-padding);
 	border-radius: var(--border-radius);
 }
+
 .withBefore::before{
 	width: 16px;
 	height: 16px;
 	object-fit: contain;
 }
+
 .exportWhite::before{
 	content: url('/src/assets/imgs/filterbar/export/exportWhite.svg');
 
 }
+
 .exportBlue::before{
 	content: url('/src/assets/imgs/filterbar/export/exportBlue.svg');
 }
+
 .createWhite::before{
 	content: url('/src/assets/imgs/filterbar/create/createWhite.svg');
 }
+
 .filterGrey::before{
 	content: url('/src/assets/imgs/filterbar/filterGrey.svg');
 }
