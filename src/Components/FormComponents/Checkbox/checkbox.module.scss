@@ -1,0 +1,22 @@
+.checkbox {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(208, 213, 221, 1);
+}
+.hidden{
+  display: none;
+}
+.checked{
+  background-color: rgba(46, 144, 250, 1);
+  background-image: url("/src/assets/imgs/filterbar/checked.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+}
+.all{
+  background-image: url("/src/assets/imgs/filterbar/minus.svg");
+
+}
