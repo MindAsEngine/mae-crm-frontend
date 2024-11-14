@@ -3,8 +3,8 @@ import style from './tableRow.module.scss';
 import { TableHeaderCell } from '../TableHeader/TableHeader.tsx';
 import clsx from "clsx";
 import StatusPlate from "../../StatusPlate/StatusPlate.tsx";
-import {statusEnum} from "../../StatusPlate/data.ts";
 import dayjs from "dayjs";
+import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
 
 type TableRowProps = {
 	row: { [key: string]: string | number };
@@ -30,37 +30,44 @@ export default function TableRow({ row, isChecked, setCheckedRows, header, onCli
 	return (
 		<tr className={style.tableRow}>
 			{header.map((headerCell, index) => (
-				(!headerCell.is_hidden_by_user || headerCell.is_id)  &&
+				(headerCell.is_hidden_by_user === false || headerCell.is_visible)  &&
 				<td key={index} className={ clsx(style.tableCell, onClickCell && style.onClickCell)}
 					onClick={()=> {
 							onClickCell && (headerCell.format === 'number')
 								? onClickCell(row['id'],headerCell.name, row[headerCell.name]) : {}
 						}}>
-					<span className={style.cellElement}>
-					{/*	todo date format and create func for this*/}
+					<div className={clsx(style.cellElement, headerCell.format === 'array' && style.array)}>
+
 					{headerCell.name !== 'id' ? (
-						prepareCell(row[headerCell.name], headerCell.format )
-					) : (
-<>
-						<input
-							type="checkbox"
-							className={style.checkbox}
-							value={row['id'].toString()}
-							checked={isChecked}
-							onChange={() =>
-								setCheckedRows((prev) =>
-									isChecked
-										? prev.filter((id) => id !== row['id'])
-										: [...prev, row['id']]
-								)
+						<>
+							{headerCell.format !== 'array' ?
+								(prepareCell(row[headerCell.name], headerCell.format ))
+								: (row[headerCell.name].map((one, index) => (
+									<span key={index} className={style.arrayElement}>
+										{(prepareCell(one, 'string' )) }
+									</span>
+								)))
 							}
-						/>
+						</>
 
-					{headerCell.is_visible && row['id']}
-</>
+						) :
+						(
+							<>
 
-						)}
-						</span>
+								<Checkbox
+									checked={isChecked}
+									onChange={() =>
+										setCheckedRows((prev) =>(
+											isChecked
+												? prev.filter((id) => id !== row['id'])
+												: [...prev, row['id']]
+										))}
+									/>
+								{row[headerCell.name]}
+							</>
+						)
+					}
+						</div>
 				</td>
 			))}
 		</tr>

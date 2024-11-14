@@ -25,12 +25,14 @@
 	.list__item {
 		display: flex;
 		align-items: center;
+
 		gap: 12px;
 		box-sizing: border-box;
-		min-width: 196px;
+		//width: 232px;
+		//height: 28px;
 		padding: 8px 12px;
 		color: var(--sidebar-text-color);
-		font: var(--font-weight-medium) var(--font-size-s) / 1
+		font: var(--font-weight-medium) var(--font-size-s) / 1.2
 			var(--font-family-inter-bold);
 		white-space: nowrap;
 		text-decoration: none;
@@ -43,6 +45,8 @@
 	.list__item:hover {
 		color: var(--sidebar-link-text-hover);
 	}
+
+
 
 	.list__item_active {
 		color: var(--sidebar-link-text-hover);
@@ -63,12 +67,15 @@
 
 	.list__item_reports {
 		cursor: pointer;
+		justify-content: space-between;
+
 	}
 
 	.list__item_reports::after {
 		content: url('../../assets/imgs/sidebar/arrow.svg');
 		transform: rotate(180deg) translate(0, -20%);
 		transition: transform 0.3s;
+		margin-left: auto; /* Отодвигает стрелку вправо */
 	}
 
 	.list__item_reports::before {
@@ -76,7 +83,7 @@
 	}
 
 	.list__item_opened.list__item_reports::after {
-		transform: rotate(0deg) translate(0, 0);
+		transform: rotate(0deg) translateY(-10%);
 	}
 
 	.sublist{
@@ -93,6 +100,10 @@
 		transform: translateY(0);
 		opacity: 1;
 		transition: transform 0.3s;
+	}
+	.sublist .list__item{
+		font: var(--font-weight-medium) var(--font-size-xs) / 1.2
+		var(--font-family-inter-bold);
 	}
 }
 
@@ -154,6 +165,7 @@
 		color: var(--sidebar-text-color);
 		font-size: var(--font-size-xs);
 		background-color: transparent;
+		height: unset;
 	}
 
 	.profile__button:hover {

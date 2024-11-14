@@ -1,6 +1,7 @@
 @import url('/src/Components/FormComponents/variables.scss');
 
 .button {
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -11,11 +12,16 @@
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
+	height: 40px;
 
 }
 
 .button:focus{
 	outline: none;
+}
+.disabled{
+	pointer-events: none;
+	cursor: not-allowed;
 }
 
 .blueDark{

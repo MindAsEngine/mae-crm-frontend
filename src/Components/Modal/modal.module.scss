@@ -1,27 +1,36 @@
 @import url('/src/font-variables.scss');
 
 .modal{
+  box-sizing: border-box;
   visibility: hidden;
   opacity: 0;
   transition: all 1s ease;
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+.modal.isOpen{
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+}
+.modal.dropDown.isOpen{
+  position: absolute;
+  top: calc(100% - 13px + 8px);
+  left: calc(100% - 13px - 516px);
+  background-color: transparent;
 }
 
-.modal.isOpen{
+.modal.windowMode.isOpen{
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  background-color: rgb(0 0 0 / 50%);
   width: 100%;
   height: 100%;
-  background-color: rgb(0 0 0 / 50%);
-  border: none;
-  visibility: visible;
-  backdrop-filter: blur(10px);
-  opacity: 1;
 }
 
 .window{
@@ -29,10 +38,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 500px;
-  min-height: 50%;
-  background-color: rgb(242 244 247 / 100%);
+  width: 516px;
+  height: 408px;
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 12px;
+  box-shadow: 0 1px 30px 0 rgba(0, 0, 0, 0.08);
 }
 
 .header{
@@ -54,24 +64,25 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
+  transform: rotate(45deg);
 }
 
 .close::before, .close::after{
   content: '';
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 0;
   width: 16px;
   height: 1.5px;
   background-color: rgb(71 84 103 / 100%);
 }
 
 .close::before{
-  transform: rotate(45deg);
+  transform: rotate(90deg);
 }
 
 .close::after{
-  transform: rotate(-45deg);
+  transform: rotate(0deg);
 }
 
 .content{

@@ -7,7 +7,10 @@
   align-items: center;
   gap: 10px;
   box-sizing: border-box;
-  width: 200px;
+
+  height: 40px;
+  width: 260px;
+
   padding: var(--input-padding);
   border: var(--input-border-color) solid 1px;
   border-radius: var(--border-radius);
@@ -26,7 +29,14 @@
   color: var(--input-text-color);
   background-color: transparent;
   border: none;
+  outline: none;
+  -webkit-appearance: none; /* Убирает крестик в Safari */
+  appearance: none;
+}
+.input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
 
+  cursor: pointer;
 }
 
 .input::placeholder{
@@ -36,8 +46,7 @@
 
 .input:focus{
   box-sizing: border-box;
-  outline-width: 0;
-  outline-color: transparent;
+
 }
 
 .input:focus::placeholder{

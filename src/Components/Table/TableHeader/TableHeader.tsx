@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './tableHeader.module.scss';
 import clsx from 'clsx';
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
+import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
 
 type TableHeaderProps = {
 	row: Array<TableHeaderCell>;
@@ -29,7 +28,8 @@ export default function
 	return (
 		<tr className={styles.tableRow}>
 			{row.map((cellData, index) => (
-				(!cellData.is_hidden_by_user || cellData.is_id)  &&
+				<>
+				{(cellData.is_hidden_by_user=== false || cellData.is_visible)  && (
 				<th
 					key={index}
 					className={clsx(
@@ -39,17 +39,15 @@ export default function
 						cellData.is_id && styles.isId
 					)}
 				>
-					{!cellData.is_id ? (
 						<span className={styles.cellElement}>
-						{cellData.title}
+							{cellData.is_id  && (
+								<Checkbox onChange={handleAllChecked} checked={isAllChecked} allCheckbox={true} />)}
+							{cellData.title}
 						</span>
-					) : (
-						<div className={styles.cellElement}>
-							<input type="checkbox" onChange={handleAllChecked} checked={isAllChecked} />
-							{cellData.is_visible && cellData.title}
-						</div>
-					)}
-				</th>
+				</th>)}
+
+
+				</>
 			))}
 		</tr>
 	);

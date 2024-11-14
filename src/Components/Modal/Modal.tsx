@@ -14,9 +14,10 @@ type ModalProps = {
     darkBlueButtonText?: string;
     onClickDarkBlueButton: () => void;
     className?: string;
+    isDropDown?: boolean;
     //
 }
-export default function Modal({isOpen, className,setIsOpen, title, children, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
+export default function Modal({isOpen, className,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -32,7 +33,11 @@ export default function Modal({isOpen, className,setIsOpen, title, children, whi
         }
     });
     return (
-        <dialog open={isOpen} className={clsx(styles.modal, isOpen && styles.isOpen)}>
+        <dialog open={isOpen} className={clsx(
+            styles.modal,
+            isOpen && styles.isOpen,
+            isDropDown ? styles.dropDown : styles.windowMode
+            )}>
             <div className={styles.window} onClick={(e) => e.stopPropagation()}>
                 <header className={styles.header}>
                     <h2 className={styles.title}>{title}</h2>

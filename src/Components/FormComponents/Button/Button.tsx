@@ -13,6 +13,7 @@ interface IButtonProps extends IClassNameProps {
 	exportButton?: 'blue' | 'white',
 	createButton?: 'blue' | 'white',
 	filterButton?: 'grey',
+	disabled?: boolean,
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -23,10 +24,13 @@ export const Button: FC<IButtonProps> = ({
 	exportButton,
 	createButton,
 	filterButton,
+	disabled,
 	...props
 }) => {
 	return (
-		<Component {...props} className={
+		<Component {...props}
+			disabled={disabled}
+				   className={
 			clsx(className, styles.button,
 				(exportButton || createButton || filterButton) && styles.withBefore,
 			{
@@ -44,7 +48,8 @@ export const Button: FC<IButtonProps> = ({
 				},
 				{
 					[styles.filterGrey]: filterButton === 'grey',
-				}
+				},
+				disabled && styles.disabled,
 			)}>
 			{children}
 		</Component>

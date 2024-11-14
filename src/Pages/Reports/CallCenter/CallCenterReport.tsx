@@ -7,6 +7,7 @@ import Report from "../../../Components/Report/Report.tsx";
 import Modal from "../../../Components/Modal/Modal.tsx";
 import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader.tsx";
 import {data, headerFromServer} from "./data.ts";
+import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 
 
 export default function CallCenterReport() {
@@ -83,8 +84,31 @@ export default function CallCenterReport() {
 					stylizedAs={'white'}
 					className={styles.additional}
 					onClick={() => setIsOpen(true)}
-				>
-					Custom
+				>Custom
+					<Modal isOpen={isOpen}
+						   setIsOpen={setIsOpen}
+						   title={"Кастом"}
+						   onClickWhiteButton={setDefaultCustomSettings}
+						   argWhiteButton={header}
+						   onClickDarkBlueButton={onCustomSettingApplied}
+						   className={styles.modal}
+						   isDropDown={true}
+					>
+						{customSettings.map((item, index) => (
+							<div key={index} className={styles.label}
+								 onClick={() => {onCheckboxChanged(item.name)}}
+							>
+								{item.title}
+								<Checkbox
+									checked={item.applied_visible}
+									onChange={() => onCheckboxChanged(item.name)}
+
+								/>
+							</div>
+						))}
+
+
+					</Modal>
 				</Button>
 				<Button
 					stylizedAs={'blue-dark'}
@@ -93,30 +117,9 @@ export default function CallCenterReport() {
 				>
 					Экспорт
 				</Button>
-				<Modal isOpen={isOpen}
-					   setIsOpen={setIsOpen}
-					   title={"Кастом"}
-					   onClickWhiteButton={setDefaultCustomSettings}
-					   argWhiteButton={header}
-					   onClickDarkBlueButton={onCustomSettingApplied}
-					   className={styles.modal}
-
-				>
-
-					{customSettings.map((item, index) => (
-						<label key={index} className={styles.label}>
-							{item.title}
-							<input
-								name={item.name}
-								checked={item.applied_visible}
-								onChange={() => onCheckboxChanged(item.name)}
-								type="checkbox"
-							/>
-						</label>
-					))}
 
 
-				</Modal>
+
 			</div>
 		</Report>
 	);

@@ -3,9 +3,8 @@ import styles from "./regions.module.scss"
 import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import {data, headerFromServer} from "./data.ts";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import dayjs from "dayjs";
-import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader.tsx";
 
 
 export default function RegionsReport() {

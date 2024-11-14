@@ -51,6 +51,7 @@ export default function TasksPage() {
 				<Button
 					stylizedAs={'blue-light'}
 					createButton={'blue'}
+					disabled={chosenData.length === 0}
 					onClick={() => setIsOpenCreateTask(true)}
 				>
 						Создать задачу
