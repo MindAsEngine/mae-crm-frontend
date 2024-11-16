@@ -6,7 +6,7 @@ import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import Modal from "../../../Components/Modal/Modal.tsx";
 import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader.tsx";
-import {data, headerFromServer} from "./data.ts";
+import {dataCallCenter, headerFromServerCallCenter} from "./dataCallCenter.ts";
 import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 
 
@@ -36,7 +36,7 @@ export default function CallCenterReport() {
 		);
 		}
 	useEffect(() => {
-		const transformedHeader = headerFromServer.map(cell => ({
+		const transformedHeader = headerFromServerCallCenter.map(cell => ({
 			name: cell.name,
 			is_id: cell.is_id,
 			is_additional: cell.is_additional,
@@ -72,7 +72,7 @@ export default function CallCenterReport() {
 	};
 
 	return (
-		<Report data={data}
+		<Report data={dataCallCenter}
 				header={header}
 				chosenData={chosenData}
 				setChosenData={setChosenData}

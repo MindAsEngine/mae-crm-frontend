@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import Report from "../../Components/Report/Report.tsx";
 import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
-import {data, headerFromServer} from "./data.ts";
+import {dataTasks, headerFromServerTasks} from "./dataTasks.ts";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
@@ -22,15 +22,17 @@ export default function TasksPage() {
 	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
 	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
+
 	const [customFilters, setCustomFilters] = React.useState([]);
-	const [header, setHeader] = useState(headerFromServer);
+	const [header, setHeader] = useState(headerFromServerTasks);
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
+
 	}
 	return (
 
-		<Report data={data}
+		<Report data={dataTasks}
 				header={header}
 				chosenData={chosenData}
 				setChosenData={setChosenData}

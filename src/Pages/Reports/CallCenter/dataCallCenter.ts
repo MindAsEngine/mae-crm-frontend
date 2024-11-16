@@ -1,4 +1,4 @@
-export const headerFromServer = [
+export const headerFromServerCallCenter = [
     {name: "id",is_id:true, title: "№", is_visible: false, is_additional: false, format: 'number'},
     {name: "fio",is_id:false, title: "ФИО", is_visible: true, is_additional: false, format: 'string'},
     {name: "count1",is_id:false, title: "Общее количество обращений", is_visible: true, is_additional: false, format: 'number'},
@@ -16,7 +16,7 @@ export const headerFromServer = [
     {name: "CR7",is_id:false, title: "Конверсия из целевого обращения в ДДУ", is_visible: false, is_additional: true, format: 'percent'},
 ];
 
-export const data = [
+export const dataCallCenter = [
     {id: 1, count1: 10, fio: "Иванов Иван Иванович",  count2: 5, CR1: 0.5, count3: 3, CR2: 0.6, count4: 2, CR3: 0.7, CR4: 0.8, count5: 1, CR5: 0.9, count6: 1, CR6: 1, CR7: 1},
     {id: 2, fio: "Петров Петр Петрович", count1: 20, count2: 10, CR1: 0.5, count3: 6, CR2: 0.6, count4: 4, CR3: 0.7, CR4: 0.8, count5: 2, CR5: 0.9, count6: 2, CR6: 1, CR7: 1},
     {id: 3, fio: "Сидоров Сидор Сидорович", count1: 30, count2: 15, CR1: 0.5, count3: 9, CR2: 0.6, count4: 6, CR3: 0.7, CR4: 0.8, count5: 3, CR5: 0.9, count6: 3, CR6: 1, CR7: 1},

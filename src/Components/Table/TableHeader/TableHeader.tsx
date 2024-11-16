@@ -5,8 +5,8 @@ import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
 
 type TableHeaderProps = {
 	row: Array<TableHeaderCell>;
-	isAllChecked: boolean;
-	setAllChecked: (isChecked: boolean) => void;
+	isAllChecked?: boolean;
+	setAllChecked?: (isChecked: boolean) => void;
 };
 
 export type TableHeaderCell = {
@@ -22,7 +22,8 @@ export type TableHeaderCell = {
 export default function
 	TableHeader({ row, isAllChecked, setAllChecked }: TableHeaderProps) {
 	const handleAllChecked = () => {
-		setAllChecked(!isAllChecked);
+		if (isAllChecked && setAllChecked)
+			setAllChecked(!isAllChecked);
 	};
 	console.log(row);
 	return (

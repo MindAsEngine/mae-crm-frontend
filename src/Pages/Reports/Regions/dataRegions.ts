@@ -1,6 +1,6 @@
 //
 
-export const headerFromServer = [
+export const headerFromServerRegions = [
     {name: "id",is_id:true, title: "№", is_visible: false, is_additional: false, format: 'number'},
     {name: "name_of_projects", format: 'string', is_visible: true, is_additional: 'false', is_id: false, title: 'Наименование проектов'},
     {name: 'region1', title: "Регион 1", is_visible: true, is_additional: false, format: 'number'},
@@ -15,7 +15,7 @@ export const headerFromServer = [
 
 ];
 
-export const data = [
+export const dataRegions = [
     {id: 1, name_of_projects: "Проект 1ssrf", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
     {id: 1, name_of_projects: "Проект 1ssrf", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
     {id: 1, name_of_projects: "Проект 1ssfgt", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},

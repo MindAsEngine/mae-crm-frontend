@@ -21,27 +21,41 @@ type ModalProps = {
 }
 export default function Modal({isOpen, classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
+            setIsOpen(false);
+        }
+    }
+    const handleClickOut = (e: MouseEvent) => {
+        const dialog = document.getElementById("modal");
+        console.log(dialog);
+        console.log(e.target, dialog.contains(e.target))
+        if (!dialog.contains(e.target)) {
             setIsOpen(false);
         }
     }
     useEffect(() => {
         // document.body.style.overflow = 'hidden';
-        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keydown', handleEscape);
+        document.addEventListener('mouseup', handleClickOut );
+
         return () => {
             // document.body.style.overflow = 'auto';
-            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keydown', handleEscape);
+            document.removeEventListener('mouseup', handleClickOut);
         }
     });
     return (
-        <dialog open={isOpen} className={clsx(
+        <dialog open={isOpen}
+
+                className={clsx(
             styles.modal,
             isOpen && styles.isOpen,
             isDropDown ? styles.dropDown : styles.windowMode,
             classNameModal
             )}>
             <div className={clsx(styles.window, classNameWindow)}
+                 id={"modal"}
                  onClick={(e) => e.stopPropagation()}>
                 <header className={styles.header}>
                     <h2 className={styles.title}>{title}</h2>

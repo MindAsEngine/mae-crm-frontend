@@ -8,8 +8,8 @@ import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
 
 type TableRowProps = {
 	row: { [key: string]: string | number };
-	isChecked: boolean;
-	setCheckedRows: (updateFunction: (prev: (string | number)[]) => (string | number)[]) => void;
+	isChecked?: boolean;
+	setCheckedRows?: (updateFunction: (prev: (string | number)[]) => (string | number)[]) => void;
 	header: Array<TableHeaderCell>;
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string | number | boolean) => void
 };
@@ -57,6 +57,7 @@ export default function TableRow({ row, isChecked, setCheckedRows, header, onCli
 								<Checkbox
 									checked={isChecked}
 									onChange={() =>
+										setCheckedRows &&
 										setCheckedRows((prev) =>(
 											isChecked
 												? prev.filter((id) => id !== row['id'])

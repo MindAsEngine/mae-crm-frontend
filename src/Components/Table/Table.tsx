@@ -6,17 +6,18 @@ import {useEffect} from "react";
 type TableProps = {
 	data: Array<object>
 	header: Array<TableHeaderCell>,
-	checkedRows: Array<number>,
-	setCheckedRows: (prev:Array<number>) => void,
+	checkedRows?: Array<number>,
+	setCheckedRows?: (prev:Array<number>) => void,
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void,
 }
 export default function Table({ data, header, onClickCell, checkedRows, setCheckedRows }: TableProps) {
 	const [isAllChecked, setAllChecked] = React.useState<boolean>(false);
 	useEffect(() => {
-		if (isAllChecked) {
+		if (isAllChecked && setCheckedRows) {
 			setCheckedRows(data.map((row) => row['id']))
 		} else {
-			setCheckedRows([])
+			if (setCheckedRows)
+				setCheckedRows([])
 		}
 	}, [isAllChecked])
 	// console.log(checkedRows)
@@ -30,7 +31,7 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 					{data.map((row, index) => (
 						<TableRow
 							onClickCell={onClickCell}
-							key={index} row={row}  isChecked={checkedRows.includes(row['id'])} setCheckedRows={setCheckedRows} header={header}/>
+							key={index} row={row}  isChecked={checkedRows?.includes(row['id'])} setCheckedRows={setCheckedRows} header={header}/>
 					))}
 				</tbody>
 				{/*TODO table footer*/}

@@ -5,5 +5,5 @@ export const statusEnum = [
     {name: "no-purpose", title: "Не целевое", color:"grey"},
     {name: "completed", title: "Сделка проведена", color:"green"},
     {name: "booked", title: "Бронь", color:"yellow"},
-    {name: "default" , title: "Не выбрано", color:"grey"},
+    {name: "default" , title: "Не разобрано", color:"grey"},
 ]

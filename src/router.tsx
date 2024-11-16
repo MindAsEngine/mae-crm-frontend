@@ -3,7 +3,7 @@ import TasksPage from './Pages/TaskPage/TasksPage.tsx'
 import CallCenterReport from './Pages/Reports/CallCenter/CallCenterReport.tsx'
 import Layout from './Components/Layout/Layout.tsx'
 import RegionsReport from './Pages/Reports/Regions/RegionsReport.tsx'
-import ProcessedRequestsSpeedReport from './Pages/Reports/ProcessedRequestsSpeedReport.tsx'
+import ProcessedRequestsSpeedReport from './Pages/Reports/Speed/ProcessedRequestsSpeedReport.tsx'
 import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
 export const routerNames: { [key: string]: string } = {
