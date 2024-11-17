@@ -59,7 +59,7 @@ export default function CallCenterReport() {
 				return setting ? { ...cell, is_hidden_by_user: !setting.applied_visible } : cell;
 			})
 		);
-		setIsOpen(false); // Close the modal after applying
+
 	};
 
 	const onCheckboxChanged = (name) => {
@@ -88,9 +88,15 @@ export default function CallCenterReport() {
 					<Modal isOpen={isOpen}
 						   setIsOpen={setIsOpen}
 						   title={"Кастом"}
-						   onClickWhiteButton={setDefaultCustomSettings}
-						   argWhiteButton={header}
-						   onClickDarkBlueButton={onCustomSettingApplied}
+						   onClickWhiteButton={() => {
+							   setDefaultCustomSettings(header);
+							   setIsOpen(false);
+						   }}
+						   // argWhiteButton={header}
+						   onClickDarkBlueButton={()=> {
+							   onCustomSettingApplied();
+							   setIsOpen(false);}
+						   }
 						   classNameModal={styles.modal}
 						   classNameContent={styles.modalContent}
 						   classNameWindow={styles.modalWindow}

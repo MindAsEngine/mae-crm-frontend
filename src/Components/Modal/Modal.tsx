@@ -9,8 +9,8 @@ type ModalProps = {
     title: string;
     children: React.ReactNode;
     whiteButtonText?: string;
-    onClickWhiteButton: (one: any) => void;
-    argWhiteButton: any;
+    onClickWhiteButton: () => void;
+    // argWhiteButton: any;
     darkBlueButtonText?: string;
     onClickDarkBlueButton: () => void;
     classNameModal?: string;
@@ -19,19 +19,22 @@ type ModalProps = {
     isDropDown?: boolean;
     //
 }
-export default function Modal({isOpen, classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton, argWhiteButton}: ModalProps) {
+export default function Modal({isOpen, classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton}: ModalProps) {
 
     const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
             setIsOpen(false);
+            // onClickWhiteButton(argWhiteButton);
         }
     }
     const handleClickOut = (e: MouseEvent) => {
         const dialog = document.getElementById("modal");
-        console.log(dialog);
-        console.log(e.target, dialog.contains(e.target))
+        // console.log(dialog);
+        // console.log(e.target, dialog.contains(e.target))
         if (!dialog.contains(e.target)) {
             setIsOpen(false);
+
+            // onClickWhiteButton(argWhiteButton);
         }
     }
     useEffect(() => {
@@ -66,11 +69,7 @@ export default function Modal({isOpen, classNameWindow, classNameModal, classNam
                 >{children}</div>
                 <footer className={styles.footer}>
                 <Button stylizedAs={"white"}
-                onClick={() => {
-                onClickWhiteButton(argWhiteButton);
-                setIsOpen(false);
-                }
-                }
+                onClick={onClickWhiteButton}
                 >
                     {whiteButtonText}
             </Button>

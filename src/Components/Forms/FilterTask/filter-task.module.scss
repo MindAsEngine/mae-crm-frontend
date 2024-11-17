@@ -1,0 +1,16 @@
+.modal{
+  top: calc(100% - 13px + 8px);
+  left: calc(100% - 13px - 408px);
+}
+.modalWindow{
+  width: 408px;
+  height: 411px;
+}
+
+.modalContent{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 4px;
+}

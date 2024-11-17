@@ -1,0 +1,26 @@
+.label{
+  color:rgba(102, 112, 133, 1);
+  font: var(--font-weight-medium) var(--font-size-s)/1.2 var(--font-family-inter-bold);
+}
+//.select{
+//  box-sizing: border-box;
+//  height: 44px;
+//  width: 360px;
+//  border: rgba(208, 213, 221, 1) solid 1px;
+//  background-color: white;
+//  border-radius: var(--border-radius);
+//  font: var(--font-weight-light) var(--font-size-m)/1.25 var(--font-family-inter-regular);
+//  color: rgba(152, 162, 179, 1);
+//  outline: rgba(208, 213, 221, 1) solid 1px;
+//  padding: 20px;
+//}
+.option{
+
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: start;
+  justify-content: space-between;
+}

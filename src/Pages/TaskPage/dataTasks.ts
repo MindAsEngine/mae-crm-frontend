@@ -19,3 +19,20 @@ export const dataTasks = [
     {id: 901234562, date: "Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)" ,fio: ["Светлана Кузьмина", "Светлана Кузьмина"], process:"booked", phone_number:["София Григорьева","+998 98 890 12 34"], broker:"Людмила Сидорова", estate_type:"квартира с террасой"},
     {id: 901234561, date: "Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)" ,fio: ["Светлана Кузьмина", "Светлана Кузьмина"], process:"default", phone_number:["София Григорьева","+998 98 890 12 34"], broker:"Людмила Сидорова", estate_type:"квартира с террасой"},
 ];
+export const customFiltersFromServer = [
+    {name: "stage", title: "Этап", options: [
+            {name: "stage", title: "Этап1"},
+            {name: "stage", title: "Этап2"},
+            {name: "stage", title: "Этап3"},
+        ], type: "select"},
+    {name: "city", title: "Город", options: [
+            {name: "city1", title: "Город1"},
+            {name: "city2", title: "Город2"},
+            {name: "city3", title: "Город3"},
+        ], type: "select"},
+    {name: "estate", title: "Тип недвижимости", options: [
+            {name: "estate1", title: "Тип недвижимости1"},
+            {name: "estate2", title: "Тип недвижимости2"},
+            {name: "estate3", title: "Тип недвижимости3"},
+        ], type: "select"},
+]

@@ -1,18 +1,38 @@
 import * as React from 'react'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 
 import Report from "../../Components/Report/Report.tsx";
 import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
-import {dataTasks, headerFromServerTasks} from "./dataTasks.ts";
+import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataTasks.ts";
+import Checkbox from "../../Components/FormComponents/Checkbox/Checkbox.tsx";
+import Modal from "../../Components/Modal/Modal.tsx";
+import Select from "../../Components/FormComponents/Select/Select.tsx";
+import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
 		search: '',
-		startDate: dayjs().subtract(1, 'month'),
-		endDate: dayjs()
+		startDate: '',
+		endDate: ''
 	})
+	const [customFilters, setCustomFilters] = useState([]);
+	const setDefaultOnCustomSetting = (filtersFromServer) => {
+		// @ts-ignore
+		setCustomFilters(filtersFromServer.map(filter =>({
+			name: filter.name,
+			title: filter.title,
+			options: filter.options,
+			selectedOptions: []
+		})))
+	}
+	const onCustomSettingApplied = () => {
+		console.log("onCustomSettingApplied");
+	}
+	useEffect(() => {
+		setDefaultOnCustomSetting(customFiltersFromServer);
+	}, []);
 
 
 	const [chosenData, setChosenData] = useState([])
@@ -23,12 +43,10 @@ export default function TasksPage() {
 	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
 
-	const [customFilters, setCustomFilters] = React.useState([]);
 	const [header, setHeader] = useState(headerFromServerTasks);
-
+	console.log(customFilters);
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
-
 	}
 	return (
 
@@ -48,6 +66,13 @@ export default function TasksPage() {
 					onClick={() => setIsOpenFilters(true)}
 				>
 					Фильтр
+					<FilterTask filters={customFilters}
+								setFilters={setCustomFilters}
+								setIsOpenModal={setIsOpenFilters}
+								isOpenModal={isOpenFilters}
+								onClickDarkBlueButton={onCustomSettingApplied}
+								onClickWhiteButton={() => setDefaultOnCustomSetting(customFiltersFromServer)}
+					/>
 				</Button>
 
 				<Button
