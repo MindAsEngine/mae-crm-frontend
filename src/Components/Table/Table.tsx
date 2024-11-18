@@ -12,20 +12,26 @@ type TableProps = {
 }
 export default function Table({ data, header, onClickCell, checkedRows, setCheckedRows }: TableProps) {
 	const [isAllChecked, setAllChecked] = React.useState<boolean>(false);
+	const [isAllUnchecked, setAllUnchecked] = React.useState<boolean>(true);
 	useEffect(() => {
-		if (isAllChecked && setCheckedRows) {
+		if (isAllChecked && typeof setCheckedRows === 'function') {
 			setCheckedRows(data.map((row) => row['id']))
+
 		} else {
-			if (setCheckedRows)
+			if (typeof setCheckedRows === 'function') {
 				setCheckedRows([])
+			}
 		}
 	}, [isAllChecked])
+	useEffect(() => {
+		setAllUnchecked(checkedRows?.length === 0)
+	}, [checkedRows]);
 	// console.log(checkedRows)
 	return (
 		<div className={styles.tableWrapper}>
 			<table className={styles.table}>
 				<thead className={styles.tableHead}>
-					<TableHeader row={header} isAllChecked={isAllChecked} setAllChecked={setAllChecked}/>
+					<TableHeader isAllUnchecked={isAllUnchecked} row={header} isAllChecked={isAllChecked} setAllChecked={setAllChecked}/>
 				</thead>
 				<tbody className={styles.tableBody}>
 					{data.map((row, index) => (

@@ -1,14 +1,9 @@
 import * as React from 'react'
 import {useEffect, useState} from "react";
-import dayjs from "dayjs";
-
 import Report from "../../Components/Report/Report.tsx";
 import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataTasks.ts";
-import Checkbox from "../../Components/FormComponents/Checkbox/Checkbox.tsx";
-import Modal from "../../Components/Modal/Modal.tsx";
-import Select from "../../Components/FormComponents/Select/Select.tsx";
 import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
 
 export default function TasksPage() {

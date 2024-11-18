@@ -7,6 +7,7 @@ type TableHeaderProps = {
 	row: Array<TableHeaderCell>;
 	isAllChecked?: boolean;
 	setAllChecked?: (isChecked: boolean) => void;
+	isAllUnchecked?: boolean;
 };
 
 export type TableHeaderCell = {
@@ -20,9 +21,9 @@ export type TableHeaderCell = {
 };
 
 export default function
-	TableHeader({ row, isAllChecked, setAllChecked }: TableHeaderProps) {
+	TableHeader({ row, isAllChecked=false, setAllChecked, isAllUnchecked=true }: TableHeaderProps) {
 	const handleAllChecked = () => {
-		if (isAllChecked && setAllChecked)
+		if (typeof setAllChecked === 'function')
 			setAllChecked(!isAllChecked);
 	};
 	console.log(row);
@@ -42,7 +43,9 @@ export default function
 				>
 						<span className={styles.cellElement}>
 							{cellData.is_id  && (
-								<Checkbox onChange={handleAllChecked} checked={isAllChecked} allCheckbox={true} />)}
+								<Checkbox onChange={handleAllChecked} checked={!isAllUnchecked} allCheckbox={true}
+										  isAllUnchecked={isAllUnchecked}
+								/>)}
 							{cellData.title}
 						</span>
 				</th>)}

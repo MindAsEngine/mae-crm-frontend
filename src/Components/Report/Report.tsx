@@ -3,7 +3,6 @@ import FilterBar from "../FilterPanel/FilterBar.tsx";
 import Table from "../Table/Table.tsx";
 import styles from './report.module.scss';
 import {TableHeaderCell} from "../Table/TableHeader/TableHeader.tsx";
-import Curtain from "../Curtain/Curtain.tsx";
 
 type ReportProps = {
     data: any[]
