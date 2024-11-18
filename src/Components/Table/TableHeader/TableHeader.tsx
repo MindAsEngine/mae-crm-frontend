@@ -6,8 +6,9 @@ import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
 type TableHeaderProps = {
 	row: Array<TableHeaderCell>;
 	isAllChecked?: boolean;
-	setAllChecked?: (isChecked: boolean) => void;
+	// setAllChecked?: (isChecked: boolean) => void;
 	isAllUnchecked?: boolean;
+	handleAllChecked?: () => void;
 };
 
 export type TableHeaderCell = {
@@ -21,12 +22,7 @@ export type TableHeaderCell = {
 };
 
 export default function
-	TableHeader({ row, isAllChecked=false, setAllChecked, isAllUnchecked=true }: TableHeaderProps) {
-	const handleAllChecked = () => {
-		if (typeof setAllChecked === 'function')
-			setAllChecked(!isAllChecked);
-	};
-	console.log(row);
+	TableHeader({ row, isAllChecked=false, handleAllChecked, isAllUnchecked=true }: TableHeaderProps) {
 	return (
 		<tr className={styles.tableRow}>
 			{row.map((cellData, index) => (
@@ -43,8 +39,8 @@ export default function
 				>
 						<span className={styles.cellElement}>
 							{cellData.is_id  && (
-								<Checkbox onChange={handleAllChecked} checked={!isAllUnchecked} allCheckbox={true}
-										  isAllUnchecked={isAllUnchecked}
+								<Checkbox onChange={handleAllChecked} checked={isAllChecked} allCheckbox={true}
+										  isAllUnchecked={isAllUnchecked} isAllChecked={isAllChecked}
 								/>)}
 							{cellData.title}
 						</span>
