@@ -29,7 +29,7 @@ export default function ProcessedRequestsSpeedReport(){
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
-		setIsOpenCurtain(true);
+		// setIsOpenCurtain(true);
 	}
 	return (
 		<>
@@ -59,17 +59,17 @@ export default function ProcessedRequestsSpeedReport(){
 
 
 				</div>
-				<Curtain isCurtainOpen={isOpenCurtain} setIsCurtainOpen={setIsOpenCurtain}
-						 children={
-							 <Report data={dataTasks} header={headerFromServerTasks}
-									 noDataRange={true}
-									 children={
-										 <Button stylizedAs={'blue-light'} exportButton={'blue'}>
-											 Экспорт </Button>
+				{/*<Curtain isCurtainOpen={isOpenCurtain} setIsCurtainOpen={setIsOpenCurtain}*/}
+				{/*		 children={*/}
+				{/*			 <Report data={dataTasks} header={headerFromServerTasks}*/}
+				{/*					 noDataRange={true}*/}
+				{/*					 children={*/}
+				{/*						 <Button stylizedAs={'blue-light'} exportButton={'blue'}>*/}
+				{/*							 Экспорт </Button>*/}
 
-									 }
-									 filters={curtainFilters} setFilters={setCurtainFilters} />}
-				/>
+				{/*					 }*/}
+				{/*					 filters={curtainFilters} setFilters={setCurtainFilters} />}*/}
+				{/*/>*/}
 
 			</Report>
 

@@ -16,19 +16,16 @@ export default function RegionsReport() {
 		startDate: dayjs().subtract(1, 'month'),
 		endDate: dayjs()
 	})
-	const [curtainFilters, setCurtainFilters] = useState({
-		search: '',
-	})
+
 	const [chosenData, setChosenData] = useState([])
 	console.log(chosenData)
 	console.log(filters)
-	const [isOpenCurtain, setIsOpenCurtain] = useState(false);
 
 	const [header, setHeader] = useState(headerFromServerRegions);
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
-		setIsOpenCurtain(true);
+		// setIsOpenCurtain(true);
 	}
 	return (
 		<>
@@ -58,17 +55,17 @@ export default function RegionsReport() {
 
 
 			</div>
-			<Curtain isCurtainOpen={isOpenCurtain} setIsCurtainOpen={setIsOpenCurtain}
-				children={
-				<Report data={dataCallCenter} header={headerFromServerCallCenter}
-								  noDataRange={true}
-								  children={
-					<Button stylizedAs={'blue-light'} exportButton={'blue'}>
-						Экспорт </Button>
+			{/*<Curtain isCurtainOpen={isOpenCurtain} setIsCurtainOpen={setIsOpenCurtain}*/}
+			{/*	children={*/}
+			{/*	<Report data={dataCallCenter} header={headerFromServerCallCenter}*/}
+			{/*					  noDataRange={true}*/}
+			{/*					  children={*/}
+			{/*		<Button stylizedAs={'blue-light'} exportButton={'blue'}>*/}
+			{/*			Экспорт </Button>*/}
 
-								  }
-								  filters={curtainFilters} setFilters={setCurtainFilters} />}
-			/>
+			{/*					  }*/}
+			{/*					  filters={curtainFilters} setFilters={setCurtainFilters} />}*/}
+			{/*/>*/}
 
 		</Report>
 
