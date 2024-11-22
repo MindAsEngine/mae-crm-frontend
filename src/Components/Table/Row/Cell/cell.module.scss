@@ -1,0 +1,42 @@
+.tableCell{
+  box-sizing: border-box;
+  background-color: inherit;
+}
+.tableCell.arrayInRow{
+  vertical-align: middle;
+}
+.footer{
+  vertical-align: middle;
+  .cellElement{
+    font: var(--font-s-semibold);
+    //border-top: var(--border-grey-200-regular);
+    padding: 21px 24px;
+  }
+}
+
+.cellElement{
+  border-top: var(--border-grey-200-regular);
+  border-bottom: var(--border-grey-200-regular);
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  color: var(--color-grey-700);
+  font: var(--font-s-regular);
+  text-wrap: nowrap;
+}
+.cellElement.array{
+  flex-direction: column;
+  align-items: start;
+}
+.onClickCell{
+  cursor: pointer;
+}
+.asideHeader{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+

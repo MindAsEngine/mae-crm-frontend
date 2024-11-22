@@ -1,46 +1,15 @@
-
 .tableRow{
   box-sizing: border-box;
-  border-top: rgb(234 236 240 / 100%) solid 1.5px;
-  border-bottom: rgb(234 236 240 / 100%) solid 1.5px;
-  background-color: white;
-}
-.tableCell{
-  box-sizing: border-box;
-  vertical-align: middle;
-}
 
-
-.cellElement{
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  color: rgba(52, 64, 84, 1);
-  gap: 8px;
-  padding: 8px 24px;
-  //max-height: 56px;
-  font: var(--font-weight-light) var(--font-size-s)/1.2 var(--font-family-inter-regular);
-  text-wrap: nowrap;
-  background-color: white;
-  
+  background-color: var(--color-white);
 }
-.cellElement.array{
-  flex-direction: column;
-  align-items: start;
-}
-
-.onClickCell{
-  cursor: pointer;
-}
-
-.asideHeader div{
-  color: red;
-}
-.asideHeader{
+.tableRow.footer{
   position: sticky;
-  left: 0;
+  border: none;
+  bottom: -1px;
   z-index: 1;
+  height: 60px;
 }
 .anomaly{
-  background-color: brown;
+  background-color: var(--color-red-100);
 }

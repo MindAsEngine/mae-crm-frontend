@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import style from "../Row/tableRow.module.scss";
-import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
+import style from "./cell.module.scss";
+import Checkbox from "../../../FormComponents/Checkbox/Checkbox.tsx";
 import * as React from "react";
-import StatusPlate from "../../StatusPlate/StatusPlate.tsx";
+import StatusPlate from "../../../StatusPlate/StatusPlate.tsx";
 import dayjs from "dayjs";
 type CellProps = {
     onClickCell: (rowPos: string | number, columnPos: string, cellData: string | number | boolean) => void,
@@ -12,7 +12,10 @@ type CellProps = {
     columnFormat: string,
     isChecked?: boolean,
     setCheckedRows?: (updateFunction: (prev: (string | number)[]) => (string | number)[]) => void,
-    className?: string
+    className?: string,
+    isArrayInRow?: boolean,
+    isFooter?: boolean,
+    isAsideHeader?: boolean,
 
 }
 const prepareCell= (cellData, format)=> {
@@ -30,10 +33,13 @@ const prepareCell= (cellData, format)=> {
 };
 
 
-export default function Cell({onClickCell,className, columnName, columnFormat, idData, cellData,  setCheckedRows, isChecked}:CellProps){
+export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow,className, columnName, columnFormat, idData, cellData,  setCheckedRows, isChecked}:CellProps){
     return (
         <td className={clsx(style.tableCell,
-            className,
+            isArrayInRow && style.arrayInRow,
+            isAsideHeader && style.asideHeader,
+              isFooter && style.footer,
+
             typeof onClickCell === "function" && style.onClickCell,
             // headerCell.is_aside_header && style.asideHeader,
         )}

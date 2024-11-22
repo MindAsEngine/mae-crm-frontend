@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import styles from "../TableHeader/tableHeader.module.scss";
-import Checkbox from "../../FormComponents/Checkbox/Checkbox.tsx";
+import styles from "../tableHeader.module.scss";
+import Checkbox from "../../../FormComponents/Checkbox/Checkbox.tsx";
 import * as React from "react";
 
 export type TableHeaderCell = {

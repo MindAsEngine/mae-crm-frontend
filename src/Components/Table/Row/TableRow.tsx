@@ -1,7 +1,7 @@
 import * as React from 'react';
 import style from './tableRow.module.scss';
-import {TableHeaderCell} from "../HeaderCell/HeaderCell.tsx";
-import Cell from "../Cell/Cell.tsx";
+import {TableHeaderCell} from "../TableHeader/HeaderCell/HeaderCell.tsx";
+import Cell from "./Cell/Cell.tsx";
 import clsx from "clsx";
 
 
@@ -15,16 +15,16 @@ type TableRowProps = {
 
 export default function TableRow({ row, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
 	return (
-		<tr className={style.tableRow}>
+		<tr className={clsx(style.tableRow, row['is_anomaly'] && style.anomaly,
+			row['is_footer'] && style.footer,
+			)}>
 			{header.map((headerCell, index) => (
 				  (headerCell.is_hidden_by_user === false || headerCell.is_visible )  &&
 				  (
-					  <>
-						  {!row['is_footer'] &&
 							  <Cell
-								  className={clsx(headerCell.is_aside_header && style.asideHeader,
-									 row['is_anomaly'] && style.anomaly
-								  )}
+								 isAsideHeader={headerCell.is_aside_header}
+								 isFooter={row['is_footer']}
+								  isArrayInRow={header.find(cell => cell.format === 'array')}
 								  key={index}
 								  onClickCell={onClickCell}
 								  columnName={headerCell.name}
@@ -34,10 +34,6 @@ export default function TableRow({ row, isChecked, setCheckedRows, header, onCli
 								  isChecked={isChecked}
 								  setCheckedRows={setCheckedRows}
 							  />
-						  }
-
-
-					  </>
 				  )
 			))}
 		</tr>

@@ -71,7 +71,9 @@ export default function CallCenterReport() {
 			)
 		);
 	};
-
+	// dataCallCenter.map((item, index) => (
+	// 	console.log(item.is_anomaly, index, "item is_anomaly")
+	// ));
 	return (
 		<Report data={dataCallCenter}
 				header={header}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './tableHeader.module.scss';
-import HeaderCell, {TableHeaderCell} from "../HeaderCell/HeaderCell.tsx";
+import HeaderCell, {TableHeaderCell} from "./HeaderCell/HeaderCell.tsx";
 
 type TableHeaderProps = {
 	row: Array<TableHeaderCell>;

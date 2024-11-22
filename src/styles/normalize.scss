@@ -142,4 +142,6 @@ html,
 body {
 	height: 100vh;
 	height: 100dvh;
+	transform: translate3d(0, 0, 0); /* Оптимизация для GPU */
+	backface-visibility: hidden;
 }

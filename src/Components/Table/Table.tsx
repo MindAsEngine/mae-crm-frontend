@@ -3,8 +3,7 @@ import TableRow from './Row/TableRow.tsx'
 import styles from './table.module.scss'
 import TableHeader from './TableHeader/TableHeader.tsx'
 import {useEffect} from "react";
-import {TableHeaderCell} from "./HeaderCell/HeaderCell.tsx";
-import TableFooter from "./TableFooter/TableFooter.tsx";
+import {TableHeaderCell} from "./TableHeader/HeaderCell/HeaderCell.tsx";
 type TableProps = {
 	data: Array<object>
 	header: Array<TableHeaderCell>,
@@ -35,29 +34,32 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 		<div className={styles.tableWrapper}>
 			<table className={styles.table}>
 				<thead className={styles.tableHead}>
-					<TableHeader
-						isAllUnchecked={isAllUnchecked}
-						row={header}
-						isAllChecked={isAllChecked}
-						handleAllChecked={handleCheckAll}
-					/>
+				<TableHeader
+					isAllUnchecked={isAllUnchecked}
+					row={header}
+					isAllChecked={isAllChecked}
+					handleAllChecked={handleCheckAll}
+				/>
 				</thead>
 				<tbody className={styles.tableBody}>
-					{data.map((row, index) => (
-
+				{data.filter(
+					(row) => !row['is_footer'])
+					.map((row, index) => (
 						<TableRow
 							onClickCell={onClickCell}
-							key={index} row={row}  isChecked={checkedRows?.includes(row['id'])} setCheckedRows={setCheckedRows} header={header}/>
+							key={index} row={row} isChecked={checkedRows?.includes(row['id'])}
+							setCheckedRows={setCheckedRows} header={header}/>
 					))}
 				</tbody>
-
-				<tfoot>
-				{data.map((row, index) => (
-
-					<TableFooter
-						onClickCell={onClickCell}
-						key={index} row={row} header={header}/>
-				))}
+				<tfoot className={styles.tableFoot}>
+				{data.filter(
+					(row) => row['is_footer'])
+					.map((row, index) => (
+						<TableRow
+							onClickCell={onClickCell}
+							key={index} row={row} isChecked={checkedRows?.includes(row['id'])}
+							setCheckedRows={setCheckedRows} header={header}/>
+					))}
 				</tfoot>
 			</table>
 		</div>

@@ -17,13 +17,13 @@ export const headerFromServerCallCenter = [
 ];
 
 export const dataCallCenter = [
-    {is_footer: false, is_anomaly:false,  id: 1, count1: 10, fio: "Иванов Иван Иванович",  count2: 5, CR1: 0.5, count3: 3, CR2: 0.6, count4: 2, CR3: 0.7, CR4: 0.8, count5: 1, CR5: 0.9, count6: 1, CR6: 1, CR7: 1},
+    {is_footer: false, is_anomaly:true,  id: 1, count1: 10, fio: "Иванов Иван Иванович",  count2: 5, CR1: 0.5, count3: 3, CR2: 0.6, count4: 2, CR3: 0.7, CR4: 0.8, count5: 1, CR5: 0.9, count6: 1, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 2, fio: "Петров Петр Петрович", count1: 20, count2: 10, CR1: 0.5, count3: 6, CR2: 0.6, count4: 4, CR3: 0.7, CR4: 0.8, count5: 2, CR5: 0.9, count6: 2, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 3, fio: "Сидоров Сидор Сидорович", count1: 30, count2: 15, CR1: 0.5, count3: 9, CR2: 0.6, count4: 6, CR3: 0.7, CR4: 0.8, count5: 3, CR5: 0.9, count6: 3, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 4, fio: "Николаев Николай Николаевич", count1: 40, count2: 20, CR1: 0.5, count3: 12, CR2: 0.6, count4: 8, CR3: 0.7, CR4: 0.8, count5: 4, CR5: 0.9, count6: 4, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 5, fio: "Александров Александр Александрович", count1: 50, count2: 25, CR1: 0.5, count3: 15, CR2: 0.6, count4: 10, CR3: 0.7, CR4: 0.8, count5: 5, CR5: 0.9, count6: 5, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 6, fio: "Андреев Андрей Андреевич", count1: 60, count2: 30, CR1: 0.5, count3: 18, CR2: 0.6, count4: 12, CR3: 0.7, CR4: 0.8, count5: 6, CR5: 0.9, count6: 6, CR6: 1, CR7: 1},
-    {is_footer: false, is_anomaly:false,  id: 7, fio: "Антонов Антон Антонович", count1: 70, count2: 35, CR1: 0.5, count3: 21, CR2: 0.6, count4: 14, CR3: 0.7, CR4: 0.8, count5: 7, CR5: 0.9, count6: 7, CR6: 1, CR7: 1},
+    {is_footer: false, is_anomaly:true,  id: 7, fio: "Антонов Антон Антонович", count1: 70, count2: 35, CR1: 0.5, count3: 21, CR2: 0.6, count4: 14, CR3: 0.7, CR4: 0.8, count5: 7, CR5: 0.9, count6: 7, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 8, fio: "Артемов Артем Артемович", count1: 80, count2: 40, CR1: 0.5, count3: 24, CR2: 0.6, count4: 16, CR3: 0.7, CR4: 0.8, count5: 8, CR5: 0.9, count6: 8, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 9, fio: "Артемьев Артемий Артемьевич", count1: 90, count2: 45, CR1: 0.5, count3: 27, CR2: 0.6, count4: 18, CR3: 0.7, CR4: 0.8, count5: 9, CR5: 0.9, count6: 9, CR6: 1, CR7: 1},
     {is_footer: false, is_anomaly:false,  id: 10, fio: "Артур Артур Артурович", count1: 100, count2: 50, CR1: 0.5, count3: 30, CR2: 0.6, count4: 20, CR3: 0.7, CR4: 0.8, count5: 10, CR5: 0.9, count6: 10, CR6: 1, CR7: 1},
