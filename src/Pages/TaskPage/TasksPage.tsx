@@ -9,8 +9,8 @@ import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
 		search: '',
-		startDate: '',
-		endDate: ''
+		startDate: null,
+		endDate: null,
 	})
 	const [customFilters, setCustomFilters] = useState([]);
 	const setDefaultOnCustomSetting = (filtersFromServer) => {

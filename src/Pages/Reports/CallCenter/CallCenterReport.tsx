@@ -13,8 +13,8 @@ import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 export default function CallCenterReport() {
 	const [filters, setFilters] = useState({
 		search: '',
-		startDate: dayjs().subtract(1, 'month'),
-		endDate: dayjs()
+		startDate:null,
+		endDate: null
 	})
 	console.log(filters)
     const [isOpen, setIsOpen] = useState(false)

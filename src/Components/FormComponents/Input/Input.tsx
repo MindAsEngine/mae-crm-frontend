@@ -10,8 +10,10 @@ type InputProps = {
     type: string,
     before?: React.ReactNode
     after?: React.ReactNode
+    readOnly?: boolean
+
 }
-export default function Input({onChange, value, before, after, className, placeholder, type}: InputProps) {
+export default function Input({onChange, readOnly,value, before, after, className, placeholder, type}: InputProps) {
     const [isFocused, setIsFocused] = React.useState(false);
     return (
         <div className={clsx(styles.inputContainer, isFocused && styles.focused, className)}>
@@ -25,8 +27,11 @@ export default function Input({onChange, value, before, after, className, placeh
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 maxLength={50}
+                autoComplete={"off"}
+                spellCheck={false}
+                readOnly={readOnly}
             />
-            {after}
+            {value.length > 0 && after}
         </div>
     )
 }

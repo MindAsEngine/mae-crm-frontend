@@ -25,7 +25,7 @@ type HeaderCellProps = {
 
 
 export default function  HeaderCell({cellData,onClickHeaderCell, isAllChecked=false, handleAllChecked, isAllUnchecked=true}: HeaderCellProps){
-    console.log(cellData.is_aside_header, "Is aside")
+    // console.log(cellData.is_aside_header, "Is aside")
     return (
         <th
            onClick={onClickHeaderCell}

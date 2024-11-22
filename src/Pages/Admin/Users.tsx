@@ -34,6 +34,7 @@ export default function Users() {
 				setChosenData={setChosenData}
 				filters={filters}
 				setFilters={setFilters}
+				noDataRange={true}
 
 				onClickCell={onClickCell}
 		>

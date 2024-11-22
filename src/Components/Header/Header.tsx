@@ -25,7 +25,8 @@ export default function Header() {
 					const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`
 					if (
 						routerNames[routeTo] === undefined ||
-						routerNames[routeTo] === 'Отчеты'
+						routerNames[routeTo] === 'Отчеты' ||
+						routerNames[routeTo] === 'АДМИН'
 					) {
 						return null
 					}

@@ -11,8 +11,8 @@ import dayjs from "dayjs";
 export default function RegionsReport() {
 	const [filters, setFilters] = useState({
 		search: '',
-		startDate: dayjs().subtract(1, 'month'),
-		endDate: dayjs()
+		startDate: null,
+		endDate: null,
 	})
 
 	const [chosenData, setChosenData] = useState([])
