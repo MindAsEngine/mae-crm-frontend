@@ -22,6 +22,9 @@ type CalendarProps = {
 }
 export default function Calendar({startDate, endDate, handleDayClick, direction, handleMonthChange, currentMonth}:CalendarProps) {
     const [weeks, setWeeks] = useState([]);
+    console.log(startDate, "Start Date")
+    console.log(endDate, "End Date")
+
     const renderDays = (month) => {
         const start = startOfWeek(startOfMonth(month), {weekStartsOn: 1});
         const end = endOfWeek(endOfMonth(month), {weekStartsOn: 1});
@@ -34,19 +37,30 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
                     endDate &&
                     day >= startDate &&
                     day <= endDate;
+                console.log(isInRange, "Is in range", day)
                 const currentDay = day.toISOString();
                 week.push(
                     <td
                         className={clsx(
-                            !isSameMonth(day, month) && styles.differentMonth,
+                            // !isSameMonth(day, month) && styles.differentMonth,
                             isInRange && styles.inRange,
-                            isSameDay(day, startDate) && styles.startDate,
-                            isSameDay(day, endDate) && styles.endDate,
-                            styles.day
+                            styles.day,
+                            !isSameMonth(day, month) && styles.differentMonth,
+                            isSameDay(day, startDate) && styles.chosenStart,
+                            isSameDay(day, endDate) && styles.chosenEnd,
+                            isSameDay(day, startDate) && styles.chosen,
+                            isSameDay(day, endDate) && styles.chosen,
+                            // styles.day
                         )}
                         key={currentDay}
                          onClick={() => handleDayClick(parseISO(currentDay))}
-                    >{day.getDate()}</td>
+                    ><span
+                        className={clsx(
+
+                        )}
+                    >{day.getDate()}</span>
+
+                    </td>
                 );
                 day = addDays(day, 1);
             }
@@ -56,23 +70,30 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
     React.useEffect(() => {
         setWeeks([]);
         renderDays(currentMonth);
-    }, [currentMonth]);
+    }, [currentMonth, startDate, endDate]);
     return (
         <div className={styles.calendar}>
             <div className={styles.month}>
-                <span>{format(currentMonth, "MMMM yyyy")}</span>
-                <button onClick={() => handleMonthChange(direction)}>&gt;</button>
+                {direction < 0 && (<span
+                    className={styles.icon + " " + styles.left}
+                    onClick={() => handleMonthChange(direction)}>&lt;</span>)}
+                <span className={styles.monthTitle}>
+                    {currentMonth.toLocaleString("ru", {month: "long"})} {format(currentMonth, "yyyy")}
+                </span>
+                {direction >= 0 && (<span
+                    className={styles.icon + " " + styles.right}
+                    onClick={() => handleMonthChange(direction)}>&gt;</span>)}
             </div>
             <table>
                 <thead>
                 <tr>
-                    <th>Пн</th>
-                    <th>Вт</th>
-                    <th>Ср</th>
-                    <th>Чт</th>
-                    <th>Пт</th>
-                    <th>Сб</th>
-                    <th>Вс</th>
+                    <th className={styles.dayTitle}>Пн</th>
+                    <th className={styles.dayTitle}>Вт</th>
+                    <th className={styles.dayTitle}>Ср</th>
+                    <th className={styles.dayTitle}>Чт</th>
+                    <th className={styles.dayTitle}>Пт</th>
+                    <th className={styles.dayTitle}>Сб</th>
+                    <th className={styles.dayTitle}>Вс</th>
                 </tr>
                 </thead>
                 <tbody>
