@@ -56,8 +56,11 @@ export default function TasksPage() {
 			<div className={styles.custom}>
 
 				<Button
+					badge={(3).toString()}
 					stylizedAs={'white'}
-					filterButton={'grey'}
+					filterButton={true}
+					// loading={chosenData.length === 0}
+
 					onClick={() => setIsOpenFilters(true)}
 				>
 					Фильтр
@@ -71,16 +74,19 @@ export default function TasksPage() {
 				</Button>
 
 				<Button
-					stylizedAs={'blue-light'}
-					createButton={'blue'}
+					stylizedAs={'blue-dark'}
+					createButton={true}
 					disabled={chosenData.length === 0}
+					// loading={chosenData.length === 0}
 					onClick={() => setIsOpenCreateTask(true)}
 				>
 						Создать задачу
 				</Button>
 				<Button
+
 					stylizedAs={'blue-dark'}
-					exportButton={'white'}
+					// loading={chosenData.length === 0}
+					createButton={true}
 					onClick={() => setIsOpenCreateAudience(true)}
 				>
 					Создать аудиторию

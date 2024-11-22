@@ -11,11 +11,11 @@
 }
 .checked{
   background-color: rgba(46, 144, 250, 1);
-  background-image: url("/src/assets/imgs/filterbar/checked.svg");
+  background-image: url("/src/assets/imgs/checkbox/checked.svg");
   background-repeat: no-repeat;
   background-position: center center;
   border: none;
 }
 .notAllChecked{
-  background-image: url("/src/assets/imgs/filterbar/minus.svg");
+  background-image: url("/src/assets/imgs/checkbox/minus.svg");
 }

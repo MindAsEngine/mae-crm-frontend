@@ -45,10 +45,14 @@ export default function FilterBar({
 					onChange={handleSearch}
 					value={filters.search}
 					className={styles.search}
-					before={(<i className={styles.search_icon}></i>)}
-					// after={(<i className={styles.close_icon}></i>)}
+					before={(<span className={styles.search_icon}></span>)}
+					after={(<span className={styles.close_icon}></span>)}
 				/>
-				{!noDataRange && <RangeDate handleDateRange={handleDateRange} filters={filters} />}
+				{!noDataRange && <RangeDate
+
+					// handleDateRange={handleDateRange}
+					// filters={filters}
+				/>}
 			</div>
 			{children}
 

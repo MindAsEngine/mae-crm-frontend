@@ -1,4 +1,3 @@
-@import url('/src/font-variables.scss');
 
 .tableRow{
   box-sizing: border-box;
@@ -19,7 +18,7 @@
 }
 
 .cellElement::after{
-  content: url("/src/assets/imgs/filterbar/sort.svg");
+  content: url("/src/assets/imgs/table/sort.svg");
   width: 16px;
   height: 16px;
 }

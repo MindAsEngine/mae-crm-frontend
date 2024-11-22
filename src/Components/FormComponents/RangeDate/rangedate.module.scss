@@ -1,23 +1,117 @@
-@import url('/src/font-variables.scss');
-@import url('/src/Components/FormComponents/variables.scss');
-
-.datepicker > div > div > div{
-  border: var(--input-border-color) solid 1.5px;
-  border-radius: var(--border-radius);
-}
-
-.datepicker > div > div > div input{
+.container{
   box-sizing: border-box;
-  padding: var(--input-padding);
-  color: var(--input-text-color);
-  background-color: transparent;
+  position: relative;
+  margin: 0;
+    padding: 0;
 }
+.input{
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  border: rgba(208, 213, 221, 1) 1px solid;
+  border-radius: 6px;
+  height: 40px;
+  width: 247px;
+  padding: 11px 14px;
+}
+.disabledInput{
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  display: flex;
+  color: rgba(152, 162, 179, 1);
+  font: var(--font-weight-medium) var(--font-size-s)/1.3 var(--font-family-inter-bold);
+  padding: 0;
+  margin: 0;
+  flex-grow: 2;
 
-.datepicker > div > div > div input:focus{
-    color: var(--focused-text-color);
-    border: var(--input-border-color) solid 2px;
 }
-
-.datepicker > div > div > div > span {
-    color: var(--input-text-color);
+.disabledInput::placeholder{
+  color: rgba(152, 162, 179, 1);
+  font: var(--font-weight-medium) var(--font-size-s)/1.3 var(--font-family-inter-bold);
 }
+.imgCalendar {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  background-image: url('/src/assets/imgs/button/calendar.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+//.header {
+//  display: flex;
+//  align-items: center;
+//  border: 1px solid #ccc;
+//  padding: 5px;
+//  cursor: pointer;
+//}
+//.header input {
+//  border: none;
+//  flex: 1;
+//  cursor: pointer;
+//}
+//.calendar-dropdown {
+//  position: absolute;
+//  top: 40px;
+//  display: flex;
+//  flex-direction: column;
+//  background: white;
+//  border: 1px solid #ccc;
+//  z-index: 10;
+//  padding: 10px;
+//}
+//.calendar {
+//  margin: 0 10px;
+//}
+//.month {
+//  display: flex;
+//  justify-content: space-between;
+//  margin-bottom: 10px;
+//}
+//.table {
+//  border-collapse: collapse;
+//  width: 100%;
+//}
+//.th {
+//  color: #999;
+//  font-size: 12px;
+//}
+//.td {
+//  width: 14%;
+//  text-align: center;
+//  padding: 5px;
+//  cursor: pointer;
+//}
+//.td.disabled {
+//  color: #ccc;
+//  pointer-events: none;
+//}
+//.td.selected {
+//  background: #007bff;
+//  color: white;
+//}
+//.td.in-range {
+//  background: #d0e7ff;
+//}
+//.time-picker {
+//  display: flex;
+//  justify-content: space-between;
+//  margin-top: 10px;
+//}
+//.time-picker label {
+//  margin-right: 5px;
+//}
+//.time-picker input {
+//  padding: 5px;
+//}
+//.footer {
+//  text-align: right;
+//  width: 100%;
+//  margin-top: 10px;
+//}
+//.footer button {
+//  margin-left: 10px;
+//}

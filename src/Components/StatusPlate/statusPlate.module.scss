@@ -1,83 +1,79 @@
-@import url('/src/font-variables.scss');
 
 .container{
+  padding: 4px 8px;
+  border-radius: var(--border-radius-xs);
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  border-radius: 6px;
+
+  .text{
+    font: var(--font-xs-medium);
+  }
+
+  .close::before, .close::after{
+    content: '';
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 10px;
+    height: 1.5px;
+  }
+
+  .close::before{
+    transform: rotate(45deg);
+  }
+
+  .close::after{
+    transform: rotate(-45deg);
+  }
 }
 
 .red{
-  background-color: rgb(254 243 242 / 100%);
+  background-color: var(--color-red-50);
+  .text{
+    color: var(--color-red-600);
+  }
+  .close{
+    background-color: var(--color-red-600);
+  }
 }
 
 .grey{
-  background-color: rgb(242 244 247 / 100%);
+  background-color: var(--color-grey-100);
+  .text{
+    color: var(--color-grey-600);
+  }
+  .close{
+    background-color: var(--color-grey-600);
+  }
 }
 
 .green{
-  background-color: rgb(234 248 228 / 100%);
+  background-color: var(--color-kelli-green-50);
+  .text{
+    color: var(--color-kelli-green-700);
+  }
+  .close{
+    background-color: var(--color-kelli-green-700);
+  }
 }
 
 .yellow{
-  background-color: rgb(255 250 235 / 100%);
+  background-color: var(--color-yellow-50);
+  .text{
+    color: var(--color-yellow-700);
+  }
+  .close{
+    background-color: var(--color-yellow-700);
+  }
 }
 
 
-.text{
-  font: var(--font-weight-medium) var(--font-size-xs)/1.2 var(--font-family-inter-bold);
-}
 
-.red .text{
-  color: rgb(217 45 32 / 100%);
-}
-
-.grey .text{
-  color: rgb(71 84 103 / 100%);
-}
-
-.green .text{
-  color: rgb(61 150 18 / 100%);
-}
-
-.yellow .text{
-  color: rgb(191 115 1 / 100%);
-}
-
-.close::before, .close::after{
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 1.5px;
-}
-
-.close::before{
-  transform: rotate(45deg);
-}
-
-.close::after{
-  transform: rotate(-45deg);
-}
-
-.red .close{
-  background-color: rgb(217 45 32 / 100%);
-}
-
-.grey .close{
-  background-color: rgb(71 84 103 / 100%);
-}
-
-.green .close{
-  background-color: rgb(61 150 18 / 100%);
-}
-
-.yellow .close{
-  background-color: rgb(191 115 1 / 100%);
-}
 
 
 

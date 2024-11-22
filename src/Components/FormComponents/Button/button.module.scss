@@ -1,5 +1,3 @@
-@import url('/src/Components/FormComponents/variables.scss');
-
 .button {
 	position: relative;
 	display: flex;
@@ -7,15 +5,11 @@
 	align-items: center;
 	gap: 8px;
 	box-sizing: border-box;
-	font: var(--font-weight-medium) var(--font-size-s) / 1.3
-			var(--font-family-inter-bold);
+	font: var(--font-s-medium);
 	background-color: transparent;
-	border: none;
+	border: transparent solid 1px;
 	cursor: pointer;
-	height: 40px;
-
 }
-
 .button:focus{
 	outline: none;
 }
@@ -23,47 +17,134 @@
 	pointer-events: none;
 	cursor: not-allowed;
 }
-
-.blueDark{
-	color: rgb(255 255 255 / 100%);
-	background-color: rgb(46 144 250 / 100%);
-}
-
-.blueLight{
-	color: rgb(21 112 239 / 100%);
-	background-color: rgb(239 248 255 / 100%);
-
-}
-
-.white{
-	color: var(--focused-text-color);
-	border: var(--input-border-color) solid 1px;
+.loading{
+	pointer-events: none;
+	cursor: wait;
 }
 
 .blueDark, .blueLight, .white{
-	padding: var(--input-padding);
-	border-radius: var(--border-radius);
+	height: 40px;
+	padding:  14px 16px;
+	border-radius: var(--border-radius-s);
+}
+.blueDark, {
+	color: var(--color-white);
+	background-color: var(--color-blue-500);
+}
+.blueDark.withBefore::before, .blueDark.withBefore.loading::after{
+	background-color: var(--color-white);
+
 }
 
-.withBefore::before{
-	width: 16px;
-	height: 16px;
-	object-fit: contain;
+.blueDark:hover{
+	background-color: var(--color-blue-400);
+}
+.blueDark:focus{
+	background-color: var(--color-blue-400);
+	box-shadow: var(--effect-primary-shadow);
+}
+.disabled.blueDark{
+	background-color: var(--color-blue-100);
+}
+.loading.blueDark{
+	background-color: var(--color-blue-100);
 }
 
-.exportWhite::before{
-	content: url('/src/assets/imgs/filterbar/export/exportWhite.svg');
+.blueLight{
+	color: var(--color-blue-600);
+	background-color: var(--color-blue-50);
+}
+.blueLight.withBefore::before, .blueLight.withBefore.loading::after{
+	background-color: var(--color-blue-600);
+}
+.blueLight:hover{
+	border: var(--border-blue-300-regular);
+}
+.blueLight:focus{
+	border: var(--border-blue-300-regular);
+	box-shadow: var(--effect-primary-shadow);
+}
+.disabled.blueLight, .blueLight.withBefore.disabled::before{
+	color: var(--color-blue-300);
+}
+
+.loading.blueLight{
+	color: var(--color-blue-300);
+}
+.loading.blueLight::after,
+.blueLight.withBefore.loading::before{
+	background-color: var(--color-blue-300);
+}
+
+.white{
+	color: var(--color-grey-600);
+	background-color: var(--color-white);
+	border: var(--border-grey-300-regular);
+}
+.white.withBefore::before, .white.withBefore.loading::after{
+	background-color: var(--color-grey-600);
+}
+.white:hover{
+	border: var(--border-grey-400-regular);
+}
+.white:focus{
+	border: var(--border-grey-400-regular);
+	box-shadow: var(--effect-grey-shadow);
+}
+.disabled.white{
+	color: var(--color-grey-300);
+	border: var(--border-grey-200-regular);
+}
+
+.loading.white{
+	color: var(--color-grey-300);
+}
+.loading.white::after,
+.white.withBefore.loading::before{
+	background-color: var(--color-grey-600);
+}
+
+.badge{
+	box-sizing: border-box;
+	background-color: var(--color-blue-500);
+	color: var(--color-white);
+	border-radius: var(--border-radius-curcle);
+	width: var(--icon-sm);
+	height: var(--icon-sm);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: .5px;
+	font: var(--font-xxs-bold);
+}
+
+.withBefore.button::before{
+	width: var(--icon-sm);
+	height: var(--icon-sm);
+	content: '';
+}
+.loading.button::after, .withBefore.loading.button::before {
+	width: var(--icon-sm);
+	height: var(--icon-sm);
+	content: '';
+	mask: url('/src/assets/imgs/button/loading.svg') no-repeat 50% 50%;
+}
+
+.withBefore.loading.button::after{
+	content: none;
+}
+
+.exportButton::before{
+	mask: url('/src/assets/imgs/button/export.svg') no-repeat 50% 50%;
 
 }
 
-.exportBlue::before{
-	content: url('/src/assets/imgs/filterbar/export/exportBlue.svg');
+.createButton::before{
+	mask: url('/src/assets/imgs/button/create.svg') no-repeat 50% 50%;
+
 }
 
-.createWhite::before{
-	content: url('/src/assets/imgs/filterbar/create/createWhite.svg');
-}
+.filterButton::before{
+	mask: url('/src/assets/imgs/button/filter.svg') no-repeat 50% 50%;
 
-.filterGrey::before{
-	content: url('/src/assets/imgs/filterbar/filterGrey.svg');
 }

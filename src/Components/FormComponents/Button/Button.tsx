@@ -4,16 +4,18 @@ import { IClassNameProps } from '@bem-react/core'
 import React, { FC } from 'react'
 import styles from './button.module.scss'
 import clsx from 'clsx'
-
+import { ReactComponent as MyIcon } from '/src/assets/imgs/button/loading.svg';
 interface IButtonProps extends IClassNameProps {
 	as?: React.ElementType
 	children: React.ReactNode
 	onClick?: () => void
 	stylizedAs?: 'blue-dark' | 'blue-light' | 'white'
-	exportButton?: 'blue' | 'white',
-	createButton?: 'blue' | 'white',
-	filterButton?: 'grey',
+	exportButton?: boolean,
+	createButton?: boolean,
+	filterButton?: boolean,
 	disabled?: boolean,
+	loading?: boolean,
+	badge?: string,
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -25,6 +27,8 @@ export const Button: FC<IButtonProps> = ({
 	createButton,
 	filterButton,
 	disabled,
+	loading,
+	badge,
 	...props
 }) => {
 	return (
@@ -38,20 +42,14 @@ export const Button: FC<IButtonProps> = ({
 				[styles.blueLight]: stylizedAs === 'blue-light',
 				[styles.white]: stylizedAs === 'white',
 			},
-				{
-					[styles.exportWhite]: exportButton === 'white',
-					[styles.exportBlue]: exportButton === 'blue',
-				},
-				{
-					[styles.createWhite]: createButton === 'white',
-					[styles.exportBlue]: createButton === 'blue',
-				},
-				{
-					[styles.filterGrey]: filterButton === 'grey',
-				},
+				exportButton && styles.exportButton,
+				createButton && styles.createButton,
+				filterButton && styles.filterButton,
 				disabled && styles.disabled,
+				loading && styles.loading,
 			)}>
 			{children}
+			{badge && !loading && <span className={styles.badge}>{badge}</span>}
 		</Component>
 	)
 }

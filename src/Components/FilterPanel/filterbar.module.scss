@@ -1,11 +1,8 @@
-@import url('/src/font-variables.scss');
-@import url('/src/Components/FormComponents/variables.scss');
-
 .section{
   display: flex;
   gap: 12px;
   padding: 16px 24px;
-  background-color: white;
+  background-color: var(--color-white)
 }
 
 .common_filters{
@@ -17,18 +14,19 @@
 }
 
 .search_icon{
-  width: 14px;
-  height: 12px;
-  background-image: url('/src/assets/imgs/filterbar/search.svg');
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  background-image: url('/src/assets/imgs/input/search.svg');
   background-repeat: no-repeat;
   background-size: contain;
+  cursor: pointer;
 }
 
 .close_icon{
   position: relative;
-    width: 16px;
-    height: 14px;
-    cursor: pointer;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  cursor: pointer;
 
 }
 
@@ -37,7 +35,7 @@
     top: 50%;
     width:100%;
     height: 1.5px;
-    background-color: var(--focused-text-color);
+    background-color: var(--color-grey-600);
     content: '';
 }
 

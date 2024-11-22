@@ -5,7 +5,7 @@
   box-sizing: border-box;
   min-width: 0;
   overflow-y: hidden;
-  border: rgb(234 236 240 / 100%) solid 1px;
-  border-radius: 12px;
-  background-color: white;
+  border: var(--border-grey-200-regular);
+  border-radius: var(--border-radius-m);
+  background-color: var(--color-white);
 }

@@ -1,0 +1,15 @@
+*{
+  /* Shadow Styles */
+  //--effect-inner-shadow: [value];
+  //--effect-shadow-s-down: [value];
+  --effect-shadow-m-down: 0px 10px 16px 0px rgba(0, 0, 0, 0.05);
+  //--effect-shadow-l-down: [value];
+
+  //--effect-shadow-s-center: [value];
+  --effect-shadow-m-center: 0px 1px 16px 0px rgba(0, 0, 0, 0.05);
+  --effect-shadow-l-center: 0px 1px 30px 0px rgba(0, 0, 0, 0.08);
+
+  --effect-grey-shadow: 0px 0px 0px 4px var(--color-grey-100);
+  --effect-primary-shadow:  0px 0px 0px 4px var(--color-blue-100);
+  --effect-red-shadow: 0px 0px 0px 4px var(--color-red-100);
+}
