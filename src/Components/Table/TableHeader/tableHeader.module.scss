@@ -2,6 +2,18 @@
 .tableRow{
   box-sizing: border-box;
   background-color: rgb(249 250 251 / 100%);
+
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.asideHeader{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+.asideHeader div{
+  background-color: red;
 }
 
 .cellElement{
@@ -11,6 +23,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
+  background-color: rgb(249 250 251 / 100%);
 
   font: var(--font-weight-medium) var(--font-size-s)/1.2 var(--font-family-inter-bold);
   text-wrap: nowrap;

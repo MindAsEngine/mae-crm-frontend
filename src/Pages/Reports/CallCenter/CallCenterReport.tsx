@@ -43,7 +43,8 @@ export default function CallCenterReport() {
 			title: cell.title,
 			is_visible: cell.is_visible,
 			format: cell.format,
-			is_hidden_by_user: !cell.is_visible
+			is_hidden_by_user: !cell.is_visible,
+			is_aside_header: cell.is_aside_header
 		}));
 
 		setHeader(transformedHeader);

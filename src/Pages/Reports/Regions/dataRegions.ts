@@ -2,7 +2,7 @@
 
 export const headerFromServerRegions = [
     {name: "id",is_id:true, title: "№", is_visible: false, is_additional: false, format: 'number'},
-    {name: "name_of_projects", format: 'string', is_visible: true, is_additional: 'false', is_id: false, title: 'Наименование проектов'},
+    {is_aside_header: true, name: "name_of_projects", format: 'string', is_visible: true, is_additional: 'false', is_id: false, title: 'Наименование проектов'},
     {name: 'region1', title: "Регион 1", is_visible: true, is_additional: false, format: 'number'},
     {name: 'region2', title: "Регион 2", is_visible: true, is_additional: false, format: 'number'},
     {name: 'region3', title: "Регион 3", is_visible: true, is_additional: false, format: 'number'},
@@ -11,8 +11,6 @@ export const headerFromServerRegions = [
     {name: 'region6', title: "Регион 6", is_visible: true, is_additional: false, format: 'number'},
     {name: 'region7', title: "Регион 7", is_visible: true, is_additional: false, format: 'number'},
     {name: 'region8', title: "Регион 8", is_visible: true, is_additional: false, format: 'number'},
-
-
 ];
 
 export const dataRegions = [
@@ -31,5 +29,6 @@ export const dataRegions = [
     {id: 1, name_of_projects: "Проект 1ssdcr", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
     {id: 1, name_of_projects: "Проект 1ssdcr", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
     {id: 1, name_of_projects: "Проект 1s", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
+    {is_footer: true,id: 1, name_of_projects: "Общее", region1: 37, region2: 33, region3: 1, region4: 3, region5: 0, region6: 21, region7: 0, region8: 21},
 
 ];

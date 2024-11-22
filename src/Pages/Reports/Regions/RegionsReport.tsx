@@ -22,7 +22,7 @@ export default function RegionsReport() {
 	console.log(filters)
 
 	const [header, setHeader] = useState(headerFromServerRegions);
-
+	console.log(header)
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
 		// setIsOpenCurtain(true);

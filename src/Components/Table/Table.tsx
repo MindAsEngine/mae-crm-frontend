@@ -1,8 +1,10 @@
 import * as React from 'react'
 import TableRow from './Row/TableRow.tsx'
 import styles from './table.module.scss'
-import TableHeader, {TableHeaderCell} from './TableHeader/TableHeader.tsx'
+import TableHeader from './TableHeader/TableHeader.tsx'
 import {useEffect} from "react";
+import {TableHeaderCell} from "./HeaderCell/HeaderCell.tsx";
+import TableFooter from "./TableFooter/TableFooter.tsx";
 type TableProps = {
 	data: Array<object>
 	header: Array<TableHeaderCell>,
@@ -33,23 +35,30 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 		<div className={styles.tableWrapper}>
 			<table className={styles.table}>
 				<thead className={styles.tableHead}>
-					<TableHeader isAllUnchecked={isAllUnchecked}
-								 row={header}
-								 isAllChecked={isAllChecked}
-								 handleAllChecked={handleCheckAll}
+					<TableHeader
+						isAllUnchecked={isAllUnchecked}
+						row={header}
+						isAllChecked={isAllChecked}
+						handleAllChecked={handleCheckAll}
 					/>
 				</thead>
 				<tbody className={styles.tableBody}>
 					{data.map((row, index) => (
+
 						<TableRow
 							onClickCell={onClickCell}
 							key={index} row={row}  isChecked={checkedRows?.includes(row['id'])} setCheckedRows={setCheckedRows} header={header}/>
 					))}
 				</tbody>
-				{/*TODO table footer*/}
-				{/*<tfoot>*/}
-				{/*	<TableFooter/>*/}
-				{/*</tfoot>*/}
+
+				<tfoot>
+				{data.map((row, index) => (
+
+					<TableFooter
+						onClickCell={onClickCell}
+						key={index} row={row} header={header}/>
+				))}
+				</tfoot>
 			</table>
 		</div>
 	)

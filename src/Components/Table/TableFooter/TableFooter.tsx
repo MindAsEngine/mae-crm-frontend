@@ -1,5 +1,5 @@
 import * as React from 'react';
-import style from './tableRow.module.scss';
+import style from './tableFooter.module.scss';
 import {TableHeaderCell} from "../HeaderCell/HeaderCell.tsx";
 import Cell from "../Cell/Cell.tsx";
 import clsx from "clsx";
@@ -13,17 +13,19 @@ type TableRowProps = {
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string | number | boolean) => void
 };
 
-export default function TableRow({ row, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
+export default function TableFooter({ row, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
 	return (
 		<tr className={style.tableRow}>
 			{header.map((headerCell, index) => (
 				  (headerCell.is_hidden_by_user === false || headerCell.is_visible )  &&
 				  (
 					  <>
-						  {!row['is_footer'] &&
+						  {row['is_footer'] &&
 							  <Cell
 								  className={clsx(headerCell.is_aside_header && style.asideHeader,
-									 row['is_anomaly'] && style.anomaly
+									 row['is_anomaly'] && style.anomaly,
+									 row['is_footer'] && style.footer,
+
 								  )}
 								  key={index}
 								  onClickCell={onClickCell}

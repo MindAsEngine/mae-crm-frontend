@@ -14,6 +14,6 @@ export const headerFromServerSpeed = [
 
 export const dataSpeed = [
     {id: 1, status_name: "Количество заявок", no_purpose: 3000,  rejected: 2000, deferred: 10000, booked:13422, default:1322, check:1452,  selection:1246},
-    {id: 1, status_name: "Среднее время", no_purpose: "1 день 3 часа",  rejected: "1 день 3 часа", deferred: "1 день 3 часа", booked:"1 день 3 часа", default:"1 день 3 часа", check:"1 день 3 часа",  selection:"1 день 3 часа"},
+    {is_footer: true, id: 1, status_name: "Среднее время", no_purpose: "1 день 3 часа",  rejected: "1 день 3 часа", deferred: "1 день 3 часа", booked:"1 день 3 часа", default:"1 день 3 часа", check:"1 день 3 часа",  selection:"1 день 3 часа"},
 
 ];
