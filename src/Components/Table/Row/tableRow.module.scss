@@ -1,7 +1,8 @@
 .tableRow{
   box-sizing: border-box;
-
   background-color: var(--color-white);
+  border-bottom: var(--border-grey-200-regular);
+
 }
 .tableRow.footer{
   position: sticky;
@@ -12,4 +13,7 @@
 }
 .anomaly{
   background-color: var(--color-red-100);
+}
+.tableRow:last-child {
+  border-bottom: none;
 }

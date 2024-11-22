@@ -5,10 +5,10 @@ import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import {dataSpeed, headerFromServerSpeed} from "./dataSpeed.ts";
 
-import { useState} from "react";
+import {useEffect, useState} from "react";
 import dayjs from "dayjs";
-import Curtain from "../../../Components/Curtain/Curtain.tsx";
-import {dataTasks, headerFromServerTasks} from "../../TaskPage/dataTasks.ts";
+import Modal from "../../../Components/Modal/Modal.tsx";
+import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 
 
 export default function ProcessedRequestsSpeedReport(){
@@ -17,15 +17,61 @@ export default function ProcessedRequestsSpeedReport(){
 		startDate: dayjs().subtract(1, 'month'),
 		endDate: dayjs()
 	})
-	const [curtainFilters, setCurtainFilters] = useState({
-		search: '',
-	})
-	const [chosenData, setChosenData] = useState([])
-	console.log(chosenData)
 	console.log(filters)
-	const [isOpenCurtain, setIsOpenCurtain] = useState(false);
-
 	const [header, setHeader] = useState(headerFromServerSpeed);
+	const [isOpen, setIsOpen] = useState(false)
+	const [customSettings, setCustomSettings] = useState([]);
+
+
+	const setDefaultCustomSettings = (header) => {
+		setCustomSettings(header.filter(cell => cell.is_additional)
+			.map(cell => (
+				{
+					name: cell.name,
+					title: cell.title,
+					applied_visible: cell.is_visible
+					// applied_visible: !cell.is_hidden_by_user if is to prev custom set(before apply)
+				}))
+		);
+	}
+	useEffect(() => {
+		const transformedHeader = headerFromServerSpeed.map(cell => ({
+			name: cell.name,
+			is_id: cell.is_id,
+			is_additional: cell.is_additional,
+			title: cell.title,
+			is_visible: cell.is_visible,
+			format: cell.format,
+			is_hidden_by_user: !cell.is_visible,
+			is_aside_header: cell.is_aside_header
+		}));
+
+		setHeader(transformedHeader);
+		// @ts-ignore
+		setDefaultCustomSettings(transformedHeader);
+
+	}, []);
+
+	const onCustomSettingApplied = () => {
+		setHeader(prevHeader =>
+			prevHeader.map(cell => {
+				const setting = customSettings.find(s => s.name === cell.name);
+				return setting ? { ...cell, is_hidden_by_user: !setting.applied_visible,
+				is_visible: setting.applied_visible
+				} : cell;
+			})
+		);
+	};
+
+
+	const onCheckboxChanged = (name) => {
+		// @ts-ignore
+		setCustomSettings(prevSettings =>
+			prevSettings.map(cell =>
+				cell.name === name ? { ...cell, applied_visible: !cell.applied_visible } : cell
+			)
+		);
+	};
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
@@ -36,8 +82,7 @@ export default function ProcessedRequestsSpeedReport(){
 
 			<Report data={dataSpeed}
 					header={header}
-					chosenData={chosenData}
-					setChosenData={setChosenData}
+
 					filters={filters}
 					setFilters={setFilters}
 
@@ -45,17 +90,51 @@ export default function ProcessedRequestsSpeedReport(){
 			>
 
 				<div className={styles.custom}>
+					<Button
+					stylizedAs={'white'}
+					className={styles.additional}
+					onClick={() => setIsOpen(true)}
+					>Custom
+					<Modal isOpen={isOpen}
+						   setIsOpen={setIsOpen}
+						   title={"Кастом"}
+						   onClickWhiteButton={() => {
+							   setDefaultCustomSettings(header);
+							   setIsOpen(false);
+						   }}
+						// argWhiteButton={header}
+						   onClickDarkBlueButton={()=> {
+							   onCustomSettingApplied();
+							   setIsOpen(false);}
+						   }
+						   classNameModal={styles.modal}
+						   classNameContent={styles.modalContent}
+						   classNameWindow={styles.modalWindow}
+						   isDropDown={true}
+					>
+						{customSettings.map((item, index) => (
+							<div key={index} className={styles.label}
+								 onClick={() => {onCheckboxChanged(item.name)}}
+							>
+								{item.title}
+								<Checkbox
+									checked={item.applied_visible}
+									onChange={() => onCheckboxChanged(item.name)}
+
+								/>
+							</div>
+						))}
 
 
-
+					</Modal>
+				</Button>
 					<Button
 						stylizedAs={'blue-dark'}
-						exportButton={'white'}
+						exportButton={true}
 						onClick={() => console.log('export')}
 					>
 						Экспорт
 					</Button>
-
 
 
 				</div>

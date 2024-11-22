@@ -1,14 +1,14 @@
 import * as React from 'react'
-import styles from "./regions.module.scss"
-import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
-import Report from "../../../Components/Report/Report.tsx";
-import {dataRegions, headerFromServerRegions} from "./dataRegions.ts";
+import styles from "./users.module.scss"
+import {dataUsers, headerFromServerRegions} from "./dataUsers.ts";
 
 import { useState} from "react";
 import dayjs from "dayjs";
+import Report from '../../Components/Report/Report.tsx';
+import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 
 
-export default function RegionsReport() {
+export default function Users() {
 	const [filters, setFilters] = useState({
 		search: '',
 		startDate: dayjs().subtract(1, 'month'),
@@ -28,7 +28,7 @@ export default function RegionsReport() {
 	return (
 		<>
 
-		<Report data={dataRegions}
+		<Report data={dataUsers}
 				header={header}
 				chosenData={chosenData}
 				setChosenData={setChosenData}
@@ -44,27 +44,15 @@ export default function RegionsReport() {
 
 				<Button
 					stylizedAs={'blue-dark'}
-					exportButton={'white'}
+					createButton={true}
 					onClick={() => console.log('export')}
 				>
-					Экспорт
+					Создать пользователя
 				</Button>
 
 
 
 			</div>
-			{/*<Curtain isCurtainOpen={isOpenCurtain} setIsCurtainOpen={setIsOpenCurtain}*/}
-			{/*	children={*/}
-			{/*	<Report data={dataCallCenter} header={headerFromServerCallCenter}*/}
-			{/*					  noDataRange={true}*/}
-			{/*					  children={*/}
-			{/*		<Button stylizedAs={'blue-light'} exportButton={'blue'}>*/}
-			{/*			Экспорт </Button>*/}
-
-			{/*					  }*/}
-			{/*					  filters={curtainFilters} setFilters={setCurtainFilters} />}*/}
-			{/*/>*/}
-
 		</Report>
 
 

@@ -10,7 +10,7 @@ type ReportProps = {
     setChosenData?: (prev:any) => void
     header: Array<TableHeaderCell>
     children?: React.ReactNode
-    filters: any,
+    filters?: any,
     setFilters: (prev:any) => void,
     onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void,
     noDataRange?: boolean,

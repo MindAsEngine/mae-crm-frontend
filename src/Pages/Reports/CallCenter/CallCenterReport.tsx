@@ -16,8 +16,6 @@ export default function CallCenterReport() {
 		startDate: dayjs().subtract(1, 'month'),
 		endDate: dayjs()
 	})
-	const [chosenData, setChosenData] = useState([])
-	console.log(chosenData)
 	console.log(filters)
     const [isOpen, setIsOpen] = useState(false)
 	const [customSettings, setCustomSettings] = useState([]);
@@ -77,8 +75,7 @@ export default function CallCenterReport() {
 	return (
 		<Report data={dataCallCenter}
 				header={header}
-				chosenData={chosenData}
-				setChosenData={setChosenData}
+
 				filters={filters}
 				setFilters={setFilters}
 		>

@@ -6,11 +6,15 @@ import RegionsReport from './Pages/Reports/Regions/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/Speed/ProcessedRequestsSpeedReport.tsx'
 import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
+import Users from "./Pages/Admin/Users.tsx";
 export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
 	'/tasks': 'Заявки',
 	'/audience': 'Аудитория',
-	'/advertisement': 'Реклама',
+	'/login': 'Вход',
+	'/admin': 'АДМИН',
+	'/admin/users': 'Пользователи',
+	// '/advertisement': 'Реклама',
 	'/reports': 'Отчеты',
 	'/reports/regions': 'Регионы покупки недвижимости',
 	'/reports/processed-requests-speed': 'Скорость отработанных заявок',
@@ -39,10 +43,10 @@ export const router = createBrowserRouter(
 					path: '/audience',
 					element: <Navigate to={'/'}/>,
 				},
-				{
-					path: '/advertisement',
-					element: <Navigate to={'/'} />,
-				},
+				// {
+				// 	path: '/advertisement',
+				// 	element: <Navigate to={'/'} />,
+				// },
 				{
 					path: '/reports',
 					children: [
@@ -64,6 +68,19 @@ export const router = createBrowserRouter(
 						},
 					],
 				},
+				{
+					path: '/admin',
+					children: [
+						{
+							index: true,
+							element: <Navigate to={'users'} />,
+						},
+						{
+							path: 'users',
+							element: <Users />,
+						}
+						]
+				}
 			],
 		},
 	],

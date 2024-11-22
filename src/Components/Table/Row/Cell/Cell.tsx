@@ -4,6 +4,7 @@ import Checkbox from "../../../FormComponents/Checkbox/Checkbox.tsx";
 import * as React from "react";
 import StatusPlate from "../../../StatusPlate/StatusPlate.tsx";
 import dayjs from "dayjs";
+import {prepareCell} from "../../prepareCell.tsx";
 type CellProps = {
     onClickCell: (rowPos: string | number, columnPos: string, cellData: string | number | boolean) => void,
     columnName: string,
@@ -18,19 +19,19 @@ type CellProps = {
     isAsideHeader?: boolean,
 
 }
-const prepareCell= (cellData, format)=> {
-    switch (format) {
-        case 'percent':
-            return typeof cellData === "number" ?
-                `${(cellData as number) * 100}%` : '';
-        case 'enum':
-            return <StatusPlate name={cellData} inEdit={false}/>
-        case 'date':
-            return dayjs(cellData).format('DD.MM.YYYY');
-        default:
-            return (cellData);
-    }
-};
+// const prepareCell= (cellData, format)=> {
+//     switch (format) {
+//         case 'percent':
+//             return typeof cellData === "number" ?
+//                 `${(cellData as number) * 100}%` : '';
+//         case 'enum':
+//             return <StatusPlate name={cellData} inEdit={false}/>
+//         case 'date':
+//             return dayjs(cellData).format('DD.MM.YYYY');
+//         default:
+//             return (cellData);
+//     }
+// };
 
 
 export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow,className, columnName, columnFormat, idData, cellData,  setCheckedRows, isChecked}:CellProps){
@@ -54,7 +55,7 @@ export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow
                         <>
                             {columnFormat !== 'array'
                                 ?
-                                (prepareCell(cellData, columnFormat))
+                                (prepareCell(cellData, columnFormat, columnFormat === 'enum' && columnName))
                                 : (Array.isArray(cellData) && cellData?.map((one, index) => (
                                     <span key={index} className={style.arrayElement}>
  										{(prepareCell(one, 'string'))}

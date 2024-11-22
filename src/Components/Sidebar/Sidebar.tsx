@@ -7,7 +7,7 @@ import clsx from 'clsx'
 
 const userImage = '/images/user.png'
 export default function Sidebar() {
-	const [isOpened, setIsOpened] = React.useState<boolean>(false)
+	const [isOpened, setIsOpened] = React.useState<boolean>(true)
 	const listItemClassName = (isActive: boolean) =>
 		isActive
 			? clsx(styles.list__item, styles.list__item_active)
@@ -26,7 +26,7 @@ export default function Sidebar() {
 						<NavLink
 							to={'/tasks'}
 							children={routerNames['/tasks']}
-							className={({ isActive }) =>
+							className={({isActive}) =>
 								clsx(listItemClassName(isActive), styles.list__item_requests)
 							}
 						/>
@@ -35,23 +35,23 @@ export default function Sidebar() {
 						<NavLink
 							to={'/audience'}
 							children={routerNames['/audience']}
-							className={({ isActive }) =>
+							className={({isActive}) =>
 								clsx(listItemClassName(isActive), styles.list__item_audience)
 							}
 						/>
 					</li>
-					<li>
-						<NavLink
-							to={'/advertisement'}
-							children={routerNames['/advertisement']}
-							className={({ isActive }) =>
-								clsx(
-									listItemClassName(isActive),
-									styles.list__item_advertisement
-								)
-							}
-						/>
-					</li>
+					{/*<li>*/}
+					{/*	<NavLink*/}
+					{/*		to={'/advertisement'}*/}
+					{/*		children={routerNames['/advertisement']}*/}
+					{/*		className={({ isActive }) =>*/}
+					{/*			clsx(*/}
+					{/*				listItemClassName(isActive),*/}
+					{/*				styles.list__item_advertisement*/}
+					{/*			)*/}
+					{/*		}*/}
+					{/*	/>*/}
+					{/*</li>*/}
 					<li
 						onClick={(e) =>
 							e.target.tagName === 'SPAN' && setIsOpened(!isOpened)
@@ -78,31 +78,57 @@ export default function Sidebar() {
 								<NavLink
 									to={'/reports/regions'}
 									children={routerNames['/reports/regions']}
-									className={({ isActive }) => listItemClassName(isActive)}
+									className={({isActive}) => listItemClassName(isActive)}
 								/>
 							</li>
 							<li>
 								<NavLink
 									to={'/reports/processed-requests-speed'}
 									children={routerNames['/reports/processed-requests-speed']}
-									className={({ isActive }) => listItemClassName(isActive)}
+									className={({isActive}) => listItemClassName(isActive)}
 								/>
 							</li>
 							<li>
 								<NavLink
 									to={'/reports/call-center'}
 									children={routerNames['/reports/call-center']}
-									className={({ isActive }) => listItemClassName(isActive)}
+									className={({isActive}) => listItemClassName(isActive)}
 								/>
 							</li>
 						</ul>
 					</li>
+					<li
+
+					>
+						<span
+							className={clsx(
+								styles.list__item,
+								styles.list__item_admin,
+							)}
+						>
+							{routerNames['/admin']}
+						</span>
+					</li>
+						<li
+
+						>
+
+
+							<NavLink
+								to={'/admin/users'}
+								children={routerNames['/admin/users']}
+								className={({isActive}) =>
+									clsx(listItemClassName(isActive), styles.list__item_users)
+								}
+							/>
+
+						</li>
 				</ul>
 			</nav>
 			<div className={styles.profile}>
 				<div className={styles.profile__info}>
 					<div className={styles.profile__avatar}>
-						<img alt={'Avatar'} src={userImage} />
+						<img alt={'Avatar'} src={userImage}/>
 					</div>
 					<div className={styles.profile__text}>
 						<span className={styles.profile__name}>Алина Иванова</span>

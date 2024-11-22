@@ -34,7 +34,8 @@ export default function  HeaderCell({cellData,onClickHeaderCell, isAllChecked=fa
                 cellData.is_hidden_by_user && styles.isInVisible,
                 cellData.is_additional && styles.isAdditional,
                 cellData.is_id && styles.isId,
-                cellData.is_aside_header && styles.asideHeader
+                cellData.is_aside_header && styles.asideHeader,
+                cellData.is_sortable === false && styles.isNotSortable
             )}
         >
             <span className={styles.cellElement}>

@@ -1,0 +1,41 @@
+
+.custom{
+  display: flex;
+  flex-shrink: 1;
+  align-items: center;
+  gap: 12px;
+
+  .additional::before{
+    content: url('/src/assets/imgs/button/notebook.svg');
+    width: var(--icon-sm);
+    height: var(--icon-sm);
+    object-position: center;
+    object-fit: contain;
+  }
+  .modal{
+    top: calc(100% - 13px + 8px);
+    left: calc(100% - 13px - 516px);
+  }
+  .modalWindow{
+    width: 516px;
+    height: 408px;
+  }
+
+  .modalContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .label{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    color: var(--color-grey-700);
+    font: var(--font-m-regular);
+  }
+
+}
