@@ -139,6 +139,7 @@
     box-sizing: border-box;
     display: flex;
   flex-direction: column;
+  justify-content: space-between;
     align-items: center;
     gap: 3px;
 }
@@ -186,4 +187,25 @@
   mask-position: center center;
   transform: rotate(180deg);
 
+}
+.footer{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 20px;
+    gap: 30px;
+    background-color: var(--color-white);
+    border-top: var(--border-grey-200-medium);
+    border-bottom-left-radius: var(--border-radius-m);
+    border-bottom-right-radius: var(--border-radius-m);
+  .label{
+    color: var(--color-grey-500);
+    font: var(--font-s-regular);
+  }
+  .buttons{
+    display: flex;
+    gap: 10px;
+
+  }
 }

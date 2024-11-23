@@ -22,8 +22,8 @@ type CalendarProps = {
 }
 export default function Calendar({startDate, endDate, handleDayClick, direction, handleMonthChange, currentMonth}:CalendarProps) {
     const [weeks, setWeeks] = useState([]);
-    console.log(startDate, "Start Date")
-    console.log(endDate, "End Date")
+    // console.log(startDate, "Start Date")
+    // console.log(endDate, "End Date")
 
     const renderDays = (month) => {
         const start = startOfWeek(startOfMonth(month), {weekStartsOn: 1});
@@ -37,7 +37,7 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
                     endDate &&
                     day >= startDate &&
                     day <= endDate;
-                console.log(isInRange, "Is in range", day)
+                // console.log(isInRange, "Is in range", day)
                 const currentDay = day.toISOString();
                 week.push(
                     <td

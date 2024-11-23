@@ -16,6 +16,12 @@
 .inputContainer:hover{
   border: var(--border-grey-400-regular);
 }
+.inputContainer.invalid{
+  border: var(--color-red-300) solid 1px;
+}
+.inputContainer.invalid.focused{
+  box-shadow: var(--effect-red-shadow);
+}
 
 .focused{
     border: var(--border-grey-300-regular);

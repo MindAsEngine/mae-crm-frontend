@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import {NavLink, useNavigate} from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
 import { Button } from '../FormComponents/Button/Button.tsx'
 import * as React from 'react'
@@ -8,6 +8,11 @@ import clsx from 'clsx'
 const userImage = '/images/user.png'
 export default function Sidebar() {
 	const [isOpened, setIsOpened] = React.useState<boolean>(true)
+	const navigate = useNavigate();
+	const handleLogout = () => {
+		navigate('/login')
+
+	};
 	const listItemClassName = (isActive: boolean) =>
 		isActive
 			? clsx(styles.list__item, styles.list__item_active)
@@ -136,7 +141,9 @@ export default function Sidebar() {
 					</div>
 				</div>
 				<div className={styles.profile__settings}>
-					<Button className={styles.profile__button}>
+					<Button className={styles.profile__button}
+							onClick={handleLogout}
+					>
 						<span className={styles.profile__logout}>Выйти</span>
 					</Button>
 				</div>
