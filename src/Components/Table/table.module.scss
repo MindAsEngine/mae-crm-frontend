@@ -3,25 +3,6 @@
   box-sizing: border-box;
   overflow: auto;
   z-index: 0;
-  scroll-behavior: smooth;
-  /* Firefox */
-  //scrollbar-width: thin;
-  //scrollbar-color: var(--color-grey-200) var(--color-white);
-}
-
-/* WebKit-браузеры (Chrome, Safari, Edge) */
-.tableWrapper::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--border-radius-m);
-}
-.tableWrapper::-webkit-scrollbar-track {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-m);
-}
-.tableWrapper::-webkit-scrollbar-thumb {
-  background-color: var(--color-grey-200);
-  border-radius: var(--border-radius-m);
 }
 
 .table{

@@ -7,6 +7,7 @@ import './styles/color.scss'
 import './styles/effect.scss'
 import './styles/border.scss'
 import './styles/icon.scss'
+import './styles/scrollbar.scss'
 import { router } from './router'
 import * as React from 'react'
 
