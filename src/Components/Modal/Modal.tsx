@@ -29,8 +29,7 @@ export default function Modal({isOpen, classNameWindow, classNameModal, classNam
     }
     const handleClickOut = (e: MouseEvent) => {
         const dialog = document.getElementById("modal");
-        // console.log(dialog);
-        // console.log(e.target, dialog.contains(e.target))
+
         if (!dialog.contains(e.target)) {
             setIsOpen(false);
 

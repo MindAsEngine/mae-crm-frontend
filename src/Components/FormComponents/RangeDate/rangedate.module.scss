@@ -1,6 +1,15 @@
 .container{
+
   box-sizing: border-box;
   position: relative;
+  width: min-content;
+}
+.inputDate{
+  justify-content: start;
+  width: max-content;
+}
+.inputDate input{
+  width: 195px;
 }
 .imgCalendar {
   width: var(--icon-sm);
@@ -11,8 +20,8 @@
 .calendarDropdown{
   box-sizing: border-box;
   position: absolute;
-  top: calc(100% + 13px);
-  left: calc(100%  - 734px);
+  top: calc(100% + 9px);
+  left: calc(100%  - 757px);
   //width: 734px;
   overflow: hidden;
   z-index: 25;
@@ -123,4 +132,56 @@
 .icon.right{
     right: 0;
     transform: rotate(90deg);
+}
+.timeCalendar{
+    box-sizing: border-box;
+    display: flex;
+  flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+.timeRange{
+    box-sizing: border-box;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+}
+.timeInput{
+  height: unset;
+  width: max-content;
+  padding: 3px 12px;
+  gap: 3px;
+  cursor: pointer;
+
+}
+.timeInput input[type=number]::-webkit-inner-spin-button,
+.timeInput input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Скрыть стрелки для Firefox */
+.timeInput input[type=number] {
+  -moz-appearance: textfield;
+  width: 18px;
+  font: var(--font-s-medium);
+  color: var(--color-grey-800);
+  cursor: pointer;
+}
+.arrow{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+
+    background-color: var(--color-grey-600);
+    mask: url("/src/assets/imgs/sidebar/arrow.svg") no-repeat center;
+    mask-size: 60% 60%;
+  mask-position: center center;
+  transform: rotate(180deg);
+
 }

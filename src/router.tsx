@@ -7,6 +7,7 @@ import ProcessedRequestsSpeedReport from './Pages/Reports/Speed/ProcessedRequest
 import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
 import Users from "./Pages/Admin/Users.tsx";
+import AudiencePage from "./Pages/AudiencePage/AudiencePage.tsx";
 export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
 	'/tasks': 'Заявки',
@@ -41,7 +42,7 @@ export const router = createBrowserRouter(
 				},
 				{
 					path: '/audience',
-					element: <Navigate to={'/'}/>,
+					element: <AudiencePage/>,
 				},
 				// {
 				// 	path: '/advertisement',

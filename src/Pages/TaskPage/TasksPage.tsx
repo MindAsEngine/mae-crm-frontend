@@ -5,6 +5,7 @@ import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataTasks.ts";
 import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
+import Switch from "../../Components/FormComponents/Switch/Switch.tsx";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
@@ -44,6 +45,8 @@ export default function TasksPage() {
 		console.log(rowPos, columnPos, cellData);
 	}
 	return (
+		<>
+		{/*<Switch/>*/}
 
 		<Report data={dataTasks}
 				header={header}
@@ -94,5 +97,6 @@ export default function TasksPage() {
 
 			</div>
 		</Report>
+		</>
 	)
 }

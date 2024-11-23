@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
 	format,
 	addMonths,
@@ -8,6 +8,7 @@ import {
 import styles from "./rangedate.module.scss";
 import Input from "../Input/Input.tsx";
 import Calendar from "./Calendar.tsx";
+import Time from "./Time.tsx";
 type DateRangeProps = {
 
 	startDate: Date;
@@ -27,11 +28,21 @@ const DateRange = ({startDate, endDate, setEndDate, setStartDate}:DateRangeProps
 		}
 	);
 
-	const [startTime, setStartTime] = useState("09:00");
-	const [endTime, setEndTime] = useState("18:00");
+	const [startTime, setStartTime] = useState({hour: "00", minute: "00"});
+	const [endTime, setEndTime] = useState({hour: "00", minute: "00"});
 
 	const toggleCalendar = () => setIsOpen(!isOpen);
 
+	const handleClickOut = (e: MouseEvent) => {
+		const dialog = document.getElementById("calendarDropdown");
+		if (!dialog.contains(e.target)) setIsOpen(false);
+	}
+	useEffect(() => {
+		 document.addEventListener('mouseup', handleClickOut );
+		return () => {
+			document.removeEventListener('mouseup', handleClickOut);
+		}
+	});
 
 	const handleDayClick = (day) => {
 		setChosenRange((prev) => {
@@ -47,12 +58,6 @@ const DateRange = ({startDate, endDate, setEndDate, setStartDate}:DateRangeProps
 		});
 	};
 
-	React.useEffect(() => {
-		setStartDate(chosenRange.start);
-		setEndDate(chosenRange.end);
-	}, [chosenRange]);
-
-
 	const handleMonthChange = (direction) => {
 		setCurrentMonth(addMonths(currentMonth, direction));
 		setNextMonth(addMonths(nextMonth, direction));
@@ -60,12 +65,13 @@ const DateRange = ({startDate, endDate, setEndDate, setStartDate}:DateRangeProps
 
 	const applySelection = () => {
 		setIsOpen(false);
-		console.log(`Selected range: ${format(startDate, "dd.MM.yyyy")} ${startTime} to ${format(endDate, "dd.MM.yyyy")} ${endTime}`);
+		setStartDate(chosenRange.start);
+		setEndDate(chosenRange.end);
 	};
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.input} onClick={toggleCalendar}>
+		<div className={styles.container} id={'calendarDropdown'}>
+			<div className={styles.input} onClick={toggleCalendar} >
 
 				<Input
 					before={<span className={styles.imgCalendar}></span>}
@@ -81,39 +87,27 @@ const DateRange = ({startDate, endDate, setEndDate, setStartDate}:DateRangeProps
 					placeholder={'ДД.ММ.ГГГГ - ДД.ММ.ГГГГ'}
 					readOnly={true}
 					onChange={() => {}}
-					className={""}
+					className={styles.inputDate}
 				/>
 			</div>
 
 			{isOpen && (
 				<div className={styles.calendarDropdown}>
 					<div className={styles.calendarArea}>
-						<Calendar endDate={chosenRange.end} direction={-1}
-								  startDate={chosenRange.start} currentMonth={currentMonth} handleDayClick={handleDayClick} handleMonthChange={handleMonthChange} />
-						<Calendar startDate={chosenRange.start} endDate={chosenRange.end} direction={1}
-								  currentMonth={nextMonth} handleDayClick={handleDayClick} handleMonthChange={handleMonthChange} />
+						<div className={styles.timeCalendar}>
+							<Calendar endDate={chosenRange.end} direction={-1}
+									  startDate={chosenRange.start} currentMonth={currentMonth}
+									  handleDayClick={handleDayClick} handleMonthChange={handleMonthChange}/>
+							<Time time={startTime} setTime={setStartTime}/>
+						</div>
+						<div className={styles.timeCalendar}>
+							<Calendar startDate={chosenRange.start} direction={1}
+									  endDate={chosenRange.end} currentMonth={nextMonth} handleDayClick={handleDayClick} handleMonthChange={handleMonthChange} />
+							<Time time={endTime} setTime={setEndTime} />
+
+						</div>
 					</div>
 
-
-					{/*/!* Поля для выбора времени *!/*/}
-					{/*<div className={styles["timePicker"]}>*/}
-					{/*	<div>*/}
-					{/*		<label>Начало:</label>*/}
-					{/*		<input*/}
-					{/*			type="time"*/}
-					{/*			value={startTime}*/}
-					{/*			onChange={(e) => setStartTime(e.target.value)}*/}
-					{/*		/>*/}
-					{/*	</div>*/}
-					{/*	<div>*/}
-					{/*		<label>Конец:</label>*/}
-					{/*		<input*/}
-					{/*			type="time"*/}
-					{/*			value={endTime}*/}
-					{/*			onChange={(e) => setEndTime(e.target.value)}*/}
-					{/*		/>*/}
-					{/*	</div>*/}
-					{/*</div>*/}
 
 				</div>
 			)}
