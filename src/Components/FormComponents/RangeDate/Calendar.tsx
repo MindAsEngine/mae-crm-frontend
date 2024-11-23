@@ -53,7 +53,7 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
                             // styles.day
                         )}
                         key={currentDay}
-                         onClick={() => handleDayClick(parseISO(currentDay))}
+                         onClick={() => !isSameMonth(day, month) && handleDayClick(parseISO(currentDay))}
                     ><span
                         className={clsx(
 

@@ -1,21 +1,20 @@
 import * as React from 'react'
+import {useEffect, useState} from 'react'
 
 import styles from "./speed.module.scss"
 import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import {dataSpeed, headerFromServerSpeed} from "./dataSpeed.ts";
 
-import {useEffect, useState} from "react";
-import dayjs from "dayjs";
-import Modal from "../../../Components/Modal/Modal.tsx";
-import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
+import ModalCustom from "../../../Components/CustomModal/ModalCustom.tsx";
+import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 
 
 export default function ProcessedRequestsSpeedReport(){
 	const [filters, setFilters] = useState({
 		search: '',
-		startDate: dayjs().subtract(1, 'month'),
-		endDate: dayjs()
+		startDate: null,
+		endDate: null,
 	})
 	console.log(filters)
 	const [header, setHeader] = useState(headerFromServerSpeed);
@@ -82,52 +81,33 @@ export default function ProcessedRequestsSpeedReport(){
 
 			<Report data={dataSpeed}
 					header={header}
-
 					filters={filters}
 					setFilters={setFilters}
-
 					onClickCell={onClickCell}
 			>
 
 				<div className={styles.custom}>
-					<Button
-					stylizedAs={'white'}
-					className={styles.additional}
-					onClick={() => setIsOpen(true)}
-					>Custom
-					<Modal isOpen={isOpen}
-						   setIsOpen={setIsOpen}
-						   title={"Кастом"}
-						   onClickWhiteButton={() => {
-							   setDefaultCustomSettings(header);
-							   setIsOpen(false);
-						   }}
-						// argWhiteButton={header}
-						   onClickDarkBlueButton={()=> {
-							   onCustomSettingApplied();
-							   setIsOpen(false);}
-						   }
-						   classNameModal={styles.modal}
-						   classNameContent={styles.modalContent}
-						   classNameWindow={styles.modalWindow}
-						   isDropDown={true}
-					>
-						{customSettings.map((item, index) => (
-							<div key={index} className={styles.label}
-								 onClick={() => {onCheckboxChanged(item.name)}}
-							>
-								{item.title}
-								<Checkbox
-									checked={item.applied_visible}
-									onChange={() => onCheckboxChanged(item.name)}
-
-								/>
-							</div>
-						))}
-
-
-					</Modal>
-				</Button>
+					<ModalCustom isOpen={isOpen}
+								 setIsOpen={setIsOpen}
+								 customSettings={customSettings}
+								 setCustomSettings={setCustomSettings}
+								 header={header}
+								 setDefaultCustomSettings={setDefaultCustomSettings}
+								 onCustomSettingApplied={onCustomSettingApplied}
+								 onCheckboxChanged={onCheckboxChanged}
+					/>
+					<RangeDate
+						startDate={filters.startDate}
+						endDate={filters.endDate}
+						setStartDate={(date) => {
+							handleStartDateChange(date)
+							// console.log('Set start date IN FILTER BAR', date)
+						}}
+						setEndDate={(date) => {
+							handleEndDateChange(date)
+							// console.log('Set end date IN FILTER BAR', date)
+						}}
+					/>
 					<Button
 						stylizedAs={'blue-dark'}
 						exportButton={true}

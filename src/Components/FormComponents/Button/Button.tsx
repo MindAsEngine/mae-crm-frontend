@@ -4,7 +4,6 @@ import { IClassNameProps } from '@bem-react/core'
 import React, { FC } from 'react'
 import styles from './button.module.scss'
 import clsx from 'clsx'
-import { ReactComponent as MyIcon } from '/src/assets/imgs/button/loading.svg';
 interface IButtonProps extends IClassNameProps {
 	as?: React.ElementType
 	children: React.ReactNode

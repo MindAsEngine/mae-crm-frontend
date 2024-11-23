@@ -20,10 +20,11 @@
 .calendarDropdown{
   box-sizing: border-box;
   position: absolute;
+  //top: 0;
   top: calc(100% + 9px);
-  left: 0;
-  //left: calc(100%  - 757px);
-  //width: 734px;
+  //left: 0;
+  left: calc(100%  - 756px);
+  width: 757px;
   overflow: hidden;
   z-index: 20;
   display: flex;
@@ -79,6 +80,7 @@
 }
 .differentMonth span{
   color: var(--color-grey-300);
+  cursor: default;
 }
 
 .inRange{

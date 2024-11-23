@@ -8,6 +8,8 @@ import Modal from "../../../Components/Modal/Modal.tsx";
 import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader.tsx";
 import {dataCallCenter, headerFromServerCallCenter} from "./dataCallCenter.ts";
 import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
+import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
+import ModalCustom from "../../../Components/CustomModal/ModalCustom.tsx";
 
 
 export default function CallCenterReport() {
@@ -50,7 +52,25 @@ export default function CallCenterReport() {
 		setDefaultCustomSettings(transformedHeader);
 
 	}, []);
+	const handleStartDateChange = (date) => {
+		setFilters((prevFilters) => {
+			// console.log('Updated Filters (start date):', updatedFilters);
+			return {
+				...prevFilters,
+				startDate: date,
+			};
+		});
+	};
 
+	const handleEndDateChange = (date) => {
+		setFilters((prevFilters) => {
+			// console.log('Updated Filters (end date):', updatedFilters);
+			return {
+				...prevFilters,
+				endDate: date,
+			};
+		});
+	};
 	const onCustomSettingApplied = () => {
 		setHeader(prevHeader =>
 			prevHeader.map(cell => {
@@ -79,45 +99,28 @@ export default function CallCenterReport() {
 				filters={filters}
 				setFilters={setFilters}
 		>
+
 			<div className={styles.custom}>
-				<Button
-					stylizedAs={'white'}
-					className={styles.additional}
-					onClick={() => setIsOpen(true)}
-				>Custom
-					<Modal isOpen={isOpen}
-						   setIsOpen={setIsOpen}
-						   title={"Кастом"}
-						   onClickWhiteButton={() => {
-							   setDefaultCustomSettings(header);
-							   setIsOpen(false);
-						   }}
-						   // argWhiteButton={header}
-						   onClickDarkBlueButton={()=> {
-							   onCustomSettingApplied();
-							   setIsOpen(false);}
-						   }
-						   classNameModal={styles.modal}
-						   classNameContent={styles.modalContent}
-						   classNameWindow={styles.modalWindow}
-						   isDropDown={true}
-					>
-						{customSettings.map((item, index) => (
-							<div key={index} className={styles.label}
-								 onClick={() => {onCheckboxChanged(item.name)}}
-							>
-								{item.title}
-								<Checkbox
-									checked={item.applied_visible}
-									onChange={() => onCheckboxChanged(item.name)}
-
-								/>
-							</div>
-						))}
+				<ModalCustom isOpen={isOpen}
+							 setIsOpen={setIsOpen} customSettings={customSettings}
+							 setCustomSettings={setCustomSettings} header={header}
+							 setDefaultCustomSettings={setDefaultCustomSettings}
+							 onCustomSettingApplied={onCustomSettingApplied} onCheckboxChanged={onCheckboxChanged}
+				/>
+				<RangeDate
+					startDate={filters.startDate}
+					endDate={filters.endDate}
+					setStartDate={(date) => {
+						handleStartDateChange(date)
+						// console.log('Set start date IN FILTER BAR', date)
+					}}
+					setEndDate={(date) => {
+						handleEndDateChange(date)
+						// console.log('Set end date IN FILTER BAR', date)
+					}}
+				/>
 
 
-					</Modal>
-				</Button>
 				<Button
 					stylizedAs={'blue-dark'}
 					exportButton={'white'}

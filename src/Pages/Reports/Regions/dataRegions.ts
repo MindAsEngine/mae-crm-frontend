@@ -2,15 +2,15 @@
 
 export const headerFromServerRegions = [
     {name: "id",is_id:true, title: "№", is_visible: false, is_additional: false, format: 'number'},
-    {is_aside_header: true, name: "name_of_projects", format: 'string', is_visible: true, is_additional: 'false', is_id: false, title: 'Наименование проектов'},
-    {name: 'region1', title: "Регион 1", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region2', title: "Регион 2", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region3', title: "Регион 3", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region4', title: "Регион 4", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region5', title: "Регион 5", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region6', title: "Регион 6", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region7', title: "Регион 7", is_visible: true, is_additional: false, format: 'number'},
-    {name: 'region8', title: "Регион 8", is_visible: true, is_additional: false, format: 'number'},
+    {is_aside_header: true, name: "name_of_projects", format: 'string', is_visible: true, is_additional: false, is_id: false, title: 'Наименование проектов'},
+    {name: 'region1', title: "Регион 1", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region2', title: "Регион 2", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region3', title: "Регион 3", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region4', title: "Регион 4", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region5', title: "Регион 5", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region6', title: "Регион 6", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region7', title: "Регион 7", is_visible: true, is_additional: true, format: 'number'},
+    {name: 'region8', title: "Регион 8", is_visible: true, is_additional: true, format: 'number'},
 ];
 
 export const dataRegions = [

@@ -155,8 +155,8 @@ const DateRange = ({ startDate, endDate, setStartDate, setEndDate }: DateRangePr
 								stylizedAs="white"
 								onClick={() => {
 									setChosenRange({ start: null, end: null });
-									setStartRawValue("");
-									setEndRawValue("");
+									setRawValue("");
+									setIsOpen(false);
 								}}
 							/>
 							<Button children="Применить" stylizedAs="blue-dark" onClick={applySelection} />
