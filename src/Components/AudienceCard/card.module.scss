@@ -5,17 +5,17 @@
   border: var(--border-grey-200-regular);
     border-radius: var(--border-radius-m);
   background-color: var(--color-white);
-  overflow: hidden;
+  //overflow: hidden;
   }
 .header{
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
   padding: 12px 14px;
   border-bottom: var(--border-grey-200-regular);
     .title{
-    display: flex;
-    gap: 8px;
-    align-items: center;
+      display: flex;
+      gap: 8px;
+      align-items: center;
     .text{
       font: var(--font-m-semibold);
       color: var(--color-grey-700);
@@ -39,10 +39,15 @@
   }
   .settingButton:hover {
     .actionsList {
+      z-index: 10;
       display: flex;
       flex-direction: column;
+      //justify-content: flex-end;
+      align-items: start;
       width: 234px;
-      right: calc(100% + 234px);
+      top: calc(100% + 14px);
+      left: calc(100% - 234px - 16px);
+
       background-color: var(--color-white);
       box-shadow: var(--effect-shadow-m-center);
       border-radius: 6px;
@@ -58,7 +63,7 @@
 
       .delete {
         margin-top: 8px;
-        border: var(--border-grey-200-regular);
+        border-top: var(--border-grey-200-regular);
         padding-top: 16px;
 
       }

@@ -26,44 +26,46 @@ return (
         <div className={styles.header}>
             <div className={styles.title}>
                 <Checkbox/>
-                {title}
-            </div>
-            <Button className={styles.settingButton}
-                    stylizedAs={'white'}
-            >
-                <span className={styles.icon}/>
-                <ul className={styles.actionsList}>
-                    <li className={clsx(styles.item, styles.options)}>
-                        Опции
-                    </li>
-                    <li className={styles.item} onClick={
-                        () => {
-                            console.log('Подключить рекламу', id)
-                        }
-                    }>
-                        Подключить рекламу
-                    </li>
-                    <li className={styles.item}
-                        onClick={
+                <div className={styles.text}>
+                        {title}
+                </div>
+                </div>
+                <Button className={styles.settingButton}
+                        stylizedAs={'white'}
+                >
+                    <span className={styles.icon}/>
+                    <ul className={styles.actionsList}>
+                        <li className={clsx(styles.item, styles.options)}>
+                            Опции
+                        </li>
+                        <li className={styles.item} onClick={
                             () => {
-                                console.log('Отключить рекламу', id)
+                                console.log('Подключить рекламу', id)
                             }
                         }>
-                        Отключить рекламу
-                    </li>
-                    <li className={clsx(styles.item, styles.delete)}
-                        onClick={
-                        () => {
-                            console.log('Удалить', id)
-                        }
-                    } >
-                        Удалить
-                    </li>
-                </ul>
+                            Подключить рекламу
+                        </li>
+                        <li className={styles.item}
+                            onClick={
+                                () => {
+                                    console.log('Отключить рекламу', id)
+                                }
+                            }>
+                            Отключить рекламу
+                        </li>
+                        <li className={clsx(styles.item, styles.delete)}
+                            onClick={
+                                () => {
+                                    console.log('Удалить', id)
+                                }
+                            }>
+                            Удалить
+                        </li>
+                    </ul>
 
-            </Button>
-        </div>
-        <div className={styles.content}>
+                </Button>
+            </div>
+            <div className={styles.content}>
             <div className={styles.text}>
                 Время отправки: {duration}
             </div>
