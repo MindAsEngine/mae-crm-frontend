@@ -81,7 +81,7 @@ return (
             </div>
             <div className={styles.connections}>
                 {connected.map((item, index) => (
-                    <span key={index} className={styles.item}></span>
+                    <span key={index} className={clsx(styles.item, item.title && styles[item.title])}/>
 
                 ))}
             </div>

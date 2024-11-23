@@ -28,7 +28,7 @@
     .icon {
       width: 100%;
       height: 100%;
-      mask: url('/src/assets/imgs/button/export.svg') no-repeat 50% 50%;
+      mask: url('/src/assets/imgs/button/more-vertical.svg') no-repeat 50% 50%;
       background-color: var(--color-grey-600);
     }
 
@@ -105,10 +105,19 @@
         content: '';
         width: 100%;
         height: 100%;
-        background-image: url('/src/assets/imgs/button/export.svg');
+
         background-repeat: no-repeat;
-        background-position: 50% 50%;
+        background-position: center;
       }
+      .google::after{
+        background-image: url('/src/assets/imgs/audience/google.png');
+      }
+      .yandex::after{
+        background-image: url('/src/assets/imgs/audience/yandex.jpg');
+    }
+      .facebook::after{
+      background-image: url('/src/assets/imgs/audience/facebook.png');
+    }
 
   }
 }
