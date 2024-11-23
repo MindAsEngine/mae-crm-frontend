@@ -31,6 +31,7 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 		setAllChecked(checkedRows?.length === data.length);
 	}, [checkedRows]);
 	return (
+
 		<div className={styles.tableWrapper}>
 			<table className={styles.table}>
 				<thead className={styles.tableHead}>

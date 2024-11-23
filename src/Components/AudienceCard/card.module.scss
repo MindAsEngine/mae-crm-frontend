@@ -1,0 +1,117 @@
+.card{
+  width: 362px;
+  display: flex;
+  flex-direction: column;
+  border: var(--border-grey-200-regular);
+    border-radius: var(--border-radius-m);
+  background-color: var(--color-white);
+  overflow: hidden;
+  }
+.header{
+    display: flex;
+    justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: var(--border-grey-200-regular);
+    .title{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    .text{
+      font: var(--font-m-semibold);
+      color: var(--color-grey-700);
+    }
+  }
+  .settingButton{
+    padding: 8px;
+    width: var(--icon-lg);
+    height: var(--icon-lg);
+    .icon {
+      width: 100%;
+      height: 100%;
+      mask: url('/src/assets/imgs/button/export.svg') no-repeat 50% 50%;
+      background-color: var(--color-grey-600);
+    }
+
+    .actionsList{
+      display: none;
+      position: absolute;
+    }
+  }
+  .settingButton:hover {
+    .actionsList {
+      display: flex;
+      flex-direction: column;
+      width: 234px;
+      right: calc(100% + 234px);
+      background-color: var(--color-white);
+      box-shadow: var(--effect-shadow-m-center);
+      border-radius: 6px;
+      padding: 0 8px;
+      .item {
+        padding: 8px;
+        color: var(--color-grey-700);
+        font: var(--font-m-regular);
+      }
+      .options {
+        color: var(--color-grey-400);
+      }
+
+      .delete {
+        margin-top: 8px;
+        border: var(--border-grey-200-regular);
+        padding-top: 16px;
+
+      }
+    }
+  }
+
+
+}
+.footer{
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    .item{
+      font: var(--font-xxs-regular);
+      color: var(--color-grey-500)
+    }
+  }
+  .connections{
+    display: flex;
+    gap: 4px;
+    .item{
+      position: relative;
+      padding: 4px;
+      width: 30px;
+      height: 30px;
+      border-radius: var(--border-radius-s);
+      background-color: var(--color-white);
+        border: var(--border-grey-200-regular);
+    }
+      .item::after{
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-image: url('/src/assets/imgs/button/export.svg');
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+      }
+
+  }
+}
+.content{
+  padding: 12px 14px;
+  border-bottom: var(--border-grey-200-regular);
+  .text{
+    font: var(--font-xs-regular);
+    color: var(--color-grey-700);
+  }
+}

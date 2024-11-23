@@ -1,16 +1,19 @@
 .container {
   display: flex;
+  flex-shrink: 0;
+  flex-grow: 1;
   align-items: center;
   background-color: var(--color-grey-100);
   padding: 4px;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
 }
 
 .item{
   cursor: pointer;
-  flex: 1 1 0;
+  flex-grow: 1;
+  flex-shrink: 1;
   border-radius: var(--border-radius-xs);
   padding: 6px 14px;
   text-align: center;
