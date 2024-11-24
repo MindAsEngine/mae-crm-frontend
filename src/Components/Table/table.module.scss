@@ -2,7 +2,20 @@
   flex-grow: 2;
   box-sizing: border-box;
   overflow: auto;
+  scrollbar-gutter: stable;
   z-index: 0;
+  position: relative;
+  width: 100%;
+
+}
+.tableWrapper::after{
+  position: fixed;
+  content: "";
+  height: .8px;
+  background-color: var(--color-grey-200);
+  bottom: 38px;
+  left: 304px ;
+  right: 20px;
 }
 
 .table{
@@ -11,8 +24,7 @@
   min-height: 0;
   border-collapse: collapse;
   border-spacing: 0;
-  min-width: 100%;
-
+  width: 100%;
 }
 .tableHead, .tableBody, .tableFoot{
   background-color: var(--color-grey-50);
