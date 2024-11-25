@@ -2,6 +2,7 @@ import * as React from "react";
 import StatusPlate from "../StatusPlate/StatusPlate.tsx";
 import dayjs from "dayjs";
 import ActionButton from "../FormComponents/ActionButton/ActionButton.tsx";
+import {switchEnum} from "./switchEnum.tsx";
 
 type PrepareCellProps = {
     cellData: string | number | boolean | Array<string>,
@@ -22,15 +23,3 @@ export const prepareCell= (cellData, format, enumName)=> {
             return (cellData);
     }
 };
-function switchEnum(cellData: string, enumName: string) {
-    switch (enumName) {
-        case 'process':
-            return <StatusPlate name={cellData} inEdit={false}/>
-        case 'action':
-            return <ActionButton onClick={() => {}}
-                                 stylizedAs={'white'}
-                                 disabled={false} name={cellData}/>
-        default:
-            return cellData;
-    }
-}

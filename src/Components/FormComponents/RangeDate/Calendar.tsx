@@ -3,9 +3,9 @@ import {
     addDays,
     endOfMonth,
     endOfWeek,
-    format,
+    format, isMonday,
     isSameDay,
-    isSameMonth,
+    isSameMonth, isSunday,
     parse, parseISO,
     startOfMonth,
     startOfWeek
@@ -43,13 +43,15 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
                     <td
                         className={clsx(
                             // !isSameMonth(day, month) && styles.differentMonth,
-                            isInRange && styles.inRange,
+                            isSameMonth(day, month) && isInRange && styles.inRange,
                             styles.day,
                             !isSameMonth(day, month) && styles.differentMonth,
-                            isSameDay(day, startDate) && styles.chosenStart,
-                            isSameDay(day, endDate) && styles.chosenEnd,
-                            isSameDay(day, startDate) && styles.chosen,
-                            isSameDay(day, endDate) && styles.chosen,
+                            isSameMonth(day, month) && isSameDay(day, startDate) && styles.chosenStart,
+                            isSameMonth(day, month) && isSameDay(day, endDate) && styles.chosenEnd,
+                            isSameMonth(day, month) && isSameDay(day, startDate) && styles.chosen,
+                            isSameMonth(day, month) && isSameDay(day, endDate) && styles.chosen,
+                            isMonday(day) && styles.monday,
+                            isSunday(day) && styles.sunday,
                             // styles.day
                         )}
                         key={currentDay}
@@ -98,7 +100,8 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
                 </thead>
                 <tbody>
                 {weeks.map((week, index) => (
-                    <tr key={index}>{week}</tr>
+                    <tr className={styles.week}
+                        key={index}>{week}</tr>
                 ))}
                 </tbody>
             </table>

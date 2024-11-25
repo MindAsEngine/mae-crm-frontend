@@ -82,20 +82,22 @@
   color: var(--color-grey-300);
   cursor: default;
 }
+.week{
+  border-bottom: var(--color-white) solid 3px;
+}
 
 .inRange{
   background-color: var(--color-grey-100);
 
 }
-.inRange.chosenEnd{
+.inRange.chosenEnd, .sunday{
   border-bottom-right-radius: var(--border-radius-curcle);
   border-top-right-radius: var(--border-radius-curcle);
 
 }
-.inRange.chosenStart{
+.inRange.chosenStart, .monday{
   border-bottom-left-radius: var(--border-radius-curcle);
   border-top-left-radius: var(--border-radius-curcle);
-
 }
 .chosen span {
   border-radius: var(--border-radius-curcle);

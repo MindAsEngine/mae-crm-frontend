@@ -4,7 +4,7 @@ import styles from "./regions.module.scss"
 import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import {dataRegions, headerFromServerRegions} from "./dataRegions.ts";
-import ModalCustom from "../../../Components/CustomModal/ModalCustom.tsx";
+import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 
 

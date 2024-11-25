@@ -9,7 +9,7 @@ import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader
 import {dataCallCenter, headerFromServerCallCenter} from "./dataCallCenter.ts";
 import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import ModalCustom from "../../../Components/CustomModal/ModalCustom.tsx";
+import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 
 
 export default function CallCenterReport() {

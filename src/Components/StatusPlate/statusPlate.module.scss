@@ -11,25 +11,15 @@
   .text{
     font: var(--font-xs-medium);
   }
-
-  .close::before, .close::after{
-    content: '';
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    width: 10px;
-    height: 1.5px;
+  .close{
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    position: relative;
+    mask: url("/src/assets/imgs/input/x.svg") no-repeat center;
+    mask-size: 90%;
   }
 
-  .close::before{
-    transform: rotate(45deg);
-  }
-
-  .close::after{
-    transform: rotate(-45deg);
-  }
 }
 
 .red{

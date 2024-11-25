@@ -2,6 +2,7 @@ import styles from "./filter-task.module.scss";
 import Select from "../../FormComponents/Select/Select.tsx";
 import Modal from "../../Modal/Modal.tsx";
 import * as React from "react";
+import {Button} from "../../FormComponents/Button/Button.tsx";
 
 
 
@@ -15,7 +16,28 @@ type FilterProps = {
     onClickDarkBlueButton?: any;
 }
 export default function FilterTask({filters, setFilters, onClickWhiteButton, onClickDarkBlueButton, setIsOpenModal, isOpenModal}: FilterProps) {
+    const countBadge = () => {
+        let count = 0;
+        filters.forEach(filter => {
+            if (filter.selectedOptions?.length > 0 || filter.entred) {
+                count += 1;
+                // console.log(filter.selected)
+            }
+        });
+
+        return count;
+    };
     return (
+        <Button
+            as={'div'}
+            badge={countBadge() !== 0 ? countBadge().toString() : undefined}
+            stylizedAs={'white'}
+            filterButton={true}
+            // loading={chosenData.length === 0}
+
+            onClick={() => setIsOpenModal(true)}
+        >
+            Фильтр
         <Modal isOpen={isOpenModal}
                setIsOpen={setIsOpenModal}
                title={"Фильтр"}
@@ -48,5 +70,6 @@ export default function FilterTask({filters, setFilters, onClickWhiteButton, onC
                 />
             ))}
         </Modal>
+        </Button>
     )
 }

@@ -1,5 +1,5 @@
 import {format, subMonths} from "date-fns";
-import React from "react";
+import React, {useEffect} from "react";
 import styles from './card.module.scss'
 import {Button} from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
@@ -21,6 +21,18 @@ type AudienceCardProps = {
 
 export default function AudienceCard({...audienceData}: AudienceCardProps) {
 const {id, title, duration, created, updated, connected} = audienceData;
+const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
+useEffect(() => {
+    const handleClick = (event) => {
+        if (!event.path.includes(document.getElementById('actionList'))) {
+            setIsOptionsOpen(false)
+        }
+    }
+    document.addEventListener('click', handleClick)
+    return () => {
+        document.removeEventListener('click', handleClick)
+    }
+}, [])
 return (
     <div className={styles.card}>
         <div className={styles.header}>
@@ -30,11 +42,15 @@ return (
                         {title}
                 </div>
                 </div>
-                <Button className={styles.settingButton}
+                <Button className={clsx(styles.settingButton,
+                    isOptionsOpen && styles.opened)}
                         stylizedAs={'white'}
+                        onClick={() => {
+                            setIsOptionsOpen(!isOptionsOpen)
+                        }}
                 >
                     <span className={styles.icon}/>
-                    <ul className={styles.actionsList}>
+                    <ul className={clsx(styles.actionsList, ) } id={"actionList"}>
                         <li className={clsx(styles.item, styles.options)}>
                             Опции
                         </li>

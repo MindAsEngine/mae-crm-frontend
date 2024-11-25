@@ -6,7 +6,7 @@
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  padding: 0 90px;
+  padding: 0 10%;
     display: flex;
     //justify-content: center;
     align-items: center;
@@ -39,7 +39,7 @@
   }
   .text{
     color: rgba(102, 102, 102, 1);
-    font: var(--font-m-regular);
+    font: var(--font-l-regular);
     line-height: 1.5;
     text-wrap: nowrap;
   }
@@ -57,7 +57,7 @@
     flex-direction: column;
     gap: 6px;
     .text{
-        font: var(--font-s-medium);
+        font: var(--font-m-medium);
         color: rgba(102, 112, 133, 1);
         text-wrap: nowrap;
     }
@@ -66,7 +66,7 @@
     background-color: var(--color-white);
     width: unset;
     input{
-      font: var(--font-m-regular);
+      font: var(--font-l-regular);
       color: var(--color-grey-400);
     }
     .icon{
@@ -84,7 +84,7 @@
   .button{
     text-align: center;
     justify-content: center;
-    font: var(--font-m-regular);
+    font: var(--font-l-regular);
   }
 
 }

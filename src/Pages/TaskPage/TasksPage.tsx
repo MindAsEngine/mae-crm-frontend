@@ -5,7 +5,6 @@ import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataTasks.ts";
 import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
-import Switch from "../../Components/FormComponents/Switch/Switch.tsx";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
@@ -58,24 +57,17 @@ export default function TasksPage() {
 		>
 			<div className={styles.custom}>
 
-				<Button
-					as={'div'}
-					badge={(3).toString()}
-					stylizedAs={'white'}
-					filterButton={true}
-					// loading={chosenData.length === 0}
 
-					onClick={() => setIsOpenFilters(true)}
-				>
-					Фильтр
 					<FilterTask filters={customFilters}
 								setFilters={setCustomFilters}
 								setIsOpenModal={setIsOpenFilters}
 								isOpenModal={isOpenFilters}
 								onClickDarkBlueButton={onCustomSettingApplied}
-								onClickWhiteButton={() => setDefaultOnCustomSetting(customFiltersFromServer)}
+								onClickWhiteButton={() =>
+								{setDefaultOnCustomSetting(customFiltersFromServer);
+								setIsOpenFilters(false)}}
 					/>
-				</Button>
+
 
 				<Button
 					stylizedAs={'blue-dark'}

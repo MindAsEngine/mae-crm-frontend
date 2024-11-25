@@ -7,8 +7,9 @@ import clsx from "clsx";
 type StatusPlateProps = {
     name: 'rejection' | 'completed' | 'terminated' | 'deferred' | 'no-purpose' | 'booked',
     inEdit: boolean,
+    onClick: () => void
 }
-export default function StatusPlate({name, inEdit=false}: StatusPlateProps) {
+export default function StatusPlate({name, inEdit=false, onClick=()=>{}}: StatusPlateProps) {
     const statusInfo = statusEnum.find(stInfo => stInfo.name === name);
     const statusDefault = statusEnum.find(stInfo => stInfo.name === 'default');
 
@@ -17,8 +18,11 @@ export default function StatusPlate({name, inEdit=false}: StatusPlateProps) {
             styles.container,
             styles[statusInfo?.color || statusDefault?.color || 'grey'],
         )}>
-            {inEdit && <span className={styles.close}/>}
-            <span className={styles.text}>{statusInfo?.title|| statusDefault?.title || 'Не выбрано'}</span>
+
+            <span className={styles.text}>{statusInfo?.title|| name || statusDefault?.title }</span>
+            {inEdit && <span className={styles.close}
+                onClick={onClick}
+                />}
         </div>
     )
 }

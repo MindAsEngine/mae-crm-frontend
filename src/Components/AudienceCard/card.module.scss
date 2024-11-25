@@ -37,7 +37,7 @@
       position: absolute;
     }
   }
-  .settingButton:hover {
+  .settingButton:hover, .settingButton.opened {
     .actionsList {
       z-index: 10;
       display: flex;

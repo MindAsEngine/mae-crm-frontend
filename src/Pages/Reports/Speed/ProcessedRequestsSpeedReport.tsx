@@ -6,7 +6,7 @@ import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import {dataSpeed, headerFromServerSpeed} from "./dataSpeed.ts";
 
-import ModalCustom from "../../../Components/CustomModal/ModalCustom.tsx";
+import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 
 

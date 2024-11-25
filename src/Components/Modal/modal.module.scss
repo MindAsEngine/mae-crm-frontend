@@ -3,7 +3,7 @@
   visibility: hidden;
   opacity: 0;
   transition: all 1s ease;
-  z-index: 1000;
+  z-index: 100;
   display: none;
   justify-content: center;
   align-items: center;
@@ -17,6 +17,11 @@
 .modal.dropDown.isOpen{
   position: absolute;
   background-color: transparent;
+}
+.dropDown{
+  flex-grow: 2;
+  top: calc(100% - 13px + 8px);
+  left: calc(100% - 13px - 408px);
 }
 
 .modal.windowMode.isOpen{
@@ -34,10 +39,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-height: 70vh;
+  max-height: 65vh;
+  flex-grow: 2;
+
+  width: 408px;
   background-color: var(--color-white);
   border-radius: var(--border-radius-m);
-  overflow: hidden;
+  //overflow: hidden;
   box-shadow: var(--effect-shadow-l-center);
 }
 
@@ -49,6 +57,7 @@
   padding: 20px;
   border-bottom: var(--border-grey-100-medium);
   background-color: var(--color-white);
+  border-radius: var(--border-radius-m);
 }
 
 .title{
@@ -97,4 +106,6 @@
   padding: 20px;
   border-top: var(--border-grey-100-medium);
   background-color: var(--color-white);
+  border-radius: var(--border-radius-m);
+
 }
