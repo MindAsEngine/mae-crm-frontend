@@ -4,6 +4,7 @@ import styles from './table.module.scss'
 import TableHeader from './TableHeader/TableHeader.tsx'
 import {useEffect} from "react";
 import {TableHeaderCell} from "./TableHeader/HeaderCell/HeaderCell.tsx";
+import clsx from "clsx";
 type TableProps = {
 	data: Array<object>
 	header: Array<TableHeaderCell>,
@@ -14,6 +15,8 @@ type TableProps = {
 export default function Table({ data, header, onClickCell, checkedRows, setCheckedRows }: TableProps) {
 	const [isAllChecked, setAllChecked] = React.useState<boolean>(false);
 	const [isAllUnchecked, setAllUnchecked] = React.useState<boolean>(true);
+	const [hasScroll, setHasScroll] = React.useState<boolean>(false);
+	const [width, setWidth] = React.useState<number>(0);
 	const handleCheckAll = () => {
 		if (typeof setCheckedRows === 'function') {
 			setAllChecked(prev => {
@@ -30,11 +33,19 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 		setAllUnchecked(checkedRows?.length === 0);
 		setAllChecked(checkedRows?.length === data.length);
 	}, [checkedRows]);
+	useEffect(() => {
+		setWidth(document.getElementById("table-wrapper").scrollWidth);
+		console.log(document.getElementById("table-head").scrollWidth, document.getElementById("table-wrapper").clientWidth);
+		if (document.getElementById("table-head").scrollWidth > document.getElementById("table-wrapper").clientWidth) {
+			setHasScroll(true);
+		}
+	}, [document.getElementById("table-wrapper")?.clientWidth]);
 	return (
 
-		<div className={styles.tableWrapper}>
-			<table className={styles.table}>
-				<thead className={styles.tableHead}>
+		<div className={clsx(styles.tableWrapper , hasScroll && styles.hasHorizontalScroll)} id={"table-wrapper"}>
+			<table className={styles.table} >
+
+				<thead className={styles.tableHead} id={"table-head"}>
 				<TableHeader
 					isAllUnchecked={isAllUnchecked}
 					row={header}

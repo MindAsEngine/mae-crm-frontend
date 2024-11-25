@@ -59,6 +59,7 @@ export default function TasksPage() {
 			<div className={styles.custom}>
 
 				<Button
+					as={'div'}
 					badge={(3).toString()}
 					stylizedAs={'white'}
 					filterButton={true}

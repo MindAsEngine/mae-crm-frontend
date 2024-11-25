@@ -8,7 +8,8 @@
   width: 100%;
 
 }
-.tableWrapper::after{
+
+.tableWrapper.hasHorizontalScroll::after{
   position: fixed;
   content: "";
   height: .8px;

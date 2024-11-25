@@ -28,6 +28,7 @@ export default function  HeaderCell({cellData,onClickHeaderCell, isAllChecked=fa
     // console.log(cellData.is_aside_header, "Is aside")
     return (
         <th
+            // key={cellData.name}
            onClick={onClickHeaderCell}
             className={clsx(
                 styles.tableCell,
@@ -37,6 +38,7 @@ export default function  HeaderCell({cellData,onClickHeaderCell, isAllChecked=fa
                 cellData.is_aside_header && styles.asideHeader,
                 cellData.is_sortable === false && styles.isNotSortable
             )}
+
         >
             <span className={styles.cellElement}>
                 {cellData.is_id && (

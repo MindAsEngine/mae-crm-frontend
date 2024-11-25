@@ -16,20 +16,18 @@ export default function
 	TableHeader({ row, isAllChecked=false, handleAllChecked, isAllUnchecked=true }: TableHeaderProps) {
 	return (
 		<tr className={styles.tableRow}>
-			{row.map((cellData, index) => (
-				<>
-				{(cellData.is_hidden_by_user=== false || cellData.is_visible)  && (
-				<HeaderCell
-					key={index}
-					cellData={cellData}
-					isAllChecked={isAllChecked}
-					handleAllChecked={handleAllChecked}
-					isAllUnchecked={isAllUnchecked}
-					onClickHeaderCell={()=> console.log(cellData.name + " sort")}
-				/>
-					)}
-				</>
-			))}
+			{row.map((cellData, index) =>
+					(cellData.is_hidden_by_user === false || cellData.is_visible) && (
+						<HeaderCell
+							key={cellData.name + index}
+							cellData={cellData}
+							isAllChecked={isAllChecked}
+							handleAllChecked={handleAllChecked}
+							isAllUnchecked={isAllUnchecked}
+							onClickHeaderCell={() => console.log(cellData.name + " sort")}
+						/>
+					)
+			)}
 		</tr>
 	);
 }

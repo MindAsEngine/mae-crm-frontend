@@ -22,6 +22,7 @@ export default function ModalCustom({isOpen, setIsOpen,
                                         onCustomSettingApplied}: ModalCustomProps) {
     return (
         <Button
+            as={'div'}
             stylizedAs={'white'}
             className={styles.additional}
             filterButton={true}
