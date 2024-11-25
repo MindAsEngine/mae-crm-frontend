@@ -36,7 +36,9 @@ export default function Select({ name, title, options, selected, onChange, multi
         }
         onChange && onChange(newSelected);
     };
-
+    const handleUnselectOne = (option: OptionProps) => {
+        onChange && onChange(selected.filter((s) => s.name !== option.name));
+    }
     const isSelected = (option: OptionProps) => selected.some((s) => s.name === option.name);
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -54,16 +56,20 @@ export default function Select({ name, title, options, selected, onChange, multi
             <div className={style.label}>
                 {title}
             </div>
-            <div className={style.dropdown}>
+            {/*<div className={style.dropdown}>*/}
                 <div
                     className={`${style.toggle} ${isOpen ? style.active : ""}`}
                     onClick={toggleDropdown}
                 >
                     {selected.length > 0
-                        ? selected.map((s) =>
-                            <span className={style.elemInToggle}> {switchEnum(s.title, name === "process" ? name : "notenum", true)}</span>)
+                        ? selected.map((s, index) =>
+                            <span className={style.elemInToggle} key={index}>
+                                {switchEnum(name === "process" ? s.name : s.title, name === "process" ? name : "notenum", true,
+                                    () => handleUnselectOne(s)
+                                )}
+                            </span>)
                         : `Выберите ${title.toLowerCase()}`}
-                </div>
+
                 {isOpen && (
                     <ul className={style.menu}>
                         {options.map((option) => (
@@ -79,7 +85,8 @@ export default function Select({ name, title, options, selected, onChange, multi
                         ))}
                     </ul>
                 )}
-            </div>
+                </div>
+            {/*</div>*/}
         </div>
     );
 }

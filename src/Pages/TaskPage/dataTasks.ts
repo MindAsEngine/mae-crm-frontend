@@ -34,38 +34,36 @@ export const dataTasks = [
 
 ];
 export const customFiltersFromServer = [
-    {name: "stage", title: "Этап", options: [
-            {name: "stage1", title: "Этап1"},
-            {name: "stage2", title: "Этап2"},
-            {name: "stage3", title: "Этап3"},
-            {name: "stage4", title: "Этап4"},
-            {name: "stage5", title: "Этап5"},
-            {name: "stage6", title: "Этап6"},
-            {name: "stage7", title: "Этап7"},
-            {name: "stage8", title: "Этап8"},
-            {name: "stage9", title: "Этап9"},
+    {name: "process", title: "Статус", options: [
+            {name: "rejected", title: "Отказ", color:"red"},
+            {name: "terminated", title: "Сделка расторгнута", color:"red"},
+            {name: "deferred", title: "Отложено", color:"grey"},
+            {name: "no-purpose", title: "Не целевое", color:"grey"},
+            {name: "completed", title: "Сделка проведена", color:"green"},
+            {name: "booked", title: "Бронь", color:"yellow"},
+            {name: "default" , title: "Не разобрано", color:"grey"},
         ], type: "select"},
     {name: "city", title: "Город", options: [
             {name: "city1", title: "Город1"},
             {name: "city2", title: "Город2"},
             {name: "city3", title: "Город3"},
         ], type: "select"},
-    {name: "estate", title: "Тип недвижимости", options: [
+    {name: "estate22", title: "Тип недвижимости", options: [
             {name: "estate1", title: "Тип недвижимости1"},
             {name: "estate2", title: "Тип недвижимости2"},
             {name: "estate3", title: "Тип недвижимости3"},
         ], type: "select"},
-    {name: "estate", title: "Тип недвижимости", options: [
+    {name: "estate221", title: "Тип недвижимости", options: [
             {name: "estate1", title: "Тип недвижимости1"},
             {name: "estate2", title: "Тип недвижимости2"},
             {name: "estate3", title: "Тип недвижимости3"},
         ], type: "select"},
-    {name: "estate", title: "Тип недвижимости", options: [
+    {name: "estate2", title: "Тип недвижимости", options: [
             {name: "estate1", title: "Тип недвижимости1"},
             {name: "estate2", title: "Тип недвижимости2"},
             {name: "estate3", title: "Тип недвижимости3"},
         ], type: "select"},
-    {name: "estate", title: "Тип недвижимости", options: [
+    {name: "estate1", title: "Тип недвижимости", options: [
             {name: "estate1", title: "Тип недвижимости1"},
             {name: "estate2", title: "Тип недвижимости2"},
             {name: "estate3", title: "Тип недвижимости3"},
