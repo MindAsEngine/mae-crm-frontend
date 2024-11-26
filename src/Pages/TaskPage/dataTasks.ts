@@ -68,4 +68,19 @@ export const customFiltersFromServer = [
             {name: "estate2", title: "Тип недвижимости2"},
             {name: "estate3", title: "Тип недвижимости3"},
         ], type: "select"},
+    {name: "estate5", title: "Тип недвижимости", options: [
+            {name: "estate1", title: "Тип недвижимости1"},
+            {name: "estate2", title: "Тип недвижимости2"},
+            {name: "estate3", title: "Тип недвижимости3"},
+        ], type: "select"},
+    {name: "estate15", title: "Тип недвижимости", options: [
+            {name: "estate1", title: "Тип недвижимости1"},
+            {name: "estate2", title: "Тип недвижимости2"},
+            {name: "estate3", title: "Тип недвижимости3"},
+        ], type: "select"},
+    {name: "estate51", title: "Тип недвижимости", options: [
+            {name: "estate1", title: "Тип недвижимости1"},
+            {name: "estate2", title: "Тип недвижимости2"},
+            {name: "estate3", title: "Тип недвижимости3"},
+        ], type: "select"},
 ]

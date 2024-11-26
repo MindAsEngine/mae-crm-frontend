@@ -5,6 +5,8 @@ import styles from "./task-page.module.scss";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataTasks.ts";
 import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
+import Modal from "../../Components/Modal/Modal.tsx";
+import TaskCreate from "../../Components/Forms/Task/TaskCreate.tsx";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
@@ -73,10 +75,21 @@ export default function TasksPage() {
 					stylizedAs={'blue-dark'}
 					createButton={true}
 					disabled={chosenData.length === 0}
+					as={'div'}
 					// loading={chosenData.length === 0}
 					onClick={() => setIsOpenCreateTask(true)}
 				>
 						Создать задачу
+					<Modal isOpen={isOpenCreateTask}
+						   isDropDown={false}
+						   setIsOpen={setIsOpenCreateTask}
+						   title={"Создать задачу"}
+						   as={'form'}
+						   onClickWhiteButton={() => setIsOpenCreateTask(false)}
+						   onClickDarkBlueButton={() => {}}
+						   children={<TaskCreate/>}
+
+					/>
 				</Button>
 				<Button
 

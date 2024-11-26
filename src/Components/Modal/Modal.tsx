@@ -17,9 +17,12 @@ type ModalProps = {
     classNameContent?: string;
     classNameWindow?: string;
     isDropDown?: boolean;
+    as?: any;
     //
 }
-export default function Modal({isOpen, classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton}: ModalProps) {
+export default function Modal({isOpen,
+    as: Component = 'div',
+                                  classNameWindow, classNameModal, classNameContent,setIsOpen, title, children, isDropDown=true, whiteButtonText="Отменить", darkBlueButtonText="Применить", onClickWhiteButton, onClickDarkBlueButton}: ModalProps) {
 
     const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -28,11 +31,11 @@ export default function Modal({isOpen, classNameWindow, classNameModal, classNam
         }
     }
     const handleClickOut = (e: MouseEvent) => {
-        const dialog = document.getElementById("modal");
+        const dialog = document.getElementById("modal"+title);
 
         if (!dialog.contains(e.target)) {
             setIsOpen(false);
-
+            // console.log("click out")
             // onClickWhiteButton(argWhiteButton);
         }
     }
@@ -56,8 +59,9 @@ export default function Modal({isOpen, classNameWindow, classNameModal, classNam
             isDropDown ? styles.dropDown : styles.windowMode,
             classNameModal
             )}>
-            <div className={clsx(styles.window, classNameWindow)}
-                 id={"modal"}
+            <div className={styles.forScroll}>
+            <Component className={clsx(styles.window, classNameWindow)}
+                 id={"modal"+title}
                  onClick={(e) => e.stopPropagation()}>
                 <header className={styles.header}>
                     <h2 className={styles.title}>{title}</h2>
@@ -79,6 +83,7 @@ export default function Modal({isOpen, classNameWindow, classNameModal, classNam
                     {darkBlueButtonText}
                 </Button>
         </footer>
+            </Component>
             </div>
         </dialog>
 

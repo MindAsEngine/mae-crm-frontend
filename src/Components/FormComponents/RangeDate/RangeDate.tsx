@@ -11,9 +11,10 @@ type DateRangeProps = {
 	endDate: Date;
 	setStartDate: (date: Date) => void;
 	setEndDate: (date: Date) => void;
+	id?: string;
 };
 
-const DateRange = ({ startDate, endDate, setStartDate, setEndDate }: DateRangeProps) => {
+const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateRangeProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [currentMonth, setCurrentMonth] = useState(subMonths(new Date(), 1));
 	const [nextMonth, setNextMonth] = useState(new Date());
@@ -29,7 +30,7 @@ const DateRange = ({ startDate, endDate, setStartDate, setEndDate }: DateRangePr
 	const toggleCalendar = () => setIsOpen(!isOpen);
 
 	const handleClickOut = (e: MouseEvent) => {
-		const dialog = document.getElementById("calendarDropdown");
+		const dialog = document.getElementById("calendarDropdown"+id);
 		if (dialog && !dialog.contains(e.target as Node)) {
 			setIsOpen(false);
 		}
@@ -105,7 +106,7 @@ const DateRange = ({ startDate, endDate, setStartDate, setEndDate }: DateRangePr
 	// 	setNextMonth(addMonths(startDate, 1));
 	// }, [chosenRange]);
 	return (
-		<div className={styles.container} id="calendarDropdown">
+		<div className={styles.container} id={"calendarDropdown"+id} >
 			<div className={styles.input} onClick={toggleCalendar}>
 				<Input
 					before={<span className={styles.imgCalendar}></span>}

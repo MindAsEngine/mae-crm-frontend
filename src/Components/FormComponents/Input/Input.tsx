@@ -1,5 +1,5 @@
 import styles from "./input.module.scss";
-import React from "react";
+import React, {Component} from "react";
 import clsx from "clsx";
 
 type InputProps = {
@@ -7,17 +7,20 @@ type InputProps = {
     value: string,
     className: string,
     placeholder: string,
-    type: string,
+    type?: string,
     before?: React.ReactNode,
     after?: React.ReactNode,
     readOnly?: boolean,
     props?: any,
     maxLength?: number,
-    isValid?: boolean
+    isValid?: boolean,
+    as?: any,
+    name?: string
 }
 export default function Input({
                                   onChange,
-                                  props,
+                                  // props,
+    name,
                                   readOnly,
                                   value,
                                   before,
@@ -26,7 +29,8 @@ export default function Input({
                                   placeholder,
                                   type,
                                   maxLength,
-                                    isValid
+                                    isValid,
+                                    as: Component='input'
                               }: InputProps) {
     const [isFocused, setIsFocused] = React.useState(false);
     return (
@@ -35,12 +39,9 @@ export default function Input({
             isValid === false && styles.invalid,
             className)}>
             {before}
-            <input
-                {...props}
-                // max={props?.maxValue}
-                // min={props?.minValue}
+            <Component
 
-                type={type}
+                type={type || "text"}
                 placeholder={placeholder}
                 className={clsx(styles.input)}
                 onChange={onChange}
@@ -51,7 +52,7 @@ export default function Input({
                 autoComplete={"new-password"}
                 autoCorrect={"off"}
                 autoCapitalize={"off"}
-
+                name={name}
                 spellCheck={false}
                 readOnly={readOnly}
 

@@ -41,13 +41,14 @@ export default function FilterTask({filters, setFilters, onClickWhiteButton, onC
         <Modal isOpen={isOpenModal}
                setIsOpen={setIsOpenModal}
                title={"Фильтр"}
+
                onClickWhiteButton={onClickWhiteButton}
                // argWhiteButton={argWhiteButton}
                onClickDarkBlueButton={onClickDarkBlueButton}
                classNameModal={styles.modal}
                classNameContent={styles.modalContent}
                classNameWindow={styles.modalWindow}
-               isDropDown={true}
+               isDropDown={false}
         >
             {filters.map((item, index) => (
                 <Select

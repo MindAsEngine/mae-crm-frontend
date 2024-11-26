@@ -1,13 +1,9 @@
 .modal{
-  top: calc(100% - 13px + 8px);
-  left: calc(100% - 13px - 408px);
-  //top: unset;
-  //  left: unset;
-  //margin: 0 auto;
 
 }
 .modalWindow{
   width: 408px;
+
 }
 
 .modalContent{
@@ -17,9 +13,8 @@
   justify-content: space-between;
   gap: 12px;
   margin: 16px 4px;
-  //new property
-  //flex-wrap: wrap;
-  //height: 35vh;
-  //width: max-content;
+  //height: unset;
+  //max-height: unset;
+
 
 }
