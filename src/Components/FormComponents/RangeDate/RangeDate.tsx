@@ -5,6 +5,7 @@ import Input from "../Input/Input.tsx";
 import Calendar from "./Calendar.tsx";
 import Time from "./Time.tsx";
 import { Button } from "../Button/Button.tsx";
+import clsx from "clsx";
 
 type DateRangeProps = {
 	startDate: Date;
@@ -19,7 +20,7 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 	const [currentMonth, setCurrentMonth] = useState(subMonths(new Date(), 1));
 	const [nextMonth, setNextMonth] = useState(new Date());
 	const [isValidInput, setIsValidInput] = useState(true);
-
+	const [isFocused, setIsFocused] = useState(false);
 	const [chosenRange, setChosenRange] = useState({ start: null, end: null });
 	const [startTime, setStartTime] = useState({ hour: "00", minute: "00" });
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
@@ -27,7 +28,10 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 	const [rawValue, setRawValue] = useState(""); // Значение без маски
 	const [maskedValue, setMaskedValue] = useState(""); // Значение с маской
 
-	const toggleCalendar = () => setIsOpen(!isOpen);
+	const toggleCalendar = () => {
+		setIsFocused(!isOpen);
+		setIsOpen(!isOpen);
+	}
 
 	const handleClickOut = (e: MouseEvent) => {
 		const dialog = document.getElementById("calendarDropdown"+id);
@@ -86,7 +90,6 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 		setIsValidInput(false);
 		if (formattedValue.length === 23) {
 			console.log("formattedValue", formattedValue);
-
 			const [start, end] = formattedValue.split(" - ");
 			const startDate = parse(start, "dd.MM.yyyy", new Date());
 			const endDate = parse(end, "dd.MM.yyyy", new Date());
@@ -98,7 +101,8 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 				// console.log("not valided", startDate, endDate);
 				setIsValidInput(false);
 			}
-
+		} else if (formattedValue.length === 0) {
+			setIsValidInput(true);
 		}
 	};
 	// useEffect(() => {
@@ -109,7 +113,12 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 		<div className={styles.container} id={"calendarDropdown"+id} >
 			<div className={styles.input} onClick={toggleCalendar}>
 				<Input
-					before={<span className={styles.imgCalendar}></span>}
+					before={<span className={
+						clsx(styles.imgCalendar , maskedValue.length > 0 && styles.active,
+							isFocused && styles.active
+
+						)
+					}></span>}
 					type="text"
 					value={maskedValue}
 					placeholder="ДД.ММ.ГГГГ - ДД.ММ.ГГГГ"

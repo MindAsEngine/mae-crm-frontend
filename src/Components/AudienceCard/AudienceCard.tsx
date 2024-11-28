@@ -25,6 +25,7 @@ const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
 useEffect(() => {
     const handleClick = (event) => {
         if (!event.path.includes(document.getElementById('actionList'))) {
+            console.log(event.path)
             setIsOptionsOpen(false)
         }
     }
@@ -42,15 +43,17 @@ return (
                         {title}
                 </div>
                 </div>
-                <Button className={clsx(styles.settingButton,
-                    isOptionsOpen && styles.opened)}
-                        stylizedAs={'white'}
-                        onClick={() => {
-                            setIsOptionsOpen(!isOptionsOpen)
-                        }}
-                >
-                    <span className={styles.icon}/>
-                    <ul className={clsx(styles.actionsList, ) } id={"actionList"}>
+
+            <Button className={clsx(styles.settingButton,
+                isOptionsOpen && styles.opened)}
+                    stylizedAs={'white'}
+                    onClick={() => {
+                        setIsOptionsOpen(!isOptionsOpen)
+                    }}
+            ><span className={styles.icon}/>
+                <div className={styles.settingArea}>
+
+                    <ul className={clsx(styles.actionsList,)} id={"actionList"}>
                         <li className={clsx(styles.item, styles.options)}>
                             Опции
                         </li>
@@ -78,10 +81,11 @@ return (
                             Удалить
                         </li>
                     </ul>
+                </div>
+            </Button>
 
-                </Button>
-            </div>
-            <div className={styles.content}>
+        </div>
+        <div className={styles.content}>
             <div className={styles.text}>
                 Время отправки: {duration}
             </div>

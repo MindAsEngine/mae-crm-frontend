@@ -15,6 +15,7 @@ type FilterProps = {
     // argWhiteButton?: any;
     onClickDarkBlueButton?: any;
 }
+// todo rigth type input
 export default function FilterTask({filters, setFilters, onClickWhiteButton, onClickDarkBlueButton, setIsOpenModal, isOpenModal}: FilterProps) {
     const countBadge = () => {
         let count = 0;
@@ -41,6 +42,8 @@ export default function FilterTask({filters, setFilters, onClickWhiteButton, onC
         <Modal isOpen={isOpenModal}
                setIsOpen={setIsOpenModal}
                title={"Фильтр"}
+
+               needScroll={true}
 
                onClickWhiteButton={onClickWhiteButton}
                // argWhiteButton={argWhiteButton}

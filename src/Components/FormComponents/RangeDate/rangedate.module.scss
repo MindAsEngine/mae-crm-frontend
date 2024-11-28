@@ -17,6 +17,9 @@
   mask: url('/src/assets/imgs/button/calendar.svg') no-repeat center;
   background-color: var(--color-grey-400);
 }
+.imgCalendar.active{
+  background-color: var(--color-grey-700);
+}
 .calendarDropdown{
   box-sizing: border-box;
   position: absolute;
@@ -24,7 +27,8 @@
   top: calc(100% + 9px);
   //left: 0;
   left: calc(100%  - 756px);
-  width: 757px;
+  //width: 757px;
+  //width: 100%;
   overflow: hidden;
   z-index: 20;
   display: flex;
@@ -50,13 +54,14 @@
     border-collapse: collapse;
   text-align: center;
     vertical-align: middle;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
+
 
   span{
     box-sizing: border-box;
     display: flex;
-
+    border: transparent solid 2px;
     align-items: center;
     justify-content: center;
     //width: 100%;
@@ -68,11 +73,17 @@
   font: var(--font-s-medium);
   }
 }
+.day:not(.differentMonth):not(.chosen):hover span {
+   border-radius: var(--border-radius-curcle);
+   background-color: var(--color-white);
+   border: var(--border-blue-500-medium);
+ }
+
 .dayTitle{
   box-sizing: border-box;
   padding: 24px 14.5px 16px;
-  width: 46px;
-  height: 46px;
+  //width: 46px;
+  //height: 46px;
   text-align: center;
   vertical-align: middle;
   color: var(--color-grey-500);
@@ -104,6 +115,7 @@
   background-color: var(--color-blue-500);
   color: var(--color-white);
 }
+
 .month{
   box-sizing: border-box;
   display: flex;

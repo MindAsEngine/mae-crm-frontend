@@ -40,6 +40,9 @@ export default function Table({ data, header, onClickCell, checkedRows, setCheck
 			setHasScroll(true);
 		}
 	}, [document.getElementById("table-wrapper")?.clientWidth]);
+	useEffect(() => {
+		handleCheckAll();
+	},[]);
 	return (
 
 		<div className={clsx(styles.tableWrapper , hasScroll && styles.hasHorizontalScroll)} id={"table-wrapper"}>

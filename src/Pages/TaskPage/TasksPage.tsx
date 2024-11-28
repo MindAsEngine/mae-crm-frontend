@@ -35,7 +35,7 @@ export default function TasksPage() {
 	const [chosenData, setChosenData] = useState([])
 	console.log(chosenData)
 	console.log(filters)
-	// todo create forms modal for audience? task? filters
+	// todo create forms modal for audience
 	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
 	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
@@ -45,6 +45,7 @@ export default function TasksPage() {
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
 	}
+
 	return (
 		<>
 		{/*<Switch/>*/}
@@ -79,17 +80,8 @@ export default function TasksPage() {
 					// loading={chosenData.length === 0}
 					onClick={() => setIsOpenCreateTask(true)}
 				>
-						Создать задачу
-					<Modal isOpen={isOpenCreateTask}
-						   isDropDown={false}
-						   setIsOpen={setIsOpenCreateTask}
-						   title={"Создать задачу"}
-						   as={'form'}
-						   onClickWhiteButton={() => setIsOpenCreateTask(false)}
-						   onClickDarkBlueButton={() => {}}
-						   children={<TaskCreate/>}
-
-					/>
+					Создать задачу
+					<TaskCreate isOpenCreateTask={isOpenCreateTask} setIsOpenCreateTask={setIsOpenCreateTask}/>
 				</Button>
 				<Button
 
