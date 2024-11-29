@@ -11,8 +11,6 @@ import './styles/scrollbar.scss'
 import { router } from './router'
 import * as React from 'react'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<RouterProvider

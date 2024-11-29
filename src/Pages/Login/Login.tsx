@@ -14,7 +14,7 @@ export default function LoginPage(){
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(login);
-        navigate('/');
+        // navigate('/');
     }
 
     return (

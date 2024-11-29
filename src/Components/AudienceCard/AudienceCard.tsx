@@ -59,15 +59,16 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
                             <li className={clsx(styles.item, styles.options)}>
                                 Опции
                             </li>
-                            <li className={styles.item} onClick={() => console.log('Подключить рекламу', id)}>
+                            <a className={styles.item} onClick={() => console.log('Подключить рекламу', id)}>
                                 Подключить рекламу
-                            </li>
-                            <li className={styles.item} onClick={() => console.log('Отключить рекламу', id)}>
+                            </a>
+                            <a className={styles.item} onClick={() => console.log('Отключить рекламу', id)}>
                                 Отключить рекламу
-                            </li>
-                            <li className={clsx(styles.item, styles.delete)} onClick={() => console.log('Удалить', id)}>
+                            </a>
+                            <span className={styles.divider} />
+                            <a className={clsx(styles.item, styles.delete)} onClick={() => console.log('Удалить', id)}>
                                 Удалить
-                            </li>
+                            </a>
                         </ul>
                     </div>
                 </Button>
