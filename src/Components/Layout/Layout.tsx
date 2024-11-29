@@ -7,7 +7,6 @@ import Switch from "../FormComponents/Switch/Switch.tsx";
 
 export default function Layout() {
 	const location = useLocation();
-	console.log(location.pathname, "location");
 	return (
 		<div className={styles.layout}>
 			<Sidebar />

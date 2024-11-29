@@ -11,20 +11,15 @@ export default function Sidebar() {
 	const navigate = useNavigate();
 	const handleLogout = () => {
 		navigate('/login')
-
 	};
 	const listItemClassName = (isActive: boolean) =>
 		isActive
 			? clsx(styles.list__item, styles.list__item_active)
 			: styles.list__item
 
-	console.log(isOpened)
+	// console.log(isOpened)
 	return (
 		<aside className={styles.sidebar}>
-			{/*<img*/}
-			{/*	className={clsx(styles.logo)}*/}
-			{/*	alt={'Logo'}*/}
-			{/*/>*/}
 			<nav className={styles.navigation}>
 				<ul className={styles.list}>
 					<li>

@@ -25,11 +25,16 @@
 	pointer-events: none;
 }
 
-.blueDark, .blueLight, .white{
+
+.blueDark, .blueLight, .white, .red{
 	height: 40px;
 	padding: 8px 16px;
 	//padding:  14px 16px;
 	border-radius: var(--border-radius-s);
+}
+.red{
+	color: var(--color-white);
+	background-color: var(--color-red-400);
 }
 
 .blueDark, {

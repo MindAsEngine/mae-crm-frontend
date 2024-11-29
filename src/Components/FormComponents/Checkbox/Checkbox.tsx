@@ -8,8 +8,9 @@ type CheckboxProps = {
     allCheckbox?: boolean;
     isAllUnchecked?: boolean;
     isAllChecked?: boolean;
+    name?: string;
 }
-export default function Checkbox({checked, disabled, onChange, allCheckbox=false, isAllUnchecked=true, isAllChecked}: CheckboxProps){
+export default function Checkbox({checked, name, disabled, onChange, allCheckbox=false, isAllUnchecked=true, isAllChecked}: CheckboxProps){
     if(allCheckbox) console.log(isAllChecked, isAllUnchecked, "all");
     return (
         <label className={
@@ -20,8 +21,10 @@ export default function Checkbox({checked, disabled, onChange, allCheckbox=false
                 (isAllChecked || !isAllUnchecked) && allCheckbox && styles.checked,
                 (allCheckbox && !isAllUnchecked && !isAllChecked) && styles.notAllChecked,
             )}>
-            <input type={'checkbox'}
-                   className={styles.hidden}
+            <input
+                name={name}
+                type={'checkbox'}
+                className={styles.hidden}
                    checked={checked}
                    onChange={onChange}
                    disabled={disabled}/>

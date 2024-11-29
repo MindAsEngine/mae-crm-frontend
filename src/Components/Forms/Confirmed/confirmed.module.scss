@@ -1,0 +1,54 @@
+.window{
+  gap: 0;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap:12px;
+  padding: 0 24px;
+  .icon{
+    background-color: var(--color-red-100);
+    border: var(--color-red-50) solid 7px;
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    position: relative;
+    display: flex;
+  }
+  .icon::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-red-500);
+    mask: url("/src/assets/imgs/audience/warn.svg") no-repeat center;
+  }
+  .title{
+    font: var(--font-xxl-bold);
+    color: var(--color-grey-700);
+    text-wrap: nowrap;
+  }
+  .description{
+      font: var(--font-m-medium);
+      color: var(--color-grey-500);
+      text-wrap: nowrap;
+  }
+}
+.header{
+  border: none;
+}
+.footer{
+  justify-content: center;
+  align-items: center;
+  border: none;
+  button{
+    flex-grow: 2;
+    align-items: center;
+    justify-content: center;
+
+  }
+}

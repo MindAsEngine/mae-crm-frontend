@@ -6,7 +6,7 @@ interface IButtonProps extends IClassNameProps {
 	as?: React.ElementType
 	children: React.ReactNode
 	onClick?: () => void
-	stylizedAs?: 'blue-dark' | 'blue-light' | 'white'
+	stylizedAs?: 'blue-dark' | 'blue-light' | 'white' | 'red'
 	exportButton?: boolean,
 	createButton?: boolean,
 	filterButton?: boolean,
@@ -38,6 +38,7 @@ export const Button: FC<IButtonProps> = ({
 				[styles.blueDark]: stylizedAs === 'blue-dark',
 				[styles.blueLight]: stylizedAs === 'blue-light',
 				[styles.white]: stylizedAs === 'white',
+				[styles.red]: stylizedAs === 'red',
 			},
 				exportButton && styles.exportButton,
 				createButton && styles.createButton,

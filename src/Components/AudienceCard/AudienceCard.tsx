@@ -4,6 +4,7 @@ import styles from './card.module.scss';
 import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
+import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
 
 type AudienceCardProps = {
     id: number;
@@ -15,21 +16,25 @@ type AudienceCardProps = {
         title: string;
         url?: string;
     }[];
+    chosen?: [];
+    setChosen?: (nevers: never[]) => void;
 };
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, title, duration, created, updated, connected } = audienceData;
+    const { id, title, duration, created, updated, connected, chosen, setChosen } = audienceData;
     const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
+    const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = React.useState(false);
+    const [isConfirmDisconnectOpen, setIsConfirmDisconnectOpen] = React.useState(false);
+    const [isModalConnectOpen, setIsModalConnectOpen] = React.useState(false);
 
     useEffect(() => {
         const handleClick = (event: MouseEvent) => {
             const actionListElement = document.getElementById('actionList');
             if (actionListElement && !event.composedPath().includes(actionListElement)) {
-                console.log(event.composedPath());
+                // console.log(event.composedPath());
                 setIsOptionsOpen(false);
             }
         };
-
         document.addEventListener('click', handleClick);
         return () => {
             document.removeEventListener('click', handleClick);
@@ -40,13 +45,37 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
         <div className={styles.card}>
             <div className={styles.header}>
                 <div className={styles.title}>
-                    <Checkbox />
+                    <Checkbox name={title}
+                                checked={chosen.filter((item) => item === id).length > 0}
+                                disabled={false}
+                                onChange={(e) => {
+                                    if (typeof setChosen !== 'function') return;
+                                    if (e.target.checked && !chosen.includes(id)) {
+                                        setChosen(prev => [...prev, id]);
+                                    } else if (!e.target.checked && chosen.includes(id)) {
+                                        setChosen(prev => prev.filter((item) => item !== id));
+                                    }
+                                    // console.log('Выбрано', id)
+
+                                }}
+                    />
                     <div className={styles.text}>
                         {title}
                     </div>
                 </div>
+                <Confirmed description={"Вы уверены, что хотите удалить аудиторию?"}
+                           isOpen={isConfirmDeleteOpen}
+                           onConfirm={() => console.log('Удалить', id)}
+                           setIsOpen={setIsConfirmDeleteOpen}
+                           title={"Удалить"}/>
+                <Confirmed description={"Вы уверены, что хотите отключить рекламу?"}
+                           isOpen={isConfirmDisconnectOpen}
+                           onConfirm={() => console.log('Отключить рекламу', id)}
+                           setIsOpen={setIsConfirmDisconnectOpen}
+                           title={"Отключить рекламу"}/>
 
                 <Button
+                    as={'div'}
                     className={clsx(styles.settingButton, isOptionsOpen && styles.opened)}
                     stylizedAs={'white'}
                     onClick={() => {
@@ -62,13 +91,9 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
                             <a className={styles.item} onClick={() => console.log('Подключить рекламу', id)}>
                                 Подключить рекламу
                             </a>
-                            <a className={styles.item} onClick={() => console.log('Отключить рекламу', id)}>
-                                Отключить рекламу
-                            </a>
+                            <a className={styles.item} onClick={() => {setIsConfirmDisconnectOpen(true);}}>Отключить рекламу</a>
                             <span className={styles.divider} />
-                            <a className={clsx(styles.item, styles.delete)} onClick={() => console.log('Удалить', id)}>
-                                Удалить
-                            </a>
+                            <a className={clsx(styles.item, styles.delete)} onClick={() => setIsConfirmDeleteOpen(true)}>Удалить</a>
                         </ul>
                     </div>
                 </Button>

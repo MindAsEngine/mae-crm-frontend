@@ -6,9 +6,11 @@ import AudienceCard from "../../Components/AudienceCard/AudienceCard.tsx";
 
 export default function AudiencePage() {
     const [audiences, setAudiences] = React.useState([]);
+    const [chosenAudiences, setChosenAudiences] = React.useState([]);
     React.useEffect(() => {
         setAudiences(audienceData);
     }, []);
+    console.log(chosenAudiences);
     return (
         <>
             <div className={styles.buttons}>
@@ -23,7 +25,10 @@ export default function AudiencePage() {
             </div>
             <div className={styles.cards}>
                 {audiences.map((audience, index) => (
-                    <AudienceCard key={index} {...audience} />
+                    <AudienceCard key={index} chosen={chosenAudiences}
+                                    setChosen={setChosenAudiences}
+                                    {...audience}
+                    />
                 ))}
 
             </div>

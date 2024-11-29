@@ -9,18 +9,22 @@ type ModalProps = {
     title: string;
     children: React.ReactNode;
     whiteButtonText?: string;
-    onClickWhiteButton: () => void;
+    onClickWhiteButton?: () => void;
     // argWhiteButton: any;
     darkBlueButtonText?: string;
-    onClickDarkBlueButton: () => void;
+    onClickDarkBlueButton?: () => void;
     classNameModal?: string;
     classNameContent?: string;
     classNameWindow?: string;
+    classNameFooter?: string;
+    classNameHeader?: string;
     isDropDown?: boolean;
     as?: any;
     needScroll?:boolean;
     handleSubmit?: () => void;
-    //
+    stylizedAs?: "red" | "blue-dark" | "blue-light" | "white",
+
+
 }
 export default function Modal({
                                   isOpen,
@@ -38,10 +42,16 @@ export default function Modal({
                                   darkBlueButtonText = "Применить",
                                   onClickWhiteButton,
                                   onClickDarkBlueButton,
+    classNameHeader,
+                                    classNameFooter,
+    stylizedAs="blue-dark"
                               }: ModalProps) {
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleButtonClick = () => {
+        if (typeof onClickDarkBlueButton === "function") {
+            onClickDarkBlueButton();
+        }
         if (formRef.current) {
             formRef.current.requestSubmit(); // Триггерит событие onSubmit формы
         }
@@ -82,13 +92,13 @@ export default function Modal({
         >
             <div className={clsx(needScroll && styles.forScroll)}>
                 <Component
-                    ref={formRef}
+                    ref={Component==="form" ? formRef : null}
                     className={clsx(styles.window, classNameWindow)}
                     id={"modal" + title}
                     onSubmit={handleSubmit} // Используется handleSubmit
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <header className={styles.header}>
+                    <header className={clsx(styles.header, classNameHeader)}>
                         <h2 className={styles.title}>{title}</h2>
                         <span
                             className={styles.close}
@@ -99,12 +109,12 @@ export default function Modal({
                     <div className={clsx(styles.content, classNameContent)}>
                         {children}
                     </div>
-                    <footer className={styles.footer}>
+                    <footer className={clsx(styles.footer, classNameFooter)}>
                         <Button stylizedAs="white" onClick={onClickWhiteButton}>
                             {whiteButtonText}
                         </Button>
                         <Button
-                            stylizedAs="blue-dark"
+                            stylizedAs={stylizedAs || "blue-dark"}
                             onClick={handleButtonClick}
                         >
                             {darkBlueButtonText}
