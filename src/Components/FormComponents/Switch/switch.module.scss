@@ -1,37 +1,38 @@
 .container {
-  display: flex;
-  flex-shrink: 0;
-  flex-grow: 1;
-  align-items: center;
-  background-color: var(--color-grey-100);
-  padding: 4px;
-  border-radius: 8px;
-  overflow: hidden;
   position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 4px;
+  overflow: hidden;
+  background-color: var(--color-grey-100);
+  border-radius: 8px;
 }
 
 .item{
-  cursor: pointer;
+  position: relative;
+  z-index: 2; /* Поверх фона */
   flex-grow: 1;
   flex-shrink: 1;
-  border-radius: var(--border-radius-xs);
   padding: 6px 14px;
-  text-align: center;
   overflow: hidden;
-  text-decoration: none;
-  position: relative;
   color: var(--color-grey-700);
-  z-index: 2; /* Поверх фона */
   font: var(--font-s-medium);
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--border-radius-xs);
+  cursor: pointer;
 }
+
 .switch{
   position: absolute;
+  top: 4px; /* Отступ сверху */
+  z-index: 1;
   width: 50%; /* Покрывает половину контейнера */
   height: calc(100% - 8px); /* Высота контейнера минус отступы */
   border-radius: var(--border-radius-xs);
-  top: 4px; /* Отступ сверху */
   transition: transform 0.7s ease, background-color 0.3s ease;
-  z-index: 1;
 }
 
 .item.active ~ .switch {
@@ -41,6 +42,7 @@
 .itemLeft.active ~ .switch {
   transform: translateX(0);
 }
+
 .itemRight.active ~ .switch {
   transform: translateX(100%);
 }

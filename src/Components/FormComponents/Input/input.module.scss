@@ -1,24 +1,25 @@
-@import url('/src/Components/FormComponents/variables.scss');
-
 .inputContainer{
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
   box-sizing: border-box;
-  height: 40px;
   width: 260px;
+  height: 40px;
   padding: 8px 14px;
   border: var(--border-grey-300-regular);
   border-radius: var(--border-radius-xs);
   transition: all 0.3s;
 }
+
 .inputContainer:hover{
   border: var(--border-grey-400-regular);
 }
+
 .inputContainer.invalid{
   border: var(--color-red-300) solid 1px;
 }
+
 .inputContainer.invalid.focused{
   box-shadow: var(--effect-red-shadow);
 }
@@ -37,13 +38,15 @@
   background-color: transparent;
   border: none;
   outline: none;
-  -webkit-appearance: none; /* Убирает крестик в Safari */
+  appearance: none; /* Убирает крестик в Safari */
   appearance: none;
 }
+
 .input::-webkit-search-cancel-button {
-  -webkit-appearance: none;
   cursor: pointer;
+  appearance: none;
 }
+
 textarea.input{
     resize: none;
 }
@@ -57,6 +60,7 @@ textarea.input{
   box-sizing: border-box;
 
 }
+
 .input:focus::placeholder{
   box-sizing: border-box;
   color: rgb(71 84 103 / 100%);

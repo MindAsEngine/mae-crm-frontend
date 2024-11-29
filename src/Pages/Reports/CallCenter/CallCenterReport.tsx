@@ -1,13 +1,9 @@
 import * as React from 'react'
 import styles from './call-center.module.scss'
 import {useEffect, useState} from 'react'
-import dayjs from 'dayjs'
 import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
-import Modal from "../../../Components/Modal/Modal.tsx";
-import {TableHeaderCell} from "../../../Components/Table/TableHeader/TableHeader.tsx";
 import {dataCallCenter, headerFromServerCallCenter} from "./dataCallCenter.ts";
-import Checkbox from "../../../Components/FormComponents/Checkbox/Checkbox.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 
@@ -23,7 +19,7 @@ export default function CallCenterReport() {
 	const [customSettings, setCustomSettings] = useState([]);
 
 
-	const [header, setHeader] = useState(Array<TableHeaderCell>)
+	const [header, setHeader] = useState([]);
 	const setDefaultCustomSettings = (header) => {
 		setCustomSettings(header.filter(cell => cell.is_additional)
 		.map(cell => (

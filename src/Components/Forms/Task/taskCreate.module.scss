@@ -1,19 +1,19 @@
 .form{
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-sizing: border-box;
   width: 100%;
 }
-.label, .labelDate{
-  box-sizing: border-box;
 
+.label, .labelDate{
   display: flex;
   flex-direction: column;
   gap: 6px;
+  box-sizing: border-box;
   width: 100%;
 }
+
  .span{
   color: var(--color-grey-500);
   font: var(--font-s-medium);
@@ -23,17 +23,21 @@
   width: 368px;
   height: 46px;
 }
+
 .textarea{
     min-height: 140px;
+
  textarea {
    height: 100%;
    appearance: none;
  }
+
   textarea::placeholder {
     color: var(--color-grey-400);
      font: var(--font-m-regular);
   }
 }
+
 .input{
     input::placeholder {
         color: var(--color-grey-400);

@@ -3,13 +3,15 @@
 }
 
 ::-webkit-scrollbar{
-  height: 18px;
   width: 8px;
+  height: 18px;
 }
+
 ::-webkit-scrollbar-track{
-  border: none;
   background-color: transparent;
+  border: none;
 }
+
 ::-webkit-scrollbar-thumb{
   background-color: var(--color-grey-200);
   border-radius: var(--border-radius-m);
@@ -18,12 +20,12 @@
 ::-webkit-scrollbar-track:horizontal{
   background-color: var(--color-white);
   border-radius: var(--border-radius-m);
-  //border: var(--border-grey-200-regular);
 }
+
 ::-webkit-scrollbar-thumb:horizontal {
-  border: transparent solid 4px;
-  background-clip: padding-box;
   background-color: var(--color-grey-200);
+  background-clip: padding-box;
+  border: transparent solid 4px;
   border-radius: var(--border-radius-m);
 }
 

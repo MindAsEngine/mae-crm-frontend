@@ -15,36 +15,33 @@
 	font-family: 'Semibold';
 	src: url('../assets/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
 }
+
 @font-face {
 	font-weight: 700;
 	font-family: 'Bold';
 	src: url('../assets/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
 }
+
 * {
 	/* Font Sizes */
-	--font-xxs-regular: 10px/1.3 Regular;
-	--font-xxs-medium: 10px/1.3 Medium;
-	--font-xxs-semibold: 10px/1.3 Semibold;
-	--font-xxs-bold: 10px/1.3 Bold;
-
-	--font-xs-regular: 12px/1.3 Regular;
-	--font-xs-medium: 12px/1.3 Medium;
-	--font-xs-semibold: 12px/1.3 Semibold;
-
-	--font-s-regular: 14px/1.3 Regular;
-	--font-s-medium: 14px/1.3 Medium;
-	--font-s-semibold: 14px/1.3 Semibold;
-
-	--font-m-regular: 16px/1.3 Regular;
-	--font-m-medium: 16px/1.3 Medium;
-	--font-m-semibold: 16px/1.3 Semibold;
-
-	--font-l-regular: 18px/1.3 Regular;
-	--font-l-medium: 18px/1.3 Medium;
-	--font-l-semibold: 18px/1.3 Semibold;
-
-	--font-4xl-regular: 36px/1.3 Regular;
-	--font-4xl-medium: 36px/1.3 Medium;
-	--font-4xl-semibold: 36px/1.3 Semibold;
+	--font-xxs-regular: 10px/1.3 regular;
+	--font-xxs-medium: 10px/1.3 medium;
+	--font-xxs-semibold: 10px/1.3 semibold;
+	--font-xxs-bold: 10px/1.3 bold;
+	--font-xs-regular: 12px/1.3 regular;
+	--font-xs-medium: 12px/1.3 medium;
+	--font-xs-semibold: 12px/1.3 semibold;
+	--font-s-regular: 14px/1.3 regular;
+	--font-s-medium: 14px/1.3 medium;
+	--font-s-semibold: 14px/1.3 semibold;
+	--font-m-regular: 16px/1.3 regular;
+	--font-m-medium: 16px/1.3 medium;
+	--font-m-semibold: 16px/1.3 semibold;
+	--font-l-regular: 18px/1.3 regular;
+	--font-l-medium: 18px/1.3 medium;
+	--font-l-semibold: 18px/1.3 semibold;
+	--font-4xl-regular: 36px/1.3 regular;
+	--font-4xl-medium: 36px/1.3 medium;
+	--font-4xl-semibold: 36px/1.3 semibold;
 }
 

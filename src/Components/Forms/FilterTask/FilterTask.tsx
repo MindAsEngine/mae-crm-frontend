@@ -12,10 +12,9 @@ type FilterProps = {
     setIsOpenModal: any;
     isOpenModal: boolean;
     onClickWhiteButton?: any;
-    // argWhiteButton?: any;
     onClickDarkBlueButton?: any;
 }
-// todo rigth type input
+// todo right type input
 export default function FilterTask({filters, setFilters, onClickWhiteButton, onClickDarkBlueButton, setIsOpenModal, isOpenModal}: FilterProps) {
     const countBadge = () => {
         let count = 0;
@@ -25,7 +24,6 @@ export default function FilterTask({filters, setFilters, onClickWhiteButton, onC
                 // console.log(filter.selected)
             }
         });
-
         return count;
     };
     return (

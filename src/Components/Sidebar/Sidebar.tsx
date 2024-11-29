@@ -2,7 +2,7 @@ import {NavLink, useNavigate} from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
 import { Button } from '../FormComponents/Button/Button.tsx'
 import * as React from 'react'
-import styles from './Sidebar.module.scss'
+import styles from './sidebar.module.scss'
 import clsx from 'clsx'
 
 const userImage = '/images/user.png'

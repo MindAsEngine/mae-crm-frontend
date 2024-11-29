@@ -1,90 +1,103 @@
 .page{
-  background-image: url("/src/assets/imgs/login/background.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 0 0;
+    display: flex;
+    align-items: center;
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   padding: 0 10%;
-    display: flex;
+  background-image: url("/src/assets/imgs/login/background.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
     //justify-content: center;
-    align-items: center;
 }
+
 .window{
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 100px;
+  background-color: rgb(255 255 255 / 25%);
+  border-radius: 24px;
+  backdrop-filter: blur(24px);
   //position: absolute;
   //top: 90px;
   //left: 90px;
   //width: 592px;
-  backdrop-filter: blur(24px);
-  background-color: rgba(255, 255, 255, 0.25);
-  border-radius: 24px;
-  padding: 100px;
-  gap: 10px;
-  align-items: center;
+
   .header{
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     padding: 0 70px;
   }
+
   .title{
+    color: rgb(51 51 51 / 100%);
     font: var(--font-4xl-semibold);
-    color: rgba(51, 51, 51, 1);
     text-wrap: nowrap;
   }
+
   .text{
-    color: rgba(102, 102, 102, 1);
+    color: rgb(102 102 102 / 100%);
     font: var(--font-l-regular);
     line-height: 1.5;
     text-wrap: nowrap;
   }
 }
+
 .form{
-  box-sizing: border-box;
   display: flex;
   flex-grow: 2;
   flex-direction: column;
-  width: 100%;
   gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+
   .label{
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    box-sizing: border-box;
+
     .text{
+        color: rgb(102 112 133 / 100%);
         font: var(--font-m-medium);
-        color: rgba(102, 112, 133, 1);
         text-wrap: nowrap;
     }
   }
+
   .input{
-    background-color: var(--color-white);
     width: unset;
+    background-color: var(--color-white);
+
     input{
-      font: var(--font-l-regular);
       color: var(--color-grey-400);
+      font: var(--font-l-regular);
     }
+
     .icon{
       width: var(--icon-sm);
       height: var(--icon-sm);
       background-color: var(--color-grey-600);
     }
+
     .user{
       mask: url('/src/assets/imgs/input/user.svg') no-repeat center;
     }
+
     .lock{
       mask: url('/src/assets/imgs/input/lock.svg') no-repeat center;
     }
   }
+
   .button{
-    text-align: center;
     justify-content: center;
     font: var(--font-l-regular);
+    text-align: center;
   }
 
 }

@@ -1,48 +1,49 @@
 *{
   /* White Tints */
-  --color-white: #FFF;
-  --color-white-90: rgba(255, 255, 255, 0.9);
-  --color-white-80: rgba(255, 255, 255, 0.8);
-  --color-white-70: rgba(255, 255, 255, 0.7);
-  --color-white-60: rgba(255, 255, 255, 0.6);
-  --color-white-50: rgba(255, 255, 255, 0.5);
-  --color-white-40: rgba(255, 255, 255, 0.4);
-  --color-white-30: rgba(255, 255, 255, 0.3);
-  --color-white-20: rgba(255, 255, 255, 0.2);
-  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white: #FFFFFF;
+  --color-white-90: rgb(255 255 255 / 90%);
+  --color-white-80: rgb(255 255 255 / 80%);
+  --color-white-70: rgb(255 255 255 / 70%);
+  --color-white-60: rgb(255 255 255 / 60%);
+  --color-white-50: rgb(255 255 255 / 50%);
+  --color-white-40: rgb(255 255 255 / 40%);
+  --color-white-30: rgb(255 255 255 / 30%);
+  --color-white-20: rgb(255 255 255 / 20%);
+  --color-white-10: rgb(255 255 255 / 10%);
 
   /* Grey Tints */
-  --color-grey-50: rgba(249, 250, 251, 1);
-  --color-grey-100: rgba(242, 244, 247, 1);
-  --color-grey-200: rgba(234, 236, 240, 1);
-  --color-grey-300: rgba(208, 213, 221, 1);
-  --color-grey-400: rgba(152, 162, 179, 1);
-  --color-grey-500: rgba(102, 112, 133, 1);
-  --color-grey-600: rgba(71, 84, 103, 1);
-  --color-grey-700: rgba(52, 64, 84, 1);
-  --color-grey-800: rgba(30, 31, 39, 1);
-  --color-grey-900: rgba(19, 19, 19, 1);
+  --color-grey-50: rgb(249 250 251 / 100%);
+  --color-grey-100: rgb(242 244 247 / 100%);
+  --color-grey-200: rgb(234 236 240 / 100%);
+  --color-grey-300: rgb(208 213 221 / 100%);
+  --color-grey-400: rgb(152 162 179 / 100%);
+  --color-grey-500: rgb(102 112 133 / 100%);
+  --color-grey-600: rgb(71 84 103 / 100%);
+  --color-grey-700: rgb(52 64 84 / 100%);
+  --color-grey-800: rgb(30 31 39 / 100%);
+  --color-grey-900: rgb(19 19 19 / 100%);
+
   /* Greens */
-  --color-kelli-green-50: rgba(234, 248, 228, 1);
-  --color-kelli-green-700: rgba(61, 150, 18, 1);
+  --color-kelli-green-50: rgb(234 248 228 / 100%);
+  --color-kelli-green-700: rgb(61 150 18 / 100%);
 
   /* Yellows */
-  --color-yellow-50: rgba(255, 250, 235, 1);
-  --color-yellow-700: rgba(191, 115, 1, 1);
+  --color-yellow-50: rgb(255 250 235 / 100%);
+  --color-yellow-700: rgb(191 115 1 / 100%);
 
   /* Blue Shades */
-  --color-blue-50: rgba(239, 248, 255, 1);
-  --color-blue-100: rgba(209, 233, 255, 1);
-  --color-blue-300: rgba(132, 202, 255, 1);
-  --color-blue-400: rgba(83, 177, 253, 1);
-  --color-blue-500: rgba(46, 144, 250, 1);
-  --color-blue-600: rgba(21, 112, 239, 1);
-  --color-blue-800: rgba(24, 73, 169, 1);
+  --color-blue-50: rgb(239 248 255 / 100%);
+  --color-blue-100: rgb(209 233 255 / 100%);
+  --color-blue-300: rgb(132 202 255 / 100%);
+  --color-blue-400: rgb(83 177 253 / 100%);
+  --color-blue-500: rgb(46 144 250 / 100%);
+  --color-blue-600: rgb(21 112 239 / 100%);
+  --color-blue-800: rgb(24 73 169 / 100%);
 
   /* Red Shades */
-  --color-red-50: rgba(254, 243, 242, 1);
-  --color-red-100: rgba(254, 228, 226, 1);
-  --color-red-300: rgba(253, 162, 155, 1);
-  --color-red-500: rgba(240, 68, 56, 1);
-  --color-red-600: rgba(217, 45, 32, 1);
+  --color-red-50: rgb(254 243 242 / 100%);
+  --color-red-100: rgb(254 228 226 / 100%);
+  --color-red-300: rgb(253 162 155 / 100%);
+  --color-red-500: rgb(240 68 56 / 100%);
+  --color-red-600: rgb(217 45 32 / 100%);
 }

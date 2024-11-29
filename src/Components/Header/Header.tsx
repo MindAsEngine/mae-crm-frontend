@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { routerNames } from '../../router.tsx'
 import * as React from 'react'
-import styles from './Header.module.scss'
+import styles from './header.module.scss'
 import clsx from 'clsx'
 
 export default function Header() {

@@ -1,32 +1,33 @@
 .tableWrapper {
+  position: relative;
+  z-index: 0;
   flex-grow: 2;
   box-sizing: border-box;
+  width: 100%;
   overflow: auto;
   scrollbar-gutter: stable;
-  z-index: 0;
-  position: relative;
-  width: 100%;
 
 }
 
 .tableWrapper.hasHorizontalScroll::after{
   position: fixed;
-  content: "";
-  height: .8px;
-  background-color: var(--color-grey-200);
+  right: 20px;
   bottom: 38px;
   left: 304px ;
-  right: 20px;
+  height: .8px;
+  background-color: var(--color-grey-200);
+  content: "";
 }
 
 .table{
   box-sizing: border-box;
+  width: 100%;
   height: 100%;
   min-height: 0;
   border-collapse: collapse;
   border-spacing: 0;
-  width: 100%;
 }
+
 .tableHead, .tableBody, .tableFoot{
   background-color: var(--color-grey-50);
 }

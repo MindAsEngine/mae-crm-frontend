@@ -10,16 +10,19 @@
 	border: transparent solid 1px;
 	cursor: pointer;
 }
+
 .button:focus{
 	outline: none;
 }
+
 .disabled{
-	pointer-events: none;
 	cursor: not-allowed;
-}
-.loading{
 	pointer-events: none;
+}
+
+.loading{
 	cursor: wait;
+	pointer-events: none;
 }
 
 .blueDark, .blueLight, .white{
@@ -28,10 +31,12 @@
 	//padding:  14px 16px;
 	border-radius: var(--border-radius-s);
 }
+
 .blueDark, {
 	color: var(--color-white);
 	background-color: var(--color-blue-500);
 }
+
 .blueDark.withBefore::before, .blueDark.withBefore.loading::after{
 	background-color: var(--color-white);
 
@@ -40,13 +45,16 @@
 .blueDark:hover{
 	background-color: var(--color-blue-400);
 }
+
 .blueDark:focus{
 	background-color: var(--color-blue-400);
 	box-shadow: var(--effect-primary-shadow);
 }
+
 .disabled.blueDark{
 	background-color: var(--color-blue-100);
 }
+
 .loading.blueDark{
 	background-color: var(--color-blue-100);
 }
@@ -55,16 +63,20 @@
 	color: var(--color-blue-600);
 	background-color: var(--color-blue-50);
 }
+
 .blueLight.withBefore::before, .blueLight.withBefore.loading::after{
 	background-color: var(--color-blue-600);
 }
+
 .blueLight:hover{
 	border: var(--border-blue-300-regular);
 }
+
 .blueLight:focus{
 	border: var(--border-blue-300-regular);
 	box-shadow: var(--effect-primary-shadow);
 }
+
 .disabled.blueLight, .blueLight.withBefore.disabled::before{
 	color: var(--color-blue-300);
 }
@@ -72,6 +84,7 @@
 .loading.blueLight{
 	color: var(--color-blue-300);
 }
+
 .loading.blueLight::after,
 .blueLight.withBefore.loading::before{
 	background-color: var(--color-blue-300);
@@ -82,16 +95,20 @@
 	background-color: var(--color-white);
 	border: var(--border-grey-300-regular);
 }
+
 .white.withBefore::before, .white.withBefore.loading::after{
 	background-color: var(--color-grey-600);
 }
+
 .white:hover{
 	border: var(--border-grey-400-regular);
 }
+
 .white:focus{
 	border: var(--border-grey-400-regular);
 	box-shadow: var(--effect-grey-shadow);
 }
+
 .disabled.white{
 	color: var(--color-grey-300);
 	border: var(--border-grey-200-regular);
@@ -100,23 +117,24 @@
 .loading.white{
 	color: var(--color-grey-300);
 }
+
 .loading.white::after,
 .white.withBefore.loading::before{
 	background-color: var(--color-grey-600);
 }
 
 .badge{
-	box-sizing: border-box;
-	background-color: var(--color-blue-500);
-	color: var(--color-white);
-	border-radius: var(--border-radius-curcle);
-	width: var(--icon-sm);
-	height: var(--icon-sm);
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	box-sizing: border-box;
+	width: var(--icon-sm);
+	height: var(--icon-sm);
 	margin-left: .5px;
+	color: var(--color-white);
 	font: var(--font-xxs-bold);
+	background-color: var(--color-blue-500);
+	border-radius: var(--border-radius-curcle);
 }
 
 .withBefore.button::before{
@@ -124,6 +142,7 @@
 	height: var(--icon-sm);
 	content: '';
 }
+
 .loading.button::after, .withBefore.loading.button::before {
 	width: var(--icon-sm);
 	height: var(--icon-sm);

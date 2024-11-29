@@ -1,17 +1,14 @@
-import React from 'react'
 import styles from './filterbar.module.scss'
-import { RangeDatePicker } from '@y0c/react-datepicker'
 import '@y0c/react-datepicker/assets/styles/calendar.scss'
-import dayjs from 'dayjs'
 import Input from "../FormComponents/Input/Input.tsx";
-import RangeDate from "../FormComponents/RangeDate/RangeDate.tsx";
+import {ChangeEvent, ReactNode} from "react";
 
 type FilterBarProps = {
 	setFilters: (
 		filters: any
 	) => void
 	filters: any
-	children?: React.ReactNode,
+	children?: ReactNode,
 	// noDataRange?: boolean
 }
 
@@ -22,14 +19,13 @@ export default function FilterBar({
 	// noDataRange=false
 
 }: FilterBarProps) {
-	const handleSearch = (e) => {
+	const handleSearch = (e:ChangeEvent<HTMLInputElement>) => {
 		setFilters((prevFilters: any) => {
-			const updateFilters =  {
-			...prevFilters,
-			search: e.target.value,
-			}
-			// console.log('Updated Filters (search):', updateFilters);
-			return updateFilters;}
+				// console.log('Updated Filters (search):', updateFilters);
+			return {
+				...prevFilters,
+				search: e.target.value,
+			};}
 			)
 
 	}

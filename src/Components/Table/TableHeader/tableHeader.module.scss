@@ -1,35 +1,38 @@
 
 .tableRow{
-  box-sizing: border-box;
-  background-color: var(--color-grey-50);
   position: sticky;
   top: -1px;
   z-index: 10;
-  will-change: top;
+  box-sizing: border-box;
+  background-color: var(--color-grey-50);
   border-collapse: collapse;
   border-spacing: 0;
+  will-change: top;
 }
+
 .tableRow th{
   vertical-align: middle;
 }
+
 .asideHeader{
   position: sticky;
   left: 0;
   z-index: 5;
   will-change: top;
 }
+
 .cellElement{
-  box-sizing: border-box;
   display: flex;
-  //justify-content: space-between;
   align-items: center;
   gap: 8px;
+  box-sizing: border-box;
   padding: 12px 24px;
-  background-color:var(--color-grey-50);
+  color: var(--color-grey-500);
   font: var(--font-s-medium);
   text-wrap: nowrap;
+  background-color:var(--color-grey-50);
+  //justify-content: space-between;
   //width: 250px;
-  color: var(--color-grey-500);
 }
 
 .tableRow th:not(.isNotSortable) .cellElement::after{

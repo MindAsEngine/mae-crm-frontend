@@ -1,49 +1,46 @@
 .sidebar {
-	box-sizing: border-box;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	box-sizing: border-box;
 	min-width: 284px;
 	background-color: var(--color-blue-800);
 
 	.navigation {
-		box-sizing: border-box;
-
 		display: flex;
 		flex-direction: column;
+		box-sizing: border-box;
 	}
 }
 
 .list {
-	box-sizing: border-box;
-	padding: 16px;
-
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	box-sizing: border-box;
+	padding: 16px;
 
 
 	.list__item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
 		box-sizing: border-box;
 		padding: 8px 12px;
-		font: var(--font-s-medium);
 		color: var(--color-white-80);
+		font: var(--font-s-medium);
 		white-space: nowrap;
 		text-decoration: none;
 		border-radius: var(--border-radius-xs);
 		transition:
 			color 0.3s,
 			background-color 0.3s;
-
-		display: flex;
-		align-items: center;
-		gap: 12px;
 	}
 
 	.list__item:hover {
 		color: var(--color-white);
 	}
+
 	.list__item::before {
 		content: '';
 		width: var(--icon-sm);
@@ -52,6 +49,7 @@
 		mask-repeat: no-repeat;
 		mask-position: center;
 	}
+
 	.list__item:hover::before, .list__item_active::before {
 		background-color: var(--color-white);
 	}
@@ -78,29 +76,32 @@
 	}
 
 	.list__item_reports {
-		cursor: pointer;
 		justify-content: space-between;
+		cursor: pointer;
 
 	}
 
 	.list__item_reports::after {
-		content: '';
-		mask: url('../../assets/imgs/sidebar/arrow.svg');
+		width: var(--icon-sm);
+		height: var(--icon-sm);
+		margin-left: auto; /* Отодвигает стрелку вправо */
 		background-color: var(--color-white-80);
 		transform: rotate(180deg) translate(0, -20%);
 		transition: transform 0.3s;
-		margin-left: auto; /* Отодвигает стрелку вправо */
+		content: '';
+		mask: url('../../assets/imgs/sidebar/arrow.svg');
 		mask-repeat: no-repeat;
 		mask-position: center;
-		width: var(--icon-sm);
-		height: var(--icon-sm);
 	}
+
 	.list__item_reports:hover::after {
 		background-color: var(--color-white);
 	}
+
 	.list__item_admin::before{
 		content: none;
 	}
+
 	.list__item_admin{
 		font: var(--font-s-regular);
 	}
@@ -113,14 +114,15 @@
 	}
 
 	.sublist{
+		display: none;
 		box-sizing: border-box;
 		padding-top: 0;
 		padding-bottom: 0;
 		visibility: hidden;
-		display: none;
 		transform: translateY(-20%);
 		opacity: 0;
 		transition: opacity 0.6s;
+
 		.list__item:not(.list__item_users)::before{
 			content: none;
 			mask: none;
@@ -129,12 +131,13 @@
 
 
 	.sublist_opened{
+		display: flex;
 		visibility: visible;
 		transform: translateY(0);
 		opacity: 1;
 		transition: transform 0.3s;
-		display: flex;
 	}
+
 	.sublist .list__item{
 		font: var(--font-xs-medium);
 	}
@@ -192,10 +195,10 @@
 	}
 
 	.profile__button {
+		height: unset;
 		color: var(--color-white);
 		font: var(--font-xs-medium);
 		background-color: transparent;
-		height: unset;
 	}
 
 	.profile__button::before {

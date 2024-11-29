@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './tableHeader.module.scss';
 import HeaderCell, {TableHeaderCell} from "./HeaderCell/HeaderCell.tsx";
 
-type TableHeaderProps = {
+export type TableHeaderProps = {
 	row: Array<TableHeaderCell>;
 	isAllChecked?: boolean;
 	// setAllChecked?: (isChecked: boolean) => void;

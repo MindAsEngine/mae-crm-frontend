@@ -1,6 +1,4 @@
 import { IClassNameProps } from '@bem-react/core'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import React, { FC } from 'react'
 import styles from './button.module.scss'
 import clsx from 'clsx'

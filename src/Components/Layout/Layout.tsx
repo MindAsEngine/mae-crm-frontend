@@ -2,7 +2,7 @@ import Sidebar from '../Sidebar/Sidebar.tsx'
 import Header from '../Header/Header.tsx'
 import {Outlet, useLocation} from 'react-router-dom'
 import * as React from 'react'
-import styles from './Layout.module.scss'
+import styles from './layout.module.scss'
 import Switch from "../FormComponents/Switch/Switch.tsx";
 
 export default function Layout() {

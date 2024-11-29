@@ -1,21 +1,21 @@
 
 .container{
-  padding: 4px 8px;
-  border-radius: var(--border-radius-xs);
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-xs);
 
   .text{
     font: var(--font-xs-medium);
   }
+
   .close{
+    position: relative;
     width: 12px;
     height: 12px;
     cursor: pointer;
-    position: relative;
     mask: url("/src/assets/imgs/input/x.svg") no-repeat center;
     mask-size: 90%;
   }
@@ -24,9 +24,11 @@
 
 .red{
   background-color: var(--color-red-50);
+
   .text{
     color: var(--color-red-600);
   }
+
   .close{
     background-color: var(--color-red-600);
   }
@@ -34,9 +36,11 @@
 
 .grey{
   background-color: var(--color-grey-100);
+
   .text{
     color: var(--color-grey-600);
   }
+
   .close{
     background-color: var(--color-grey-600);
   }
@@ -44,9 +48,11 @@
 
 .green{
   background-color: var(--color-kelli-green-50);
+
   .text{
     color: var(--color-kelli-green-700);
   }
+
   .close{
     background-color: var(--color-kelli-green-700);
   }
@@ -54,9 +60,11 @@
 
 .yellow{
   background-color: var(--color-yellow-50);
+
   .text{
     color: var(--color-yellow-700);
   }
+
   .close{
     background-color: var(--color-yellow-700);
   }
