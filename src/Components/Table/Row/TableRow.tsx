@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 
 type TableRowProps = {
+	isFooter?: boolean;
 	row: { [key: string]: string | number };
 	isChecked?: boolean;
 	setCheckedRows?: (updateFunction: (prev: (string | number)[]) => (string | number)[]) => void;
@@ -13,17 +14,17 @@ type TableRowProps = {
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string | number | boolean) => void
 };
 
-export default function TableRow({ row, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
+export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
 	return (
 		<tr className={clsx(style.tableRow, row['is_anomaly'] && style.anomaly,
-			row['is_footer'] && style.footer,
+			isFooter && style.footer,
 			)}>
 			{header.map((headerCell, index) => (
 				  (headerCell.is_hidden_by_user === false || headerCell.is_visible )  &&
 				  (
 							  <Cell
 								 isAsideHeader={headerCell.is_aside_header}
-								 isFooter={row['is_footer']}
+								 isFooter={isFooter}
 								  isArrayInRow={header.find(cell => cell.format === 'array')}
 								  key={index}
 								  onClickCell={onClickCell}

@@ -14,10 +14,13 @@ type ReportProps = {
     setFilters: (prev:any) => void,
     onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void,
     noDataRange?: boolean,
+    footer?: any
+    isLoading?: boolean
 
 }
 
-export default function Report({data,noDataRange, onClickCell, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
+export default function Report({data, isLoading,
+                                   footer,noDataRange, onClickCell, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
 
 	return (
 		<main className={styles.report}>
@@ -30,8 +33,10 @@ export default function Report({data,noDataRange, onClickCell, header, children,
                        noDataRange={noDataRange}
             />
 			<Table
+                isLoading={isLoading}
                 data={data}
                 header={header}
+                footer={footer}
                 checkedRows={chosenData}
                 setCheckedRows={setChosenData}
                 onClickCell={onClickCell}

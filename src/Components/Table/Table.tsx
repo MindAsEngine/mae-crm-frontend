@@ -12,20 +12,23 @@ type TableProps = {
 	checkedRows?: Array<number>
 	setCheckedRows?: (prev: Array<number>) => void
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void
+	footer?: any
+	isLoading?: boolean
 }
 
 export default function Table({
 								  data,
 								  header,
+								  footer,
 								  onClickCell,
 								  checkedRows,
-								  setCheckedRows
+								  setCheckedRows,
+								  isLoading
 							  }: TableProps) {
 	const [isAllChecked, setAllChecked] = useState<boolean>(false);
 	const [isAllUnchecked, setAllUnchecked] = useState<boolean>(true);
 	const [hasScroll, setHasScroll] = useState<boolean>(false);
 	const [width, setWidth] = useState<number>(0);
-
 	const tableWrapperRef = useRef<HTMLDivElement>(null);
 	const tableHeadRef = useRef<HTMLTableSectionElement>(null);
 
@@ -52,6 +55,13 @@ export default function Table({
 		}
 	}, [data]); // Rerun when data changes
 
+	if (isLoading) {
+		return (
+			<div className={styles.tableWrapper}>
+				<div className={styles.loading}>Loading...</div>
+			</div>
+		);
+	}
 	return (
 		<div className={clsx(styles.tableWrapper, hasScroll && styles.hasHorizontalScroll)} ref={tableWrapperRef}>
 			<table className={styles.table}>
@@ -78,18 +88,16 @@ export default function Table({
 				))}
 				</tbody>
 				<tfoot className={styles.tableFoot}>
-				{data.filter(
-					(row) => row['is_footer']
-				).map((row, index) => (
+
 					<TableRow
+						isFooter={true}
 						onClickCell={onClickCell}
-						key={row['id']} // Use unique key (row['id']) instead of index
-						row={row}
-						isChecked={checkedRows?.includes(row['id'])}
-						setCheckedRows={setCheckedRows}
+						key={footer['id']} // Use unique key (row['id']) instead of index
+						row={footer}
+
 						header={header}
 					/>
-				))}
+
 				</tfoot>
 			</table>
 		</div>
