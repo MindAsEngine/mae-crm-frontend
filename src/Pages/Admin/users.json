@@ -1,0 +1,24 @@
+{
+  "headers": [
+    {"name": "id", "is_id": true, "title": "№", "is_visible": false, "is_additional": false, "format": "number"},
+    {"name": "fio", "title": "ФИО", "is_visible": true, "is_additional": false, "format": "string"},
+    {"name": "surname", "title": "Фамилия", "is_visible": false, "is_additional": false, "format": "string"},
+    {"name": "name", "title": "Имя", "is_visible": false, "is_additional": false, "format": "string"},
+    {"name": "patronymic", "title": "Отчество", "is_visible": false, "is_additional": false, "format": "string"},
+    {"name": "role", "title": "Роль", "is_visible": true, "is_additional": false, "format": "string"},
+    {"name": "login", "title": "Логин", "is_visible": true, "is_additional": false, "format": "number"},
+    {"name": "createdAt", "title": "Дата регистрации", "is_visible": true, "is_additional": false, "format": "date"},
+    {"name": "action", "title": "", "is_visible": true, "is_additional": true, "format": "enum", "is_sortable": false}
+
+  ],
+"data": [
+    {"id": 1, "fio": "Иванов Иван Иванович",
+      "name": "Иван", "surname": "Иванов", "patronymic": "Иванович", "role": "администратор", "login": "qwrwrwfw@shhshshsh.ru", "createdAt": "12.12.2021", "action": "update"},
+    {"id": 2, "fio": "Петров Петр Петрович",
+      "name": "Петр", "surname": "Петров", "patronymic": "Петрович", "role": "пользователь", "login": "sdxfghyujik@dfghj.ru", "createdAt": "12.12.2021", "action": "update"},
+    {"id": 3, "fio": "Сидоров Сидор Сидорович",
+      "name": "Сидор", "surname": "Сидоров", "patronymic": "Сидорович", "role": "пользователь", "login": "gsxdgwgh@mcdjdcjdj.ru", "createdAt": "12.12.2021", "action": "update"},
+    {"id": 4, "fio": "Александров Александр Александрович",
+      "name": "Александр", "surname": "Александров", "patronymic": "Александрович", "role": "пользователь", "login": "mmmxmxm@slslsl.shs", "createdAt": "12.12.2021", "action": "update"}
+]
+}

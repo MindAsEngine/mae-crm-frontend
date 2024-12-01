@@ -7,7 +7,7 @@ export function switchEnum(cellData: string, enumName: string, inEdit: boolean=f
         case 'process':
             return <StatusPlate name={cellData} inEdit={inEdit} onClick={onClick}/>
         case 'action':
-            return <ActionButton onClick={() => {}}
+            return <ActionButton onClick={onClick}
     stylizedAs={'white'}
     disabled={false} name={cellData}/>
         case 'notenum':

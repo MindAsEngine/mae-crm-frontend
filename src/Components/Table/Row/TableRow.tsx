@@ -16,7 +16,7 @@ type TableRowProps = {
 
 export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
 	return (
-		<tr className={clsx(style.tableRow, row['is_anomaly'] && style.anomaly,
+		<tr className={clsx(style.tableRow, row?.is_anomaly && style.anomaly,
 			isFooter && style.footer,
 			)}>
 			{header.map((headerCell, index) => (
@@ -29,7 +29,7 @@ export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows
 								  key={index}
 								  onClickCell={onClickCell}
 								  columnName={headerCell.name}
-								  idData={row['id']}
+								  idData={row['id'] as number}
 								  cellData={row[headerCell.name]}
 								  columnFormat={headerCell.format}
 								  isChecked={isChecked}

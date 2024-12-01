@@ -50,41 +50,35 @@ export default function CallCenterReport() {
 			if (endDate) params.append("end", endDate.toISOString()); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			const response = await fetch(`/api/call-center?${params.toString()}`, {
+			await fetch(`/api/call-center?${params.toString()}`, {
 					method: 'GET',
 					headers: {
 						'Accept': 'application/json', // Явно указываем, что ожидаем JSON
 					}})
 				.then((res) => {
 					if (!res.ok) {
-						return { status: res.status };
+						setTimeout(() => {
+						}, 1000); // Имитация задержки в 1 секунду
+						return jsonData;
+
 						// throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
+				.then((data) => {
+					setData(data?.data); // Установка данных
+					setFooter(data?.footer); // Установка футера
+					setHeaderBefore(data?.headers); // Установка заголовков
+					setDefaultCustomSettings(data?.headers);
+				})
 				.catch((err) => console.error(err));
-			if (response?.status === 200) {
-				setData(response?.data); // Установка данных
-				setFooter(response?.footer); // Установка футера
-				setHeaderBefore(response?.headers); // Установка заголовков
-				setDefaultCustomSettings(response?.headers); // Инициализация настроек
-			} else if (response?.status === 404) {
-				console.error("Данные не найдены (пока)");
-				setTimeout(() => {
-					// Используем локальные данные
-					setData(jsonData?.data); // Установка данных
-					setFooter(jsonData?.footer); // Установка футера
-					setHeaderBefore(jsonData?.headers); // Установка заголовков
-				}, 1000); // Имитация задержки в 1 секунду
-			} else {
-				console.error("Ошибка загрузки данных");
-				console.error(response);
-			}
-
 		};
 		fetchData();
-	}, []);
+	}, [filters]);
+
 	useEffect(() => {
+
+		// @ts-ignore
 		setHeader( headerBefore.map((cell) => ({ ...cell,
 			is_hidden_by_user: !cell.is_visible })));
 		setLoading(false);
@@ -128,10 +122,11 @@ export default function CallCenterReport() {
 		);
 	};
 
-	console.log(data, "DataPage");
-	console.log(header, "HeaderPage");
-	console.log(footer, "FooterPage");
-
+	// console.log(data, "DataPage");
+	// console.log(header, "HeaderPage");
+	// console.log(footer, "FooterPage");
+	console.log(filters, "FiltersPage");
+	//todo sorting
 	return (
 		<Report
 			data={data}

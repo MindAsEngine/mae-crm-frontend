@@ -6,7 +6,7 @@ import RegionsReport from './Pages/Reports/Regions/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/Speed/ProcessedRequestsSpeedReport.tsx'
 import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
-import Users from "./Pages/Admin/Users.tsx";
+import UsersPage from "./Pages/Admin/UsersPage.tsx";
 import AudiencePage from "./Pages/AudiencePage/AudiencePage.tsx";
 import LoginPage from "./Pages/Login/Login.tsx";
 export const routerNames: { [key: string]: string } = {
@@ -79,7 +79,7 @@ export const router = createBrowserRouter(
 						},
 						{
 							path: 'users',
-							element: <Users />,
+							element: <UsersPage />,
 						}
 						]
 				}

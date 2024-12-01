@@ -35,6 +35,9 @@ type CellProps = {
 
 
 export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow,className, columnName, columnFormat, idData, cellData,  setCheckedRows, isChecked}:CellProps){
+    const onClick = () => {
+        typeof onClickCell === "function" && onClickCell(idData, columnName, cellData);
+    }
     return (
         <td className={clsx(style.tableCell,
             isArrayInRow && style.arrayInRow,
@@ -46,7 +49,7 @@ export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow
         )}
 
             onClick={() => {
-                ((typeof onClickCell === "function") && (columnFormat === 'number'))
+                ((typeof onClickCell === "function") && (columnFormat === 'number'|| columnFormat === 'enum' && columnName==='actions'))
                     ? onClickCell(idData, columnName, cellData) : {}
             }}>
             <div className={clsx(style.cellElement, columnFormat === 'array' && style.array)}>
@@ -55,7 +58,7 @@ export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow
                         <>
                             {columnFormat !== 'array'
                                 ?
-                                (prepareCell(cellData, columnFormat, columnFormat === 'enum' && columnName))
+                                (prepareCell(cellData, columnFormat, columnFormat === 'enum' && columnName, onClick))
                                 : (Array.isArray(cellData) && cellData?.map((one, index) => (
                                     <span key={index} className={style.arrayElement}>
  										{(prepareCell(one, 'string'))}

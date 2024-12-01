@@ -87,18 +87,19 @@ export default function Table({
 					/>
 				))}
 				</tbody>
+				{footer &&
 				<tfoot className={styles.tableFoot}>
 
 					<TableRow
 						isFooter={true}
 						onClickCell={onClickCell}
-						key={footer['id']} // Use unique key (row['id']) instead of index
+						// Use unique key (row['id']) instead of index
 						row={footer}
 
 						header={header}
 					/>
 
-				</tfoot>
+				</tfoot>}
 			</table>
 		</div>
 	);
