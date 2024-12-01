@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "../Button/Button.tsx";
 import styles from "./action.module.scss";
 import clsx from "clsx";
@@ -15,6 +16,7 @@ export default function ActionButton({
                                          disabled = false, // Значение по умолчанию
                                          name
                                      }: ActionButtonProps) {
+    const actions = name.split("|");
     return (
         <Button
             onClick={onClick}
@@ -24,9 +26,8 @@ export default function ActionButton({
         >
             <span
                 className={clsx(
-                    name === "delete" && styles.delete,
-                    name === "edit" && styles.edit,
-                    name === "view" && styles.view
+                    actions.map((action) => styles[action]),
+
                 )}
             />
         </Button>

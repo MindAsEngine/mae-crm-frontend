@@ -18,8 +18,13 @@
   color: var(--color-grey-500);
   font: var(--font-s-medium);
 }
+ .span.required::after{
+    content: '*';
+   color: var(--color-red-300);
+ }
 
-.input, .textarea, .labelDate > div > div > div{
+.input, .textarea, .labelDate .inputDate{
+//.labelDate > div > div > div{
   width: 368px;
   height: 46px;
 }

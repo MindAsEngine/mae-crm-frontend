@@ -22,6 +22,7 @@ type ModalProps = {
     as?: any;
     needScroll?:boolean;
     handleSubmit?: () => void;
+    onClose?: () => void;
     stylizedAs?: "red" | "blue-dark" | "blue-light" | "white",
 
 
@@ -42,6 +43,7 @@ export default function Modal({
                                   darkBlueButtonText = "Применить",
                                   onClickWhiteButton,
                                   onClickDarkBlueButton,
+    onClose,
     classNameHeader,
                                     classNameFooter,
     stylizedAs="blue-dark"
@@ -51,9 +53,13 @@ export default function Modal({
     const handleButtonClick = () => {
         if (typeof onClickDarkBlueButton === "function") {
             onClickDarkBlueButton();
+
         }
         if (formRef.current) {
             formRef.current.requestSubmit(); // Триггерит событие onSubmit формы
+        }
+        if (typeof onClose === "function") {
+            onClose();
         }
     };
 
@@ -61,13 +67,21 @@ export default function Modal({
         if (e.key === "Escape") {
             setIsOpen(false);
         }
+        if (typeof onClose === "function") {
+            onClose();
+        }
     };
 
     const handleClickOut = (e: MouseEvent) => {
         const dialog = document.getElementById("modal" + title);
         if (dialog && !dialog.contains(e.target as Node)) {
             setIsOpen(false);
+            if (typeof onClose === "function") {
+                onClose();
+            }
+
         }
+
     };
 
     useEffect(() => {
@@ -89,6 +103,7 @@ export default function Modal({
                 isDropDown ? styles.dropDown : styles.windowMode,
                 classNameModal
             )}
+            onClose={onClose}
         >
             <div className={clsx(needScroll && styles.forScroll)}>
                 <Component
@@ -102,7 +117,12 @@ export default function Modal({
                         <h2 className={styles.title}>{title}</h2>
                         <span
                             className={styles.close}
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                                setIsOpen(false);
+                                if (typeof onClose === "function") {
+                                    onClose();
+                                }}
+                            }
                         />
                     </header>
 
@@ -110,7 +130,14 @@ export default function Modal({
                         {children}
                     </div>
                     <footer className={clsx(styles.footer, classNameFooter)}>
-                        <Button stylizedAs="white" onClick={onClickWhiteButton}>
+                        <Button stylizedAs="white" onClick={() => {
+                            if (typeof onClickWhiteButton === "function") {
+                                onClickWhiteButton();
+                            }
+                            if (typeof onClose === "function") {
+                                onClose();
+                            }
+                            }}>
                             {whiteButtonText}
                         </Button>
                         <Button

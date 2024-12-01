@@ -33,10 +33,13 @@ export default function Input({
                                     as: Component='input'
                               }: InputProps) {
     const [isFocused, setIsFocused] = React.useState(false);
+    const [isTouched, setIsTouched] = React.useState(false);
     return (
-        <div className={clsx(styles.inputContainer, isFocused && styles.focused,
+        <div
+            onClick={() => setIsTouched(true)}
+            className={clsx(styles.inputContainer, isFocused && styles.focused,
             // isValid && styles.valid,
-            isValid === false && styles.invalid,
+            isTouched && isValid === false && styles.invalid,
             className)}>
             {before}
             <Component
