@@ -12,15 +12,10 @@ type CheckboxProps = {
     name?: string;
 }
 export default function Checkbox({checked, name, disabled, onChange, allCheckbox=false, isAllUnchecked=true, isAllChecked}: CheckboxProps){
-    // if(allCheckbox) console.log(isAllChecked, isAllUnchecked, "all");
+    if(allCheckbox) console.log(isAllChecked, isAllUnchecked, "all");
     const [isFocused, setIsFocused] = React.useState(false);
-    // React.useEffect(() => {
-    //     console.log("isFocused updated:", isFocused);
-    // }, [isFocused]);
-
     return (
         <label
-
             className={
             clsx(
                 styles.checkbox,
@@ -33,10 +28,7 @@ export default function Checkbox({checked, name, disabled, onChange, allCheckbox
                >
             <input
 
-                onFocus={() => {
-                    setIsFocused(true);
-                    console.log("focus");}
-                }
+                onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 name={name}
                 type={'checkbox'}

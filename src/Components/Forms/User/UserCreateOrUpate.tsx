@@ -66,7 +66,10 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
 
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            // if (user.password !== password || !user.password || !user.login || !user.name || !user.surname) {
+            if(user.login ===""){
+                return;
+            }
+
             if (userBeforeUpdate) {
                 console.log("Update data:", user);
             } else {

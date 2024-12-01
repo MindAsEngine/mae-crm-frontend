@@ -20,8 +20,6 @@ export default function CallCenterReport() {
 		sortField: "", // Поле для сортировки
 		sortOrder: "asc", // Порядок сортировки: asc или desc
 	});
-
-	const [isOpen, setIsOpen] = useState(false);
 	const [customSettings, setCustomSettings] = useState([]);
 
 	// Инициализация пользовательских настроек колонок
@@ -46,8 +44,8 @@ export default function CallCenterReport() {
 			// Формирование параметров для запроса
 			const params = new URLSearchParams();
 			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate.toISOString()); // Конечная дата в формате ISO
+			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
 			await fetch(`/api/call-center?${params.toString()}`, {
@@ -77,12 +75,11 @@ export default function CallCenterReport() {
 	}, [filters]);
 
 	useEffect(() => {
-
 		// @ts-ignore
 		setHeader( headerBefore.map((cell) => ({ ...cell,
 			is_hidden_by_user: !cell.is_visible })));
 		setLoading(false);
-	}, [headerBefore]);
+	}, [headerBefore, filters]);
 
 
 	const handleStartDateChange = (date) => {
@@ -122,10 +119,7 @@ export default function CallCenterReport() {
 		);
 	};
 
-	// console.log(data, "DataPage");
-	// console.log(header, "HeaderPage");
-	// console.log(footer, "FooterPage");
-	console.log(filters, "FiltersPage");
+
 	//todo sorting
 	return (
 		<Report
@@ -138,8 +132,6 @@ export default function CallCenterReport() {
 		>
 			<div className={styles.custom}>
 				<ModalCustom
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
 					customSettings={customSettings}
 					setCustomSettings={setCustomSettings}
 					header={header}

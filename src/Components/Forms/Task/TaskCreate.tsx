@@ -1,6 +1,6 @@
 import React, {forwardRef, useState} from "react";
 import Input from "../../FormComponents/Input/Input.tsx";
-import styles from "./taskCreate.module.scss";
+import styles from "../form.module.scss";
 import Select from "../../FormComponents/Select/Select.tsx";
 import DateRange from "../../FormComponents/RangeDate/RangeDate.tsx";
 import Modal from "../../Modal/Modal.tsx";
