@@ -13,6 +13,7 @@ type DateRangeProps = {
 	setStartDate: (date: Date) => void;
 	setEndDate: (date: Date) => void;
 	id?: string;
+
 };
 
 const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateRangeProps) => {
@@ -21,16 +22,15 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 	const [nextMonth, setNextMonth] = useState(new Date());
 	const [isValidInput, setIsValidInput] = useState(true);
 	const [isFocused, setIsFocused] = useState(false);
-	const [chosenRange, setChosenRange] = useState({ start: null, end: null });
+	const [chosenRange, setChosenRange] = useState({ start: startDate, end: endDate });
 	const [startTime, setStartTime] = useState({ hour: "00", minute: "00" });
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
-
 	const [rawValue, setRawValue] = useState(""); // Значение без маски
 	const [maskedValue, setMaskedValue] = useState(""); // Значение с маской
 
 	const toggleCalendar = () => {
-		setIsFocused(!isOpen);
-		setIsOpen(!isOpen);
+		setIsFocused(true);
+		setIsOpen(true);
 	}
 
 	const handleClickOut = (e: MouseEvent) => {
@@ -66,17 +66,15 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 	};
 
 	const applySelection = () => {
-		if (chosenRange.start && chosenRange.end) {
-			setIsOpen(false);
+		if (isValid(chosenRange.start) && isValid(chosenRange.end)) {
 			setStartDate(chosenRange.start);
 			setEndDate(chosenRange.end);
+			setIsOpen(false);
 		}
 	};
 
-
 	const handleInputChange = (val) => {
 		const value = val.replace(/\D/g, ""); // Убираем всё, кроме цифр
-
 		// Формируем маскированное значение
 		let formattedValue = value;
 		if (value.length > 2) formattedValue = `${value.slice(0, 2)}.${value.slice(2)}`;
@@ -84,7 +82,7 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 		if (value.length > 8) formattedValue = `${formattedValue.slice(0, 10)} - ${formattedValue.slice(10)}`;
 		if (value.length > 10) formattedValue = `${formattedValue.slice(0, 15)}.${formattedValue.slice(15)}`;
 		if (value.length > 12) formattedValue = `${formattedValue.slice(0, 18)}.${formattedValue.slice(18)}`;
-
+		setChosenRange({ start: null, end: null });
 		setRawValue(value);
 		setMaskedValue(formattedValue);
 		setIsValidInput(false);
@@ -103,14 +101,21 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 			}
 		} else if (formattedValue.length === 0) {
 			setIsValidInput(true);
+		} else if (formattedValue.length === 10) {
+			const startDate = parse(formattedValue, "dd.MM.yyyy", new Date());
+			if (isValid(startDate)) {
+				setChosenRange({ start: startDate, end: startDate });
+				setIsValidInput(true);
+			} else {
+				setIsValidInput(false);
+			}
 		}
 	};
-	// useEffect(() => {
-	// 	setCurrentMonth(startDate);
-	// 	setNextMonth(addMonths(startDate, 1));
-	// }, [chosenRange]);
+
 	return (
-		<div className={styles.container} id={"calendarDropdown"+id} >
+		<div className={styles.container} id={"calendarDropdown"+id}
+		onClick={event => event.stopPropagation()}
+		>
 			<div className={styles.input} onClick={toggleCalendar}>
 				<Input
 					before={<span className={
@@ -166,6 +171,7 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 								onClick={() => {
 									setChosenRange({ start: null, end: null });
 									setRawValue("");
+									setMaskedValue("");
 									setIsOpen(false);
 								}}
 							/>

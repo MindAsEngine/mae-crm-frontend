@@ -119,7 +119,7 @@ export default function CallCenterReport() {
 		);
 	};
 
-
+	console.log("filters", filters);
 	//todo sorting
 	return (
 		<Report

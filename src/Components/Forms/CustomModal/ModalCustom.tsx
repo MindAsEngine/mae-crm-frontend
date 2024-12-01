@@ -52,8 +52,6 @@ export default function ModalCustom({
                         />
                     </div>
                 ))}
-
-
             </Modal>
         </Button>
     )
