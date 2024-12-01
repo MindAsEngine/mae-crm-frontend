@@ -2,6 +2,7 @@ import * as React from "react";
 import style from "./select.module.scss";
 import {switchEnum} from "../../Table/switchEnum.tsx";
 import {useEffect} from "react";
+import clsx from "clsx";
 
 type OptionProps = {
     title: string;
@@ -15,12 +16,14 @@ type SelectProps = {
     selected: OptionProps[]; // Updated type
     onChange?: (selected: OptionProps[]) => void; // Callback for parent
     multiple?: boolean; // Allow single/multiple select
+    isValid?: boolean;
+    required?: boolean;
 };
 
 
-export default function Select({ name, title, options, selected, onChange, multiple = false }: SelectProps) {
+export default function Select({required=false, name, title, options, selected, onChange, multiple = false, isValid=true }: SelectProps) {
     const [isOpen, setIsOpen] = React.useState(false);
-
+    const [isTouched, setIsTouched] = React.useState(false);
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleOptionClick = (option: OptionProps) => {
         let newSelected: OptionProps[];
@@ -52,13 +55,14 @@ export default function Select({ name, title, options, selected, onChange, multi
 
     }, [name]);
     return (
-        <div className={style.container} id={"select" + name}>
-            <div className={style.label}>
+        <div className={style.container} id={"select" + name}
+                onClick={() => setIsTouched(true)}>
+            <div className={clsx(style.label, required && style.required)}>
                 {title}
             </div>
             {/*<div className={style.dropdown}>*/}
                 <div
-                    className={`${style.toggle} ${isOpen ? style.active : ""}`}
+                    className={clsx(style.toggle, !isValid && isTouched  && style.invalid, isOpen && style.active)}
                     onClick={toggleDropdown}
                 >
                     {selected.length > 0

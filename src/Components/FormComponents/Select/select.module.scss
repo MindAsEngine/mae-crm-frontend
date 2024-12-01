@@ -9,6 +9,10 @@
   color: var(--color-grey-500);
   font: var(--font-s-medium);
 }
+.label.required::after{
+  content: '*';
+  color: var(--color-red-300);
+}
 
 .toggle{
   position: relative;
@@ -48,6 +52,13 @@
 .toggle.active {
   border: var(--border-grey-300-regular);
   box-shadow: var(--effect-grey-shadow);
+}
+.toggle.invalid{
+  border: var(--color-red-300) solid 1px;
+}
+
+.toggle.invalid.active{
+  box-shadow: var(--effect-red-shadow);
 }
 
 .menu {
