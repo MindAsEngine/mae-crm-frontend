@@ -9,7 +9,6 @@
     {"name": "login", "title": "Логин", "is_visible": true, "is_additional": false, "format": "number"},
     {"name": "createdAt", "title": "Дата регистрации", "is_visible": true, "is_additional": false, "format": "date"},
     {"name": "action", "title": "", "is_visible": true, "is_additional": true, "format": "enum", "is_sortable": false}
-
   ],
 "data": [
     {"id": 1, "fio": "Иванов Иван Иванович",

@@ -1,26 +1,27 @@
 import * as React from 'react'
 import {useEffect, useState} from 'react'
-import styles from "./regions.module.scss"
+import styles from "../reports.module.scss"
 import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
-import {dataRegions, headerFromServerRegions} from "./dataRegions.ts";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-
+import jsonData from "./regions.json"; // Локальные данные для теста
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function RegionsReport() {
+	const [data, setData] = useState([]); // Данные для таблицы
+	const [header, setHeader] = useState([]); // Заголовок таблицы
+	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
+	const [footer, setFooter] = useState([]); // Футер таблицы
+	const [loading, setLoading] = useState(true); // Состояние загрузки
+	const [exportClicked, setExportClicked] = useState(false);
 	const [filters, setFilters] = useState({
-		search: '',
-		startDate: null,
-		endDate: null,
-	})
-
-	const [chosenData, setChosenData] = useState([])
-	console.log(chosenData)
-	console.log(filters)
-
-	const [header, setHeader] = useState(headerFromServerRegions);
-	const [isOpen, setIsOpen] = useState(false)
+		search: "", // Поиск по ФИО
+		startDate: null, // Начальная дата
+		endDate: null, // Конечная дата
+		sortField: "", // Поле для сортировки
+		sortOrder: "asc", // Порядок сортировки: asc или desc
+	});
 	const [customSettings, setCustomSettings] = useState([]);
 
 
@@ -36,22 +37,57 @@ export default function RegionsReport() {
 		);
 	}
 	useEffect(() => {
-		const transformedHeader = headerFromServerRegions.map(cell => ({
-			name: cell.name,
-			is_id: cell.is_id,
-			is_additional: cell.is_additional,
-			title: cell.title,
-			is_visible: cell.is_visible,
-			format: cell.format,
-			is_hidden_by_user: !cell.is_visible,
-			is_aside_header: cell.is_aside_header
-		}));
+		// Симуляция загрузки данных с сервера
+		const fetchData = async () => {
+			setLoading(true); // Установка состояния загрузки
 
-		setHeader(transformedHeader);
+			const { search, startDate, endDate, sortField, sortOrder } = filters;
+			// Формирование параметров для запроса
+			const params = new URLSearchParams();
+			if (search !== "") params.append("search", search); // Добавляем параметр поиска
+			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+
+			await fetch(apiUrl+`/regions?${params.toString()}`, {
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
+					'Content-Type': 'application/json',
+				}})
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(`HTTP error! status: ${res.status}`);
+					}
+					return res.json(); // Парсим JSON только при успешном статусе
+				})
+				.then((data) => {
+					setData(data?.data); // Установка данных
+					setFooter(data?.footer); // Установка футера
+					setHeaderBefore(data?.headers); // Установка заголовков
+					setDefaultCustomSettings(data?.headers);
+				})
+				.catch((err) => {
+					console.error(err);
+					setTimeout(() => {
+					}, 1000); // Имитация задержки в 1 секунду
+					const data = jsonData;
+					setData(data?.data); // Установка данных
+					setFooter(data?.footer); // Установка футера
+					setHeaderBefore(data?.headers); // Установка заголовков
+					setDefaultCustomSettings(data?.headers);
+				});
+		};
+		fetchData();
+	}, [filters]);
+
+	useEffect(() => {
 		// @ts-ignore
-		setDefaultCustomSettings(transformedHeader);
-
-	}, []);
+		setHeader( headerBefore.map((cell) => ({ ...cell,
+			is_hidden_by_user: !cell.is_visible })));
+		setLoading(false);
+	}, [headerBefore]);
 	const handleStartDateChange = (date) => {
 		setFilters((prevFilters) => {
 			// console.log('Updated Filters (start date):', updatedFilters);
@@ -73,6 +109,7 @@ export default function RegionsReport() {
 	};
 
 	const onCustomSettingApplied = () => {
+		// @ts-ignore
 		setHeader(prevHeader =>
 			prevHeader.map(cell => {
 				const setting = customSettings.find(s => s.name === cell.name);
@@ -97,13 +134,34 @@ export default function RegionsReport() {
 		console.log(rowPos, columnPos, cellData);
 		// setIsOpenCurtain(true);
 	}
+	const handleExport = async (api) => {
+		console.log("export", api);
+	}
+	const handleExportClick = () => {
+		setExportClicked(true);
+	}
+	useEffect(() => {
+		if (exportClicked) {
+			const { search, startDate, endDate, sortField, sortOrder } = filters;
+			const params = new URLSearchParams();
+			if (search !== "") params.append("search", search); // Добавляем параметр поиска
+			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+
+			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
+				.then(() => {
+					setExportClicked(false);
+				});
+		}
+	}, [exportClicked]);
 	return (
 		<>
 
-		<Report data={dataRegions}
+		<Report data={data}
 				header={header}
-				chosenData={chosenData}
-				setChosenData={setChosenData}
+				footer={footer}
+				isLoading={loading}
 				filters={filters}
 				setFilters={setFilters}
 
@@ -112,8 +170,7 @@ export default function RegionsReport() {
 
 			<div className={styles.custom}>
 				<ModalCustom
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
+
 					customSettings={customSettings}
 					setCustomSettings={setCustomSettings}
 					header={header}
@@ -142,7 +199,7 @@ export default function RegionsReport() {
 				<Button
 					stylizedAs={'blue-dark'}
 					exportButton={'white'}
-					onClick={() => console.log('export')}
+					onClick={handleExportClick}
 				>
 					Экспорт
 				</Button>

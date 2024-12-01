@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import Report from '../../Components/Report/Report.tsx';
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import UserCreateOrUpdate from "../../Components/Forms/User/UserCreateOrUpate.tsx";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 
 
@@ -27,7 +28,7 @@ export default function UsersPage() {
 			const params = new URLSearchParams();
 			if (search !== "") params.append("search", search);
 
-			await fetch(`/api/users?${params.toString()}`, {
+			await fetch(apiUrl + `/users?${params.toString()}`, {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',

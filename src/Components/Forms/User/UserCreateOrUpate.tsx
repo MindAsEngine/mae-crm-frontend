@@ -4,7 +4,7 @@ import React from "react";
 import styles from "../form.module.scss";
 import Input from "../../FormComponents/Input/Input.tsx";
 import clsx from "clsx";
-
+const apiUrl = import.meta.env.VITE_API_URL;
 class User{
     id: number | null;
     surname: string ;
@@ -26,6 +26,8 @@ type UserCreateOrUpateProps = {
 const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
     ({ isOpenCreateUser, setIsOpenCreateUser, userBeforeUpdate={} ,isUpdate=false, onClose}: UserCreateOrUpateProps, ref) => {
         const [password, setPassword] = useState<string>("");
+        const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+        const [isSubmitStatusSuccess, setIsSubmitStatusSuccess] = useState<boolean| null>(null);
         const resetForm = () => {
             setUser({
                 id: 0,
@@ -52,8 +54,56 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                 setUser(userBeforeUpdate);
                 // console.log("User before update:", userBeforeUpdate.id, user);
             }
-
         }, []);
+        useEffect(() => {
+             const postUser = async () => {
+                const response = await fetch( apiUrl + '/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user),
+                }).then((res) => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                }).then((data) => {
+                    console.log("Data:", data);
+                    setIsSubmitStatusSuccess(true);
+                }).catch((error) => {
+                    console.error('Ошибка:', error);
+                    setIsSubmitStatusSuccess(false);
+                });
+             }
+
+             const putUser = async () => {
+                 const response = await fetch( apiUrl + '/users/' + user.id, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(user),
+                    }).then((res) => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! status: ${res.status}`);
+                        }
+                        return res.json();
+                    }).then((data) => {
+                        console.log("Data:", data);
+                        setIsSubmitStatusSuccess(true);
+                    }).catch((error) => {
+                        console.error('Ошибка:', error);
+                        setIsSubmitStatusSuccess(false);
+                 });
+             }
+            if (isFormSubmitted && !isUpdate) {
+                postUser();
+            } else if (isFormSubmitted && isUpdate) {
+                putUser();
+            }
+
+        }, [isFormSubmitted]);
 
 
 
@@ -66,19 +116,13 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
 
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if(user.login ===""){
-                return;
-            }
+            setIsFormSubmitted(true);
 
-            if (userBeforeUpdate) {
-                console.log("Update data:", user);
-            } else {
-                console.log("Create data:", user);
-            }
             if (typeof onClose === "function") onClose();
-            resetForm();
-            setIsOpenCreateUser(false); // Закрыть модалку после отправки
-
+            if (!isFormSubmitted && isSubmitStatusSuccess) {
+                resetForm();
+                setIsOpenCreateUser(false); // Закрыть модалку после отправки
+            }
         };
 
 

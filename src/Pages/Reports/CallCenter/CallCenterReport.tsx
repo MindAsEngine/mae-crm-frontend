@@ -1,11 +1,14 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import styles from "./call-center.module.scss";
+import styles from "../reports.module.scss";
 import { Button } from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
-import jsonData from "./call-center.json"; // Локальные данные для теста
+import jsonData from "./call-center.json";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 export default function CallCenterReport() {
 	const [data, setData] = useState([]); // Данные для таблицы
@@ -21,20 +24,47 @@ export default function CallCenterReport() {
 		sortOrder: "asc", // Порядок сортировки: asc или desc
 	});
 	const [customSettings, setCustomSettings] = useState([]);
-
-	// Инициализация пользовательских настроек колонок
+	const [exportClicked, setExportClicked] = useState(false);
 	const setDefaultCustomSettings = (header) => {
-		setCustomSettings(
-			header
-				.filter((cell) => cell.is_additional)
-				.map((cell) => ({
+		setCustomSettings(header.filter(cell => cell.is_additional)
+			.map(cell => (
+				{
 					name: cell.name,
 					title: cell.title,
-					applied_visible: cell.is_visible,
+					applied_visible: cell.is_visible
+					// applied_visible: !cell.is_hidden_by_user if is to prev custom set(before apply)
 				}))
+		);
+	}
+	 const handleStartDateChange = (date) => {
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			startDate: date,
+		}));
+	};
+
+	 const handleEndDateChange = (date) => {
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			endDate: date,
+		}));
+	};
+
+	 const onCustomSettingApplied = () => {
+		// @ts-ignore
+		setHeader((prevHeader) =>
+			prevHeader.map((cell) => {
+				const setting = customSettings.find((s) => s.name === cell.name);
+				return setting
+					? { ...cell, is_hidden_by_user: !setting.applied_visible }
+					: cell;
+			})
 		);
 	};
 
+	 const handleExport = async (api) => {
+		console.log("export", api);
+	}
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
@@ -48,17 +78,18 @@ export default function CallCenterReport() {
 			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(`/api/call-center?${params.toString()}`, {
+			await fetch(apiUrl+`/call-center?${params.toString()}`, {
 					method: 'GET',
+					credentials: 'include',
 					headers: {
 						'Accept': 'application/json', // Явно указываем, что ожидаем JSON
+						'Content-Type': 'application/json',
 					}})
 				.then((res) => {
 					if (!res.ok) {
 						setTimeout(() => {
 						}, 1000); // Имитация задержки в 1 секунду
 						return jsonData;
-
 						// throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
@@ -79,35 +110,7 @@ export default function CallCenterReport() {
 		setHeader( headerBefore.map((cell) => ({ ...cell,
 			is_hidden_by_user: !cell.is_visible })));
 		setLoading(false);
-	}, [headerBefore, filters]);
-
-
-	const handleStartDateChange = (date) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			startDate: date,
-		}));
-	};
-
-	const handleEndDateChange = (date) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			endDate: date,
-		}));
-	};
-
-	const onCustomSettingApplied = () => {
-		// @ts-ignore
-		setHeader((prevHeader) =>
-			prevHeader.map((cell) => {
-				const setting = customSettings.find((s) => s.name === cell.name);
-				return setting
-					? { ...cell, is_hidden_by_user: !setting.applied_visible }
-					: cell;
-			})
-		);
-	};
-
+	}, [headerBefore]);
 	const onCheckboxChanged = (name) => {
 		// @ts-ignore
 		setCustomSettings((prevSettings) =>
@@ -118,8 +121,28 @@ export default function CallCenterReport() {
 			)
 		);
 	};
+	const handleExportClick = () => {
+		setExportClicked(true);
+	}
+	useEffect(() => {
+		if (exportClicked) {
+			const { search, startDate, endDate, sortField, sortOrder } = filters;
+			const params = new URLSearchParams();
+			if (search !== "") params.append("search", search); // Добавляем параметр поиска
+			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-	console.log("filters", filters);
+			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
+				.then(() => {
+				setExportClicked(false);
+			});
+		}
+	}, [exportClicked]);
+
+
+
+	// console.log("filters", filters);
 	//todo sorting
 	return (
 		<Report
@@ -148,7 +171,7 @@ export default function CallCenterReport() {
 				<Button
 					stylizedAs={"blue-dark"}
 					exportButton={"white"}
-					onClick={() => console.log("export")}
+					onClick={handleExportClick}
 				>
 					Экспорт
 				</Button>

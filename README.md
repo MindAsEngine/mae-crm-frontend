@@ -1,50 +1,30 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### docker ###
+```bash
+docker build . -t "frontend:v1.0"
+docker run -p 3000:3000 frontend:v1.0
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### api ###
+В файле `api.yaml` описаны необходимые методы.
+Для запуска мок-сервера необходимо выполнить команду:
+```bash
+npm install -g @stoplight/prism-cli
+prism mock api.yaml
 ```
+
+### Описание
+*Структура ответа для страниц-table:*
+1. headers - массив описаний одной ячейки для заголовка таблицы, который указывает на свойсва столбца.
+    * is_sortable - возможность сортировки по столбцу.
+    * is_aside_header - является ли столбец столбцом заголовков
+    * name - имя столбца.
+    * is_id - является ли столбец идентификатором.
+    * title - заголовок столбца.
+    * is_visible - видимость столбца.
+    * is_additional - является ли столбец дополнительным, то есть можно ли его скрыть через кастом.
+    * format - формат столбца (типы: number, enum, string, array, date).
+2. data - массив объектов, где каждый объект - это строка таблицы.
+    * is_anomaly - является ли строка аномалией.
+    * ключ - название столбца, значение - значение ячейки.
+3. footer - объект, где строка таблиц - итоговые значения.
+    * ключ - название столбца, значение - значение ячейки.
