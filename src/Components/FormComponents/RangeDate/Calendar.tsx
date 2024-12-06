@@ -76,15 +76,15 @@ export default function Calendar({startDate, endDate, handleDayClick, direction,
     return (
         <div className={styles.calendar}>
             <div className={styles.month}>
-                {direction < 0 && (<span
+                {direction <= 0 && (<span
                     className={styles.icon + " " + styles.left}
-                    onClick={() => handleMonthChange(direction)}>&lt;</span>)}
+                    onClick={() => handleMonthChange(-1)}>&lt;</span>)}
                 <span className={styles.monthTitle}>
                     {currentMonth.toLocaleString("ru", {month: "long"})} {format(currentMonth, "yyyy")}
                 </span>
                 {direction >= 0 && (<span
                     className={styles.icon + " " + styles.right}
-                    onClick={() => handleMonthChange(direction)}>&gt;</span>)}
+                    onClick={() => handleMonthChange(1)}>&gt;</span>)}
             </div>
             <table>
                 <thead>

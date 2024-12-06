@@ -48,12 +48,15 @@ export default function Table({
 
 	useEffect(() => {
 		if (tableWrapperRef.current && tableHeadRef.current) {
+			// console.log(tableWrapperRef.current.scrollWidth, tableWrapperRef.current.clientWidth )
+
 			setWidth(tableWrapperRef.current.scrollWidth);
 			if (tableHeadRef.current.scrollWidth > tableWrapperRef.current.clientWidth) {
 				setHasScroll(true);
 			}
 		}
-	}, [data]); // Rerun when data changes
+
+	}, [data, header]); // Rerun when data changes
 
 	if (isLoading) {
 		return (

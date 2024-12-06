@@ -1,20 +1,12 @@
-.modal{
-
-}
-
 .modalWindow{
   width: 408px;
-
 }
 
-.modalContent{
+.modalWindow .modalContent{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 12px;
   margin: 0 4px;
-  //height: unset;
-  //max-height: unset;
-
-
+  padding-right: 4px;
 }

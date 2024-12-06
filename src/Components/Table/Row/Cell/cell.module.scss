@@ -16,6 +16,9 @@
     font: var(--font-s-semibold);
     border-top: var(--border-grey-200-regular);
   }
+  .cellElement:last-child{
+    border-bottom: var(--border-grey-200-regular);
+  }
 
 }
 

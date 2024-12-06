@@ -17,6 +17,6 @@
   background-color: var(--color-red-100);
 }
 
-.tableRow:last-child {
+.tableRow:not(.footer):last-child {
   border-bottom: none;
 }

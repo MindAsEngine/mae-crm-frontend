@@ -62,9 +62,7 @@ export default function CallCenterReport() {
 		);
 	};
 
-	 const handleExport = async (api) => {
-		console.log("export", api);
-	}
+
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
@@ -87,10 +85,7 @@ export default function CallCenterReport() {
 					}})
 				.then((res) => {
 					if (!res.ok) {
-						setTimeout(() => {
-						}, 1000); // Имитация задержки в 1 секунду
-						return jsonData;
-						// throw new Error(`HTTP error! status: ${res.status}`);
+						throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
@@ -100,7 +95,15 @@ export default function CallCenterReport() {
 					setHeaderBefore(data?.headers); // Установка заголовков
 					setDefaultCustomSettings(data?.headers);
 				})
-				.catch((err) => console.error(err));
+				.catch((err) => {
+					setTimeout(() => {
+					}, 1000); // Имитация задержки в 1 секунду
+					const data = jsonData;
+					setData(data?.data); // Установка данных
+					setFooter(data?.footer); // Установка футера
+					setHeaderBefore(data?.headers); // Установка заголовков
+					setDefaultCustomSettings(data?.headers);
+				});
 		};
 		fetchData();
 	}, [filters]);
@@ -125,15 +128,41 @@ export default function CallCenterReport() {
 		setExportClicked(true);
 	}
 	useEffect(() => {
-		if (exportClicked) {
+		const handleExport = async (api) => {
 			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+			const reqBody :object = {};
+			if (search !== "") reqBody.append("search", search); // Добавляем параметр поиска
+			if (startDate) reqBody.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) reqBody.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (sortField !== "") reqBody.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
+			const res = await fetch(api, {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Accept': 'application/vnd.ms-excel',
+					'Content-Type': 'application/vnd.ms-excel',
+
+				},
+				body: JSON.stringify(reqBody),
+			}).then((res) => {
+				if (!res.ok) {
+					throw new Error(`HTTP error! status: ${res.status}`);
+				}
+				return res.blob();
+			}).then((blob) => {
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement ('a');
+				a.href = url;
+				a.download = 'report.xlsx';
+				a.click();
+				window.URL.revokeObjectURL(url);
+
+			}).catch((err) => console.error(err));
+		}
+		if (exportClicked) {
+
+			handleExport(apiUrl+`/call-center/export`)
 				.then(() => {
 				setExportClicked(false);
 			});

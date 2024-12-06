@@ -14,9 +14,17 @@ type DateRangeProps = {
 	setEndDate: (date: Date) => void;
 	id?: string;
 
+	iconPosition?: "right"
+	oneCalendar: boolean
+	withTime: boolean,
+	inputStyle: string
+	isValidStyle: boolean
 };
 
-const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateRangeProps) => {
+const DateRange = ({
+	withTime=true, iconPosition=undefined, oneCalendar=false, inputStyle="",
+	isValidStyle=true,
+					   startDate,id="", endDate, setStartDate, setEndDate }: DateRangeProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [currentMonth, setCurrentMonth] = useState(subMonths(new Date(), 1));
 	const [nextMonth, setNextMonth] = useState(new Date());
@@ -120,8 +128,7 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 				<Input
 					before={<span className={
 						clsx(styles.imgCalendar , maskedValue.length > 0 && styles.active,
-							isFocused && styles.active
-
+							isFocused && styles.active,
 						)
 					}></span>}
 					type="text"
@@ -129,13 +136,27 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 					placeholder="ДД.ММ.ГГГГ - ДД.ММ.ГГГГ"
 					onChange={(e)=>handleInputChange(e.target.value)}
 					maxLength={23}
-					className={styles.inputDate}
+					className={clsx(styles.inputDate, inputStyle)}
 					isValid={isValidInput}
 				/>
 			</div>
 			{isOpen && (
 				<div className={styles.calendarDropdown}>
 					<div className={styles.calendarArea}>
+						{oneCalendar ?
+							<div className={styles.timeCalendar}>
+								<Calendar
+									endDate={chosenRange.end}
+									direction={0}
+									startDate={chosenRange.start}
+									currentMonth={currentMonth}
+									handleDayClick={handleDayClick}
+									handleMonthChange={handleMonthChange}
+								/>
+
+							</div>
+						:
+							<>
 						<div className={styles.timeCalendar}>
 							<Calendar
 								endDate={chosenRange.end}
@@ -145,7 +166,7 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 								handleDayClick={handleDayClick}
 								handleMonthChange={handleMonthChange}
 							/>
-							<Time time={startTime} setTime={setStartTime} />
+							{withTime && <Time time={startTime} setTime={setStartTime}/>}
 						</div>
 						<div className={styles.timeCalendar}>
 							<Calendar
@@ -156,8 +177,9 @@ const DateRange = ({ startDate,id="", endDate, setStartDate, setEndDate }: DateR
 								handleDayClick={handleDayClick}
 								handleMonthChange={handleMonthChange}
 							/>
-							<Time time={endTime} setTime={setEndTime} />
+							{withTime && <Time time={endTime} setTime={setEndTime} />}
 						</div>
+							</>}
 					</div>
 					<div className={styles.footer}>
 						<div className={styles.label}>

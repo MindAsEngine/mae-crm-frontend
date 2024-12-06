@@ -18,7 +18,7 @@ export default function UsersPage() {
 	const [loading, setLoading] = useState(true);
 	const [userInUpdate, setUserInUpdate] = useState(null);
 
-	const [isCreateUserOpened, setIsCreateUserOpened] = useState(false);
+	// const [isCreateUserOpened, setIsCreateUserOpened] = useState(false);
 	const [isUpdateUserOpened, setIsUpdateUserOpened] = useState(false);
 
 	useEffect(() => {
@@ -36,9 +36,7 @@ export default function UsersPage() {
 			})
 				.then((res) => {
 					if (!res.ok) {
-						setTimeout(() => {
-						}, 1000); // Имитация задержки в 1 секунду
-						return dataJson;
+						throw new Error('Ошибка:', res.status);
 					}
 					return res.json();
 				})
@@ -48,7 +46,12 @@ export default function UsersPage() {
 					setLoading(false);
 				})
 				.catch((error) => {
-					console.error('Ошибка:', error);
+					setTimeout(() => {
+					}, 1000); // Имитация задержки в 1 секунду
+					const data = dataJson;
+					setDataUsers(data.data);
+					setHeader(data.headers);
+					setLoading(false);
 				});
 
 		};
@@ -82,16 +85,20 @@ export default function UsersPage() {
 					} isOpenCreateUser={isUpdateUserOpened}
 										setIsOpenCreateUser={setIsUpdateUserOpened}
 										userBeforeUpdate={userInUpdate}
-										isUpdate={true}
+										isUpdate={userInUpdate !== null}
 					/>
 
-				<UserCreateOrUpdate
+				{/*<UserCreateOrUpdate*/}
 
-					isOpenCreateUser={isCreateUserOpened} setIsOpenCreateUser={setIsCreateUserOpened}/>
+				{/*	isOpenCreateUser={isCreateUserOpened} setIsOpenCreateUser={setIsCreateUserOpened}/>*/}
 				<Button
 					stylizedAs={'blue-dark'}
 					createButton={true}
-					onClick={() => setIsCreateUserOpened(true)}>
+					onClick={() => {
+						// setIsCreateUserOpened(true);
+
+						setIsUpdateUserOpened(true);
+					}}>
 					Создать пользователя
 				</Button>
 

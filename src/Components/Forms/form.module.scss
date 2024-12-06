@@ -1,6 +1,7 @@
 .form{
   display: flex;
   flex-direction: column;
+  justify-content: start;
   gap: 12px;
   box-sizing: border-box;
   width: 100%;
@@ -9,21 +10,23 @@
 .label, .labelDate{
   display: flex;
   flex-direction: column;
+
   gap: 6px;
   box-sizing: border-box;
   width: 100%;
 }
 
- .span{
+.span{
   color: var(--color-grey-500);
   font: var(--font-s-medium);
+   align-self: start;
 }
  .span.required::after{
     content: '*';
    color: var(--color-red-300);
  }
 
-.input, .textarea, .labelDate .inputDate{
+.input, .textarea,  .inputDate_{
 //.labelDate > div > div > div{
   width: 368px;
   height: 46px;
@@ -49,4 +52,6 @@
          font: var(--font-m-regular);
     }
 }
+
+
 

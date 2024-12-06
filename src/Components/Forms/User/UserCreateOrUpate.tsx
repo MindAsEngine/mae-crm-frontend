@@ -41,20 +41,30 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
             setPassword("");
         }
         const [user, setUser] = useState({
-            id: 0,
-            surname: "",
-            name: "",
-            patronymic: "",
-            login: "",
-            password: "",
-            createdAt: new Date(),
+            id: userBeforeUpdate ? userBeforeUpdate.id : 0,
+            surname: userBeforeUpdate ? userBeforeUpdate.surname : "",
+            name: userBeforeUpdate ? userBeforeUpdate.name : "",
+            patronymic: userBeforeUpdate ? userBeforeUpdate.patronymic : "",
+            login: userBeforeUpdate ? userBeforeUpdate.login : "",
+            password: userBeforeUpdate ? userBeforeUpdate.password : "",
+            createdAt: userBeforeUpdate ? userBeforeUpdate.createdAt : new Date(),
         });
         useEffect(() => {
-            if (userBeforeUpdate) {
-                setUser(userBeforeUpdate);
-                // console.log("User before update:", userBeforeUpdate.id, user);
+            if (isUpdate) {
+                setUser({
+                    ...user,
+                    id: userBeforeUpdate.id,
+                    surname: userBeforeUpdate.surname,
+                    name: userBeforeUpdate.name,
+                    patronymic: userBeforeUpdate.patronymic,
+                    login: userBeforeUpdate.login,
+                    password: userBeforeUpdate.password,
+                    createdAt: userBeforeUpdate.createdAt,
+                });
+            } else {
+                resetForm();
             }
-        }, []);
+        }, [isUpdate]);
         useEffect(() => {
              const postUser = async () => {
                 const response = await fetch( apiUrl + '/users', {
@@ -139,8 +149,9 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                     console.log("Form submitted!" + user.login + " " + user.password);
                 }}
                 classNameContent={styles.form}
+                onClose={onClose}
             >
-                {!userBeforeUpdate?.surname &&
+                {/*{!userBeforeUpdate?.surname &&*/}
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>
                         Фамилия</span>
@@ -149,8 +160,9 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                            value={user.surname} onChange={handleChange}
                            placeholder={"Введите фамилию"}
                     />
-                </label>}
-                {!userBeforeUpdate?.name &&
+                </label>
+            {/*}*/}
+                {/*{!userBeforeUpdate?.name &&*/}
 
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>Имя</span>
@@ -161,8 +173,8 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                     placeholder={"Введите имя"}
                     />
                 </label>
-            }
-                {!userBeforeUpdate?.patronymic &&
+            {/*}*/}
+                {/*{!userBeforeUpdate?.patronymic &&*/}
 
                 <label className={styles.label}>
                     <span className={styles.span}>Отчество</span>
@@ -170,8 +182,9 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                            name="patronymic" value={user.patronymic} onChange={handleChange}
                     placeholder={"Введите отчество"}
                     />
-                </label>}
-                {!userBeforeUpdate?.login &&
+                </label>
+            {/*}*/}
+            {/*    {!userBeforeUpdate?.login &&*/}
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>Логин</span>
                     <Input className={styles.input}
@@ -181,12 +194,13 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                     placeholder={"Введите логин"}
                     />
 
-                </label>}
+                </label>
+            {/*}*/}
 
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>Пароль</span>
                     <Input className={styles.input}
-                           isValid={user.password?.length > 0}
+                           isValid={!isUpdate ? user.password?.length > 0 : true}
 
                            name="password" value={user.password} onChange={handleChange}
                     placeholder={"Введите пароль"}
@@ -196,7 +210,7 @@ const UserCreateOrUpdate = forwardRef<HTMLFormElement>(
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>Пароль еще раз</span>
                     <Input className={clsx(styles.input)}
-                           isValid={password === user.password && password?.length > 0}
+                           isValid={password === user.password}
                            value={password}
                            name={"password2"}
 

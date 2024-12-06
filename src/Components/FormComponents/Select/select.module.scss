@@ -6,6 +6,7 @@
 }
 
 .label{
+  align-self: start;
   color: var(--color-grey-500);
   font: var(--font-s-medium);
 }
@@ -72,6 +73,8 @@
   background-color: var(--color-white);
   border-radius: var(--border-radius-m);
   box-shadow: var(--effect-shadow-m-center);
+  display: flex;
+  flex-direction: column;
 }
 
 .menu::-webkit-scrollbar{
@@ -91,6 +94,7 @@
 }
 
 .option {
+  align-self: start;
   padding: 10px 16px;
   color: var(--color-grey-700);
   font: var(--font-m-regular);

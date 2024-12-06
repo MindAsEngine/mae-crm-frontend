@@ -121,10 +121,11 @@ export default function ProcessedRequestsSpeedReport(){
 	const handleExportClick = () => {
 		setExportClicked(true);
 	}
-	const handleExport = async (api) => {
-		console.log("export", api);
-	}
+
 	useEffect(() => {
+		const handleExport = async (api) => {
+
+		}
 		if (exportClicked) {
 			const { search, startDate, endDate, sortField, sortOrder } = filters;
 			const params = new URLSearchParams();

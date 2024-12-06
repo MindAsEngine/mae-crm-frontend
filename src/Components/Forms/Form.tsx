@@ -1,16 +1,13 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import * as React from "react";
-import styles from './modal.module.scss'
+import styles from '../Modal/modal.module.scss'
 import clsx from "clsx";
-import {Button} from "../FormComponents/Button/Button.tsx";
 type ModalProps = {
     isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     title: string;
     children: React.ReactNode;
     whiteButtonText?: string;
     onClickWhiteButton?: () => void;
-    // argWhiteButton: any;
     darkBlueButtonText?: string;
     onClickDarkBlueButton?: () => void;
     classNameModal?: string;
@@ -19,23 +16,17 @@ type ModalProps = {
     classNameFooter?: string;
     classNameHeader?: string;
     isDropDown?: boolean;
-    as?: any;
     needScroll?:boolean;
-    handleSubmit?: () => void;
     onClose?: () => void;
     stylizedAs?: "red" | "blue-dark" | "blue-light" | "white",
-
-
+    footer?: React.ReactNode
 }
-export default function Modal({
+export default function Form({
                                   isOpen,
-                                  handleSubmit,
-                                  as: Component = "div",
-                                  needScroll = false,
+                                  needScroll = true,
                                   classNameWindow,
                                   classNameModal,
                                   classNameContent,
-                                  setIsOpen,
                                   title,
                                   children,
                                   isDropDown = true,
@@ -46,28 +37,29 @@ export default function Modal({
                                   onClose,
                                   classNameHeader,
                                   classNameFooter,
+    footer="",
                                   stylizedAs="blue-dark"
                               }: ModalProps) {
-    const formRef = useRef<HTMLFormElement>(null);
 
-    const handleButtonClick = () => {
+    const handleApplyClick = () => {
         if (typeof onClickDarkBlueButton === "function") {
             onClickDarkBlueButton();
-
-        }
-        if (formRef.current) {
-            formRef.current.requestSubmit(); // Триггерит событие onSubmit формы
         }
         if (typeof onClose === "function") {
             onClose();
         }
     };
-
-    const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-            setIsOpen(false);
+    const handleResetClick = () => {
+        if (typeof onClickWhiteButton === "function") {
+            onClickWhiteButton();
         }
         if (typeof onClose === "function") {
+            onClose();
+        }
+    }
+
+    const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape" && typeof onClose === "function") {
             onClose();
         }
     };
@@ -75,19 +67,15 @@ export default function Modal({
     const handleClickOut = (e: MouseEvent) => {
         const dialog = document.getElementById("modal" + title);
         if (dialog && !dialog.contains(e.target as Node)) {
-            setIsOpen(false);
             if (typeof onClose === "function") {
                 onClose();
             }
-
         }
-
     };
 
     useEffect(() => {
         document.addEventListener("keydown", handleEscape);
         document.addEventListener("mouseup", handleClickOut);
-
         return () => {
             document.removeEventListener("keydown", handleEscape);
             document.removeEventListener("mouseup", handleClickOut);
@@ -104,21 +92,17 @@ export default function Modal({
                 classNameModal
             )}
             onClose={onClose}
+            onClick={(e) => e.stopPropagation()}
         >
             <div className={clsx(needScroll && styles.forScroll)}>
-                <Component
-                    ref={Component==="form" ? formRef : null}
+                <form
                     className={clsx(styles.window, classNameWindow)}
-                    id={"modal" + title}
-                    onSubmit={handleSubmit} // Используется handleSubmit
-                    onClick={(e) => e.stopPropagation()}
-                >
+                    id={"modal" + title}>
                     <header className={clsx(styles.header, classNameHeader)}>
                         <h2 className={styles.title}>{title}</h2>
                         <span
                             className={styles.close}
                             onClick={() => {
-                                setIsOpen(false);
                                 if (typeof onClose === "function") {
                                     onClose();
                                 }}
@@ -130,24 +114,15 @@ export default function Modal({
                         {children}
                     </div>
                     <footer className={clsx(styles.footer, classNameFooter)}>
-                        <Button stylizedAs="white" onClick={() => {
-                            if (typeof onClickWhiteButton === "function") {
-                                onClickWhiteButton();
-                            }
-                            if (typeof onClose === "function") {
-                                onClose();
-                            }
-                        }}>
-                            {whiteButtonText}
-                        </Button>
-                        <Button
-                            stylizedAs={stylizedAs || "blue-dark"}
-                            onClick={handleButtonClick}
-                        >
-                            {darkBlueButtonText}
-                        </Button>
+                        {footer}
+                        {/*<Button stylizedAs="white" onClick={handleResetClick}>*/}
+                        {/*    {whiteButtonText}*/}
+                        {/*</Button>*/}
+                        {/*<Button stylizedAs={stylizedAs || "blue-dark"} onClick={handleApplyClick}>*/}
+                        {/*    {darkBlueButtonText}*/}
+                        {/*</Button>*/}
                     </footer>
-                </Component>
+                </form>
             </div>
         </dialog>
     );

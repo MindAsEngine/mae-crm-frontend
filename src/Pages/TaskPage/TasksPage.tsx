@@ -7,6 +7,7 @@ import {customFiltersFromServer, dataTasks, headerFromServerTasks} from "./dataT
 import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
 import Modal from "../../Components/Modal/Modal.tsx";
 import TaskCreate from "../../Components/Forms/Task/TaskCreate.tsx";
+import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 
 export default function TasksPage() {
 	const [filters, setFilters] = useState({
@@ -81,8 +82,10 @@ export default function TasksPage() {
 					onClick={() => setIsOpenCreateTask(true)}
 				>
 					Создать задачу
-					<TaskCreate isOpenCreateTask={isOpenCreateTask} setIsOpenCreateTask={setIsOpenCreateTask}/>
+
 				</Button>
+				<TaskCreate isOpenCreateTask={isOpenCreateTask} setIsOpenCreateTask={setIsOpenCreateTask}/>
+
 				<Button
 
 					stylizedAs={'blue-dark'}
@@ -92,6 +95,8 @@ export default function TasksPage() {
 				>
 					Создать аудиторию
 				</Button>
+				<AudienceCreate isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}/>
+
 
 			</div>
 		</Report>
