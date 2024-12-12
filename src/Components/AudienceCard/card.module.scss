@@ -1,7 +1,8 @@
 .card{
   display: flex;
   flex-direction: column;
-  width: 362px;
+  flex: 1 1 300px; /* Базовая ширина карточки - 300px, карточки равномерно распределяются */
+  max-width: 362px; /* Максимальная ширина */
   background-color: var(--color-white);
   border: var(--border-grey-200-regular);
     border-radius: var(--border-radius-m);
@@ -128,6 +129,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 14px;
+  gap: 6px;
 
   .info {
     display: flex;
@@ -136,7 +138,9 @@
 
     .item{
       color: var(--color-grey-500);
-      font: var(--font-xxs-regular)
+      font: var(--font-xxs-regular);
+      text-wrap: nowrap;
+
     }
   }
 

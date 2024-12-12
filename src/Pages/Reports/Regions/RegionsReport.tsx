@@ -6,7 +6,7 @@ import Report from "../../../Components/Report/Report.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import jsonData from "./regions.json"; // Локальные данные для теста
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL ;
 
 export default function RegionsReport() {
 	const [data, setData] = useState([]); // Данные для таблицы
@@ -45,13 +45,14 @@ export default function RegionsReport() {
 			// Формирование параметров для запроса
 			const params = new URLSearchParams();
 			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (startDate) params.append("start_date", startDate?.toISOString()); // Начальная дата в формате ISO
+			if (endDate) params.append("end_date", endDate?.toISOString()); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/regions?${params.toString()}`, {
+			await fetch(apiUrl+`/reports/regions?${params.toString()}`, {
 				method: 'GET',
 				credentials: 'include',
+				mode: 'no-cors',
 				headers: {
 					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
 					'Content-Type': 'application/json',
@@ -72,11 +73,11 @@ export default function RegionsReport() {
 					console.error(err);
 					setTimeout(() => {
 					}, 1000); // Имитация задержки в 1 секунду
-					const data = jsonData;
-					setData(data?.data); // Установка данных
-					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					// const data = jsonData;
+					// setData(data?.data); // Установка данных
+					// setFooter(data?.footer); // Установка футера
+					// setHeaderBefore(data?.headers); // Установка заголовков
+					// setDefaultCustomSettings(data?.headers);
 				});
 		};
 		fetchData();

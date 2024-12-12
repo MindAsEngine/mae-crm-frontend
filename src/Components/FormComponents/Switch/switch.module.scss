@@ -1,13 +1,15 @@
 .container {
   position: relative;
   display: flex;
-  flex-grow: 1;
+  //flex-grow: 1;
   flex-shrink: 0;
   align-items: center;
   padding: 4px;
   overflow: hidden;
   background-color: var(--color-grey-100);
   border-radius: 8px;
+  height: 40px;
+  box-sizing: border-box;
 }
 
 .item{

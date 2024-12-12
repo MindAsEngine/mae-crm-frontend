@@ -18,8 +18,8 @@ export default function ProcessedRequestsSpeedReport(){
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [filters, setFilters] = useState({
 		search: "", // Поиск по ФИО
-		startDate: null, // Начальная дата
-		endDate: null, // Конечная дата
+		startDate: new Date(0),
+		endDate: new Date(),
 		sortField: "", // Поле для сортировки
 		sortOrder: "asc", // Порядок сортировки: asc или desc
 	});
@@ -38,6 +38,14 @@ export default function ProcessedRequestsSpeedReport(){
 		);
 	}
 
+	const formatDate = (date) => {
+		const d = new Date(date);
+		const day = String(d.getDate()).padStart(2, '0'); // Добавляем ведущий ноль
+		const month = String(d.getMonth() + 1).padStart(2, '0'); // Добавляем ведущий ноль
+		const year = d.getFullYear();
+
+		return `${day}-${month}-${year}`;
+	};
 
 	const onCustomSettingApplied = () => {
 		// @ts-ignore
@@ -59,12 +67,13 @@ export default function ProcessedRequestsSpeedReport(){
 			// Формирование параметров для запроса
 			const params = new URLSearchParams();
 			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
+			if (startDate) params.append("start_date", formatDate(startDate)); // Начальная дата в формате ISO
+			if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/process-speed?${params.toString()}`, {
+			await fetch(apiUrl+`/reports/speed?${params.toString()}`, {
 				method: 'GET',
+				mode: 'no-cors',
 				credentials: 'include',
 				headers: {
 					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
@@ -87,11 +96,11 @@ export default function ProcessedRequestsSpeedReport(){
 					// alert("Ошибка загрузки данных");
 					setTimeout(() => {
 					}, 1000); // Имитация задержки в 1 секунду
-					const data = jsonData;
-					setData(data?.data); // Установка данных
-					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					// const data = jsonData;
+					// setData(data?.data); // Установка данных
+					// setFooter(data?.footer); // Установка футера
+					// setHeaderBefore(data?.headers); // Установка заголовков
+					// setDefaultCustomSettings(data?.headers);
 				});
 		};
 		fetchData();
@@ -168,6 +177,7 @@ export default function ProcessedRequestsSpeedReport(){
 					filters={filters}
 					setFilters={setFilters}
 					onClickCell={onClickCell}
+					// isLoading={loading}
 			>
 
 				<div className={styles.custom}>

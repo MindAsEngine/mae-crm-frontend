@@ -98,11 +98,14 @@ export default function CallCenterReport() {
 				.catch((err) => {
 					setTimeout(() => {
 					}, 1000); // Имитация задержки в 1 секунду
-					const data = jsonData;
-					setData(data?.data); // Установка данных
-					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					// const data = jsonData;
+					// setData(data?.data); // Установка данных
+					// setFooter(data?.footer); // Установка футера
+					// setHeaderBefore(data?.headers); // Установка заголовков
+					// /setDefaultCustomSettings(data?.headers);
+				})
+				.finally(() =>{
+					setLoading(false);
 				});
 		};
 		fetchData();
@@ -112,7 +115,6 @@ export default function CallCenterReport() {
 		// @ts-ignore
 		setHeader( headerBefore.map((cell) => ({ ...cell,
 			is_hidden_by_user: !cell.is_visible })));
-		setLoading(false);
 	}, [headerBefore]);
 	const onCheckboxChanged = (name) => {
 		// @ts-ignore
