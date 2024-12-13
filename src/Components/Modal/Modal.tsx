@@ -101,11 +101,7 @@ stylizedAs="blue-dark"
                         <h2 className={styles.title}>{title}</h2>
                         <span
                             className={styles.close}
-                            onClick={() => {
-                                if (typeof onClose === "function") {
-                                    onClose();
-                                }}
-                            }
+                            onClick={handleResetClick}
                         />
                     </header>
 

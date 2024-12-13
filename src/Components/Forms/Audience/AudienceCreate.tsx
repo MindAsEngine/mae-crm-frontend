@@ -73,7 +73,10 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
             <Form
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}
-                setIsOpen={setIsOpenCreateAudience}
+                onClickWhiteButton={() =>{
+                    resetAudience();
+                    setIsOpenCreateAudience(false);
+                }}
                 title="Создать аудиторию"
                 classNameContent={styles.form}
                 onClose={resetAudience}
