@@ -69,6 +69,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
             }));
         }
         return (
+            // todo create audience
             <Form
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}

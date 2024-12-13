@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1 1 300px; /* Базовая ширина карточки - 300px, карточки равномерно распределяются */
   max-width: 362px; /* Максимальная ширина */
+  height: min-content;
   background-color: var(--color-white);
   border: var(--border-grey-200-regular);
     border-radius: var(--border-radius-m);

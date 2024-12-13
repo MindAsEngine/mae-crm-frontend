@@ -20,10 +20,13 @@ type AudienceCardProps = {
     }[];
     chosen?: [];
     setChosen?: (nevers: never[]) => void;
+    setInitToReload?: () => void;
 };
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, duration, created, updated, integrated, chosen, setChosen } = audienceData;
+    const { id, name, duration, created, updated, integrated, chosen, setChosen,setInitToReload } = audienceData;
 
     const [created_, setCreated_] = React.useState(created);
     const [updated_, setUpdated_] = React.useState(updated);
@@ -31,6 +34,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
     const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = React.useState(false);
     const [isConfirmDisconnectOpen, setIsConfirmDisconnectOpen] = React.useState(false);
+    // todo modal
     const [isModalConnectOpen, setIsModalConnectOpen] = React.useState(false);
 
     useEffect(() => {
@@ -55,6 +59,61 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
             setCreated_(created);
             setUpdated_(updated);}
     }, [created, updated]);
+    const handleDelete = () => {
+        fetch(apiUrl+`/audiences/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            }
+        ).then((res) => {
+            console.log(res);
+            console.log('Удалить', id)
+            setInitToReload(true);
+            }
+        ).catch((err) => {
+            console.log(err);
+            })
+    };
+
+const handleConnect = () => {
+    fetch(apiUrl+`/integrations`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cabinet: 1,
+            audiences: [id]
+        })
+    })
+    .then((res) => {
+        console.log(res);
+        console.log('Подключить', id);
+        setIsModalConnectOpen(false);
+        setInitToReload(true);
+        })
+    .catch((err) => {
+        console.log(err);
+        })
+
+}
+const handleDisconnect = () => {
+    fetch(apiUrl+`/audiences/${id}/disconnect`,{
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then((res) => {
+            console.log(res);
+            console.log('Отключить', id)
+            setInitToReload(true);
+            }).
+        catch((err) => {
+            console.log(err);
+            })
+        }
+
 
     return (
         <div className={styles.card}>
@@ -80,12 +139,12 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
                 </div>
                 <Confirmed description={"Вы уверены, что хотите удалить аудиторию?"}
                            isOpen={isConfirmDeleteOpen}
-                           onConfirm={() => console.log('Удалить', id)}
+                           onConfirm={() => handleDelete() }
                            setIsOpen={setIsConfirmDeleteOpen}
                            title={"Удалить"}/>
                 <Confirmed description={"Вы уверены, что хотите отключить рекламу?"}
                            isOpen={isConfirmDisconnectOpen}
-                           onConfirm={() => console.log('Отключить рекламу', id)}
+                           onConfirm={() => handleDisconnect()}
                            setIsOpen={setIsConfirmDisconnectOpen}
                            title={"Отключить рекламу"}/>
 
@@ -103,7 +162,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
                             <li className={clsx(styles.item, styles.options)}>
                                 Опции
                             </li>
-                            <a className={styles.item} onClick={() => console.log('Подключить рекламу', id)}>
+                            <a className={styles.item} onClick={() => handleConnect()}>
                                 Подключить рекламу
                             </a>
                             <a className={styles.item} onClick={() => {setIsConfirmDisconnectOpen(true);}}>Отключить рекламу</a>

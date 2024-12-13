@@ -14,6 +14,7 @@ export default function AudiencePage() {
     const [chosenAudiences, setChosenAudiences] = React.useState([]);
     const [status, setStatus] = React.useState("loading");
     const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
+    const [initToReload, setInitToReload] = React.useState(true);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -43,15 +44,19 @@ export default function AudiencePage() {
 
                 });
         };
-        // fetchData();
-        setStatus("loading")
-        setInterval(() => {
-            setAudiences(audienceData.audiences);
+    //   console.log(audiences);
+    if (initToReload)  {
+        fetchData();
+        setInitToReload(false);
+    }
+        // setStatus("loading")
+        // setInterval(() => {
+            // setAudiences(audienceData.audiences);
             // console.log(audienceData.audiences)
-            setStatus("success");
-        }, 2000)
+            // setStatus("success");
+        // }, 2000)
 
-        }, []);
+        }, [initToReload]);
 
     return (
         <>
@@ -61,7 +66,7 @@ export default function AudiencePage() {
                         createButton={true}
 
 
-               />
+               />{/*     todo new form for integration*/}
                 <Button stylizedAs={'blue-dark'}
                         children={'Создать аудиторию'}
                         createButton={true}
@@ -78,6 +83,7 @@ export default function AudiencePage() {
                     <AudienceCard key={index} chosen={chosenAudiences}
                                     setChosen={setChosenAudiences}
                                     {...audience}
+                                    setInitToReload={setInitToReload}
                     />
                 ))}
                     
