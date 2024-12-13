@@ -1,3 +1,5 @@
+
+
 .buttons {
   display: flex;
   justify-content: flex-end;
@@ -6,13 +8,14 @@
 }
 
 .cards{
+    //flex-grow: 2;
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
   overflow: auto;
   scroll-behavior: smooth;
   justify-content: start;
-
+    //flex-grow: 2;
   /* Firefox */
   //scrollbar-width: thin;
   //scrollbar-color: var(--color-grey-200) var(--color-white);

@@ -31,7 +31,12 @@
   color: var(--color-grey-700);
   font: var(--font-s-regular);
   text-wrap: nowrap;
-  //border-top: var(--border-grey-200-regular);
+}
+.tableCell{
+  border-right: var(--border-grey-200-regular);
+}
+.tableCell:last-child {
+  border-right: none;
 }
 
 .cellElement.array{

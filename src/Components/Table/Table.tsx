@@ -5,6 +5,7 @@ import TableHeader from './TableHeader/TableHeader.tsx'
 import { useEffect, useRef, useState } from "react";
 import { TableHeaderCell } from "./TableHeader/HeaderCell/HeaderCell.tsx";
 import clsx from "clsx";
+import {useLocation} from "react-router-dom";
 
 type TableProps = {
 	data: Array<object>
@@ -25,12 +26,17 @@ export default function Table({
 								  setCheckedRows,
 								  isLoading
 							  }: TableProps) {
+	const url = useLocation();
+
 	const [isAllChecked, setAllChecked] = useState<boolean>(false);
 	const [isAllUnchecked, setAllUnchecked] = useState<boolean>(true);
-	const [hasScroll, setHasScroll] = useState<boolean>(false);
-	const [width, setWidth] = useState<number>(0);
+	const [hasScrollHorizontal, setHasScrollHorizontal] = useState<boolean>(false);
+	const [hasScrollVertical, setHasScrollVertical] = useState<boolean>(false);
+
 	const tableWrapperRef = useRef<HTMLDivElement>(null);
 	const tableHeadRef = useRef<HTMLTableSectionElement>(null);
+	const tableRef = useRef<HTMLTableElement>(null);
+	const tableBefore = useRef(null);
 
 	const handleCheckAll = () => {
 		if (typeof setCheckedRows === 'function') {
@@ -48,15 +54,20 @@ export default function Table({
 
 	useEffect(() => {
 		if (tableWrapperRef.current && tableHeadRef.current) {
-			// console.log(tableWrapperRef.current.scrollWidth, tableWrapperRef.current.clientWidth )
-
-			setWidth(tableWrapperRef.current.scrollWidth);
 			if (tableHeadRef.current.scrollWidth > tableWrapperRef.current.clientWidth) {
-				setHasScroll(true);
+				setHasScrollHorizontal(true);
+			}
+		}
+		if (tableWrapperRef.current && tableRef.current && tableBefore.current) {
+			console.log(tableRef.current.scrollHeight, tableWrapperRef.current.clientHeight);
+			if (tableRef.current.scrollHeight > tableWrapperRef.current.clientHeight
+			|| tableWrapperRef.current.clientHeight > document.body.clientHeight) {
+				setHasScrollVertical(true);
+				tableBefore.current.style.top = tableWrapperRef.current.offsetTop + "px";
 			}
 		}
 
-	}, [data, header]); // Rerun when data changes
+	}, [data, header, url]); // Rerun when data changes
 
 	if (isLoading) {
 		return (
@@ -66,8 +77,17 @@ export default function Table({
 		);
 	}
 	return (
-		<div className={clsx(styles.tableWrapper, hasScroll && styles.hasHorizontalScroll)} ref={tableWrapperRef}>
-			<table className={styles.table}>
+		<div className={clsx(styles.tableWrapper, hasScrollHorizontal && styles.hasHorizontalScroll,
+			hasScrollVertical && styles.hasVerticalScroll
+		)} ref={tableWrapperRef}
+		>
+			 <span
+				className={clsx(hasScrollVertical && styles.before)}
+				ref={tableBefore}
+			></span>
+			<table className={styles.table} ref={tableRef}
+				   id={"table-top"}
+			>
 				<thead className={styles.tableHead} ref={tableHeadRef}>
 				<TableHeader
 					isAllUnchecked={isAllUnchecked}

@@ -4,17 +4,38 @@
   flex-grow: 2;
   box-sizing: border-box;
   width: 100%;
-  overflow: auto;
+
+
+}
+.tableWrapper.hasVerticalScroll{
+  overflow-y: scroll;
   scrollbar-gutter: stable;
 }
+.tableWrapper.hasHorizontalScroll{
+  overflow-x: scroll;
+  scrollbar-gutter: stable;
 
+
+  .before{
+
+    position: fixed;
+    right: 38px;
+    bottom: calc(20px + 18px);
+    width: .8px;
+    background-color: var(--color-grey-200);
+
+
+
+  }
+}
 .tableWrapper.hasHorizontalScroll::after{
   position: fixed;
-  right: 20px;
+  right: 38px;
   bottom: 38px;
   left: 304px ;
   height: .8px;
   background-color: var(--color-grey-200);
+
   content: "";
 }
 

@@ -1,0 +1,14 @@
+.error{
+  color: var(--color-red-600);
+  font: var(--font-m-semibold);
+  display: flex;
+  background-color: var(--color-red-100);
+  border: var(--border-red-300-regular);
+  border-radius: var(--border-radius-xs);
+  padding: 10px;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+
+}

@@ -32,7 +32,7 @@ export default function FilterTask({filters, setFilters, onClickWhiteButton, onC
             badge={countBadge() !== 0 ? countBadge().toString() : undefined}
             stylizedAs={'white'}
             filterButton={true}
-            // loading={chosenData.length === 0}
+            // Loading={chosenData.length === 0}
 
             onClick={() => setIsOpenModal(true)}
         >

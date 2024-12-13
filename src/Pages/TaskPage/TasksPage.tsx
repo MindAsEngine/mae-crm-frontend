@@ -78,7 +78,7 @@ export default function TasksPage() {
 					createButton={true}
 					disabled={chosenData.length === 0}
 					as={'div'}
-					// loading={chosenData.length === 0}
+					// Loading={chosenData.length === 0}
 					onClick={() => setIsOpenCreateTask(true)}
 				>
 					Создать задачу
@@ -89,7 +89,7 @@ export default function TasksPage() {
 				<Button
 
 					stylizedAs={'blue-dark'}
-					// loading={chosenData.length === 0}
+					// Loading={chosenData.length === 0}
 					createButton={true}
 					onClick={() => setIsOpenCreateAudience(true)}
 				>

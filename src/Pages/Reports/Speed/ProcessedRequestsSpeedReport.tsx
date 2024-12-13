@@ -177,7 +177,7 @@ export default function ProcessedRequestsSpeedReport(){
 					filters={filters}
 					setFilters={setFilters}
 					onClickCell={onClickCell}
-					// isLoading={loading}
+					// isLoading={Loading}
 			>
 
 				<div className={styles.custom}>

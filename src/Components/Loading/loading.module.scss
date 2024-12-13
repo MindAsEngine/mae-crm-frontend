@@ -1,0 +1,29 @@
+.loading{
+  color: var(--color-grey-700);
+  font: var(--font-m-semibold);
+  display: flex;
+  //flex-grow: 2;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+
+  span{
+    width: var(--icon-sm);
+    height: var(--icon-sm);
+    display: block;
+    border: var(--color-grey-300) solid 4px;
+    border-right-color: var(--color-grey-500);
+    border-radius: 50%;
+    animation: spin linear 3s infinite;
+
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(0deg);
+    }
+    from{
+      transform: rotate(360deg);
+    }
+  }
+}

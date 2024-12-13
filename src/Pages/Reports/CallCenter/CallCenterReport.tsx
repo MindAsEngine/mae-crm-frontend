@@ -98,11 +98,11 @@ export default function CallCenterReport() {
 				.catch((err) => {
 					setTimeout(() => {
 					}, 1000); // Имитация задержки в 1 секунду
-					// const data = jsonData;
-					// setData(data?.data); // Установка данных
-					// setFooter(data?.footer); // Установка футера
-					// setHeaderBefore(data?.headers); // Установка заголовков
-					// /setDefaultCustomSettings(data?.headers);
+					const data = jsonData;
+					setData(data?.data); // Установка данных
+					setFooter(data?.footer); // Установка футера
+					setHeaderBefore(data?.headers); // Установка заголовков
+					setDefaultCustomSettings(data?.headers);
 				})
 				.finally(() =>{
 					setLoading(false);

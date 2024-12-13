@@ -55,7 +55,12 @@ export default function UsersPage() {
 				});
 
 		};
-		fetchData();
+		// fetchData();
+		const data = dataJson;
+		setDataUsers(data.data);
+		setHeader(data.headers);
+		setLoading(false);
+
 	}, [filters])
 	console.log("filterParams", filters)
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {

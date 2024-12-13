@@ -910,7 +910,7 @@ paths:
                         login: "ivanov"
                         action: "edit"
                         role: "admin"
-                        created_at: "2021-01-01"
+                        created_at: "2024-11-14T21:00:00.000Z"
                         surname: "Иванов"
                         patronymic: "Иванович"
                         name: "Иван"
@@ -920,7 +920,7 @@ paths:
                         login: "petrov"
                         action: "edit"
                         role: "user"
-                        created_at: "2021-01-02"
+                        created_at: "2024-11-14T21:00:00.000Z"
                         surname: "Петров"
                         patronymic: "Петрович"
                         name: "Петр"
@@ -929,7 +929,7 @@ paths:
                         login: "sidorov"
                         action: "edit"
                         role: "user"
-                        created_at: "2021-01-03"
+                        created_at: "2024-11-14T21:00:00.000Z"
                         surname: "Сидоров"
                         patronymic: "Сидорович"
                         name: "Сидор"
@@ -1155,11 +1155,11 @@ components:
         created:
           type: string
           description: Дата создания
-          example: Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)
+          example: '2024-11-14T21:00:00.000Z'
         updated:
           type: string
           description: Дата изменения
-          example: Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)
+          example: '2024-11-14T21:00:00.000Z'
         integrated:
           type: array
           items:
