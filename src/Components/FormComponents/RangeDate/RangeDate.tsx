@@ -8,10 +8,13 @@ import { Button } from "../Button/Button.tsx";
 import clsx from "clsx";
 
 type DateRangeProps = {
-	startDate: Date;
-	endDate: Date;
-	setStartDate: (date: Date) => void;
-	setEndDate: (date: Date) => void;
+	range: {start: Date,
+		end: Date}
+	setRange: (date: { end: Date; start: Date }) => void
+	// startDate: Date;
+	// endDate: Date;
+	// setStartDate: (date: Date) => void;
+	// setEndDate: (date: Date) => void;
 	id?: string;
 
 	iconPosition?: "right"
@@ -24,13 +27,17 @@ type DateRangeProps = {
 const DateRange = ({
 	withTime=true, iconPosition=undefined, oneCalendar=false, inputStyle="",
 	isValidStyle=true,
-					   startDate,id="", endDate, setStartDate, setEndDate }: DateRangeProps) => {
+	range, setRange,
+					   // startDate,
+					   id="",
+					   // endDate, setStartDate, setEndDate
+}: DateRangeProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [currentMonth, setCurrentMonth] = useState(subMonths(new Date(), 1));
 	const [nextMonth, setNextMonth] = useState(new Date());
 	const [isValidInput, setIsValidInput] = useState(true);
 	const [isFocused, setIsFocused] = useState(false);
-	const [chosenRange, setChosenRange] = useState({ start: startDate, end: endDate });
+	const [chosenRange, setChosenRange] = useState({ start: range.start, end: range.end });
 	const [startTime, setStartTime] = useState({ hour: "00", minute: "00" });
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
 	const [rawValue, setRawValue] = useState(""); // Значение без маски
@@ -73,10 +80,11 @@ const DateRange = ({
 		setNextMonth(addMonths(nextMonth, direction));
 	};
 
-	const applySelection = () => {
+	const applySelection = (e) => {
+		e.preventDefault();
 		if (isValid(chosenRange.start) && isValid(chosenRange.end)) {
-			setStartDate(chosenRange.start);
-			setEndDate(chosenRange.end);
+			setRange({end: chosenRange.end, start: chosenRange.start})
+			// setEndDate(chosenRange.end);
 			setIsOpen(false);
 		}
 	};
@@ -141,10 +149,10 @@ const DateRange = ({
 				/>
 			</div>
 			{isOpen && (
-				<div className={styles.calendarDropdown}>
+				<div className={clsx(styles.oneCalendar, styles.calendarDropdown)}>
 					<div className={styles.calendarArea}>
 						{oneCalendar ?
-							<div className={styles.timeCalendar}>
+							<div className={clsx(styles.timeCalendar)}>
 								<Calendar
 									endDate={chosenRange.end}
 									direction={0}
@@ -159,6 +167,7 @@ const DateRange = ({
 							<>
 						<div className={styles.timeCalendar}>
 							<Calendar
+
 								endDate={chosenRange.end}
 								direction={-1}
 								startDate={chosenRange.start}

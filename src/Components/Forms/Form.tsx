@@ -58,29 +58,29 @@ export default function Form({
         }
     }
 
-    const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape" && typeof onClose === "function") {
-            onClose();
-        }
-    };
-
-    const handleClickOut = (e: MouseEvent) => {
-        const dialog = document.getElementById("modal" + title);
-        if (dialog && !dialog.contains(e.target as Node)) {
-            if (typeof onClose === "function") {
-                onClose();
-            }
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener("keydown", handleEscape);
-        document.addEventListener("mouseup", handleClickOut);
-        return () => {
-            document.removeEventListener("keydown", handleEscape);
-            document.removeEventListener("mouseup", handleClickOut);
-        };
-    });
+    // const handleEscape = (e: KeyboardEvent) => {
+    //     if (e.key === "Escape" && typeof onClose === "function") {
+    //         onClose();
+    //     }
+    // };
+    //
+    // const handleClickOut = (e: MouseEvent) => {
+    //     const dialog = document.getElementById("modal" + title);
+    //     if (dialog && !dialog.contains(e.target as Node)) {
+    //         if (typeof onClose === "function") {
+    //             onClose();
+    //         }
+    //     }
+    // };
+    //
+    // useEffect(() => {
+    //     document.addEventListener("keydown", handleEscape);
+    //     document.addEventListener("mouseup", handleClickOut);
+    //     return () => {
+    //         document.removeEventListener("keydown", handleEscape);
+    //         document.removeEventListener("mouseup", handleClickOut);
+    //     };
+    // });
 
     return (
         <dialog

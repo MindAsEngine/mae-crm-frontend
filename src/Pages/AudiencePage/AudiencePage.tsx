@@ -22,7 +22,7 @@ export default function AudiencePage() {
             await fetch(apiUrl+`/audiences?`, {
                 method: 'GET',
                 // mode: 'no-cors',
-                credentials: 'include',
+                // credentials: 'include',
                 headers: {
                     'Accept': 'application/json', // Явно указываем, что ожидаем JSON
                     'Content-Type': 'application/json',

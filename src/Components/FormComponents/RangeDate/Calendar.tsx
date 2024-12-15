@@ -19,6 +19,7 @@ type CalendarProps = {
     handleDayClick: (day: Date) => void;
     handleMonthChange: (direction: number) => void;
     direction?: number;
+    // oneCalendar: true;
 }
 export default function Calendar({startDate, endDate, handleDayClick, direction, handleMonthChange, currentMonth}:CalendarProps) {
     const [weeks, setWeeks] = useState([]);

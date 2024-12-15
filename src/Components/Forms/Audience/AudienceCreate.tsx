@@ -32,7 +32,10 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
             id: 0,
             title:'',
             description: "",
-            type: [],
+            statuses: [],
+            rejection_reasons:[],
+            non_target_reasons: [],
+            // type: [],
             start: null,
             end: null,
         });
@@ -42,16 +45,14 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                 id: 0,
                 title: "",
                 description: "",
-                type: [],
+                statuses: [],
+                rejection_reasons:[],
+                non_target_reasons: [],
                 start: null,
                 end: null,
             });
         };
-        useEffect(() => {
-            console.log("Audience data:", audience);
-            console.log(audience.start !== null && audience.end !== null)
-        }, [audience]);
-
+        // console.log(new Date(1731048164 * 1000));
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             console.log("Audience data:", audience);
@@ -112,11 +113,13 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                     {/*TODO setting date and adptive*/}
                     <DateRange
                         inputStyle={styles.inputDate_}
-                        startDate={audience.start}
-                        endDate={audience.end}
+                        // startDate={audience.start}
+                        // endDate={audience.end}
                         isValidStyle={audience.start !== null && audience.end !== null}
-                        setStartDate={(date) => setAudience({ ...audience, start: date })}
-                        setEndDate={(date) => setAudience({ ...audience, end: date })}
+                        // setStartDate={(date) => setAudience({ ...audience, start: date })}
+                        // setEndDate={(date) => setAudience({ ...audience, end: date })}
+                       range={{start: audience.start, end: audience.end}}
+                        setRange={(date) => setAudience({ ...audience, start: date.start, end: date.end})}
                         iconPosition={"right"}
                         oneCalendar={true}
                         withTime={false}
@@ -124,12 +127,13 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                 </label>
                 <Select
                     onChange={(selected) =>
-                        setAudience(prevState => ({ ...prevState, type: selected }))}
-                    selected={audience.type}
+                        setAudience(prevState => ({ ...prevState, statuses: selected }))}
+                    selected={audience.statuses}
                     title="Тип задачи"
                     required={true}
                     multiple={true}
                     // name="type"
+                    // todo statuses
                     options={[
                         { name: AudienceStatus.New, title: "Новая" },
                         { name: AudienceStatus.InProgress, title: "В работе" },
@@ -138,38 +142,38 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                     ]}
                     isValid={audience.type?.length > 0}
                 />
-                <Select
-                    onChange={(selected) =>
-                        setAudience(prevState => ({ ...prevState, type: selected }))}
-                    selected={audience.type}
-                    title="Тип задачи"
-                    // required={true}
-                    multiple={true}
-                    // name="type"
-                    options={[
-                        { name: AudienceStatus.New, title: "Новая" },
-                        { name: AudienceStatus.InProgress, title: "В работе" },
-                        { name: AudienceStatus.Done, title: "Выполнена" },
-                        { name: AudienceStatus.Canceled, title: "Отменена" },
-                    ]}
-                    // isValid={audience.type?.length > 0}
-                />
-                <Select
-                    onChange={(selected) =>
-                        setAudience(prevState => ({ ...prevState, type: selected }))}
-                    selected={audience.type}
-                    title="Тип задачи"
-                    // required={true}
-                    multiple={true}
-                    // name="type"
-                    options={[
-                        { name: AudienceStatus.New, title: "Новая" },
-                        { name: AudienceStatus.InProgress, title: "В работе" },
-                        { name: AudienceStatus.Done, title: "Выполнена" },
-                        { name: AudienceStatus.Canceled, title: "Отменена" },
-                    ]}
-                    // isValid={audience.type?.length > 0}
-                />
+                {/*<Select*/}
+                {/*    onChange={(selected) =>*/}
+                {/*        setAudience(prevState => ({ ...prevState, type: selected }))}*/}
+                {/*    selected={audience.type}*/}
+                {/*    title="Тип задачи"*/}
+                {/*    // required={true}*/}
+                {/*    multiple={true}*/}
+                {/*    // name="type"*/}
+                {/*    options={[*/}
+                {/*        { name: AudienceStatus.New, title: "Новая" },*/}
+                {/*        { name: AudienceStatus.InProgress, title: "В работе" },*/}
+                {/*        { name: AudienceStatus.Done, title: "Выполнена" },*/}
+                {/*        { name: AudienceStatus.Canceled, title: "Отменена" },*/}
+                {/*    ]}*/}
+                {/*    // isValid={audience.type?.length > 0}*/}
+                {/*/>*/}
+                {/*<Select*/}
+                {/*    onChange={(selected) =>*/}
+                {/*        setAudience(prevState => ({ ...prevState, type: selected }))}*/}
+                {/*    selected={audience.type}*/}
+                {/*    title="Тип задачи"*/}
+                {/*    // required={true}*/}
+                {/*    multiple={true}*/}
+                {/*    // name="type"*/}
+                {/*    options={[*/}
+                {/*        { name: AudienceStatus.New, title: "Новая" },*/}
+                {/*        { name: AudienceStatus.InProgress, title: "В работе" },*/}
+                {/*        { name: AudienceStatus.Done, title: "Выполнена" },*/}
+                {/*        { name: AudienceStatus.Canceled, title: "Отменена" },*/}
+                {/*    ]}*/}
+                {/*    // isValid={audience.type?.length > 0}*/}
+                {/*/>*/}
             </Form>
         );}
 
