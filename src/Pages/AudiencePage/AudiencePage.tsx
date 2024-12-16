@@ -4,8 +4,10 @@ import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import AudienceCard from "../../Components/AudienceCard/AudienceCard.tsx";
 import Loading from "../../Components/Loading/Loading.tsx";
 import Error from  "../../Components/Error/Error.tsx"
-import audienceData from "./audienceData.json";
+// import audienceData from "./audienceData.json";
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
+import AdvertCreate from "../../Components/Forms/Advert/AdvertCreate.tsx";
+import {useEffect} from "react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -14,6 +16,7 @@ export default function AudiencePage() {
     const [chosenAudiences, setChosenAudiences] = React.useState([]);
     const [status, setStatus] = React.useState("loading");
     const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
+    const [isOpenCreateAdvert, setIsOpenCreateAdvert] = React.useState(false);
     const [initToReload, setInitToReload] = React.useState(true);
 
     React.useEffect(() => {
@@ -64,16 +67,26 @@ export default function AudiencePage() {
                 <Button stylizedAs={'blue-light'}
                         children={'Подключить рекламу'}
                         createButton={true}
+                        onClick={()=>setIsOpenCreateAdvert(true)}
+                        disabled={status !== "success"}
 
 
-               />{/*     todo new form for integration*/}
+               />
+                {isOpenCreateAdvert &&
+                <AdvertCreate isOpenCreateAdvert={isOpenCreateAdvert} setIsOpenCreateAdvert={setIsOpenCreateAdvert}
+                              audiencesFromDB={audiences} chosenAudiences={chosenAudiences}
+                              setChosenAudiences={setChosenAudiences}
+                />}
+                {/*     todo new form for integration*/}
                 <Button stylizedAs={'blue-dark'}
                         children={'Создать аудиторию'}
                         createButton={true}
                         onClick={()=>setIsOpenCreateAudience(true)}
 
                 />
-                <AudienceCreate isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}/>
+                {isOpenCreateAudience&&<AudienceCreate isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}
+
+                />}
 
             </div>
 

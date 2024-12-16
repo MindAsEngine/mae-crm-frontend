@@ -41,7 +41,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
         const handleClick = (event: MouseEvent) => {
             const actionListElement = document.getElementById('actionList');
             if (actionListElement && !event.composedPath().includes(actionListElement)) {
-                // console.log(event.composedPath());
+
                 setIsOptionsOpen(false);
             }
         };
@@ -85,6 +85,7 @@ const handleConnect = () => {
         body: JSON.stringify({
             cabinet: 1,
             audiences: [id]
+
         })
     })
     .then((res) => {
@@ -114,23 +115,21 @@ const handleDisconnect = () => {
             })
         }
 
-
     return (
         <div className={styles.card}>
             <div className={styles.header}>
                 <div className={styles.title}>
                     <Checkbox name={name}
-                                checked={chosen.filter((item) => item === id).length > 0}
+                                checked={chosen.filter((item => item.name === id))?.length > 0 }
                                 disabled={false}
                                 onChange={(e) => {
                                     if (typeof setChosen !== 'function') return;
-                                    if (e.target.checked && !chosen.includes(id)) {
-                                        setChosen(prev => [...prev, id]);
-                                    } else if (!e.target.checked && chosen.includes(id)) {
-                                        setChosen(prev => prev.filter((item) => item !== id));
+                                    if (e.target.checked && chosen?.filter((item => item.name === id))) {
+                                        setChosen(prev => [...prev, {"title": name, "name": id}]);
                                     }
-                                    // console.log('Выбрано', id)
-
+                                    else if (!e.target.checked && chosen?.filter((item => item.name !== id))) {
+                                        setChosen(prev => prev.filter(item => item.name !== id));
+                                    }
                                 }}
                     />
                     <div className={styles.text}>

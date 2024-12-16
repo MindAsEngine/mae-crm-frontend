@@ -18,7 +18,9 @@ class Audience {
     id: number;
     title: string;
     description: string;
-    type: AudienceStatus[];
+    statuses: [];
+    rejection_reasons:[];
+    non_target_reasons: [];
     start: Date | null;
     end: Date | null;
 }
@@ -35,10 +37,11 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
             statuses: [],
             rejection_reasons:[],
             non_target_reasons: [],
-            // type: [],
+
             start: null,
             end: null,
         });
+    const [isTouched, setIsTouched] = useState(false);
 
         const resetAudience = () => {
             setAudience({
@@ -55,8 +58,13 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
         // console.log(new Date(1731048164 * 1000));
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            console.log("Audience data:", audience);
-            setIsOpenCreateAudience(false); // Закрыть модалку после отправки
+            if (audience.title && audience.end && audience.start && audience.statuses) {
+                console.log("Audience data:", audience);
+
+                setIsOpenCreateAudience(false); // Закрыть модалку после отправки
+            } else{
+                setIsTouched(true);
+            }
         };
         const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
             e.preventDefault();
@@ -104,6 +112,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                         as="input"
                         name="title"
                         // maxLength={100}
+                        isTouchedDefault={isTouched}
                         isValid={audience.title?.length > 0}
                     />
                 </label>
@@ -123,6 +132,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                         iconPosition={"right"}
                         oneCalendar={true}
                         withTime={false}
+                        isTouchedDefault={isTouched}
                                         />
                 </label>
                 <Select
@@ -132,15 +142,16 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                     title="Тип задачи"
                     required={true}
                     multiple={true}
-                    // name="type"
+                    name="statuses"
                     // todo statuses
+                    isTouchedDefault={isTouched}
                     options={[
                         { name: AudienceStatus.New, title: "Новая" },
                         { name: AudienceStatus.InProgress, title: "В работе" },
                         { name: AudienceStatus.Done, title: "Выполнена" },
                         { name: AudienceStatus.Canceled, title: "Отменена" },
                     ]}
-                    isValid={audience.type?.length > 0}
+                    isValid={audience.statuses?.length > 0}
                 />
                 {/*<Select*/}
                 {/*    onChange={(selected) =>*/}
