@@ -44,7 +44,9 @@
   //width: 100%;
 }
 .oneCalendar{
-  top: -240%;
+  top: unset;
+  bottom: -255px;
+
   right: calc(-396px - 30px);
   left: unset;
   .footer{
@@ -114,8 +116,8 @@
 }
 
 .inRange{
-  //background-color: var(--color-grey-100);
-  background-color: var(--color-grey-50);
+  background-color: var(--color-grey-100);
+  //background-color: var(--color-grey-50);
 }
 
 .inRange.chosenEnd, .sunday{

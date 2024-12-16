@@ -18,12 +18,13 @@ type SelectProps = {
     multiple?: boolean; // Allow single/multiple select
     isValid?: boolean;
     required?: boolean;
+    isTouchedDefault?: boolean
 };
 
 
-export default function Select({required=false, name, title, options, selected, onChange, multiple = false, isValid=true }: SelectProps) {
+export default function Select({required=false, name, title, options, isTouchedDefault=false,selected, onChange, multiple = false, isValid=true }: SelectProps) {
     const [isOpen, setIsOpen] = React.useState(false);
-    const [isTouched, setIsTouched] = React.useState(false);
+    const [isTouched, setIsTouched] = React.useState(isTouchedDefault);
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleOptionClick = (option: OptionProps) => {
         let newSelected: OptionProps[];
@@ -42,7 +43,7 @@ export default function Select({required=false, name, title, options, selected, 
     const handleUnselectOne = (option: OptionProps) => {
         onChange && onChange(selected.filter((s) => s.name !== option.name));
     }
-    const isSelected = (option: OptionProps) => selected.some((s) => s.name === option.name);
+    const isSelected = (option: OptionProps) => selected?.some((s) => s.name === option.name);
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             const select = document.getElementById("select" + name);
@@ -54,6 +55,7 @@ export default function Select({required=false, name, title, options, selected, 
         return () => document.removeEventListener("mousedown", handleClickOutside);
 
     }, [name]);
+    // console.log(selected, "se")
     return (
         <div className={style.container} id={"select" + name}
                 onClick={() => setIsTouched(true)}>
@@ -62,10 +64,10 @@ export default function Select({required=false, name, title, options, selected, 
             </div>
             {/*<div className={style.dropdown}>*/}
                 <div
-                    className={clsx(style.toggle, !isValid && isTouched  && style.invalid, isOpen && style.active)}
+                    className={clsx(style.toggle, !isValid && (isTouched || isTouchedDefault)  && style.invalid, isOpen && style.active)}
                     onClick={toggleDropdown}
                 >
-                    {selected.length > 0
+                    {selected?.length > 0
                         ? selected.map((s, index) =>
                             <span className={style.elemInToggle} key={index}>
                                 {switchEnum(name === "process" ? s.name : s.title, name === "process" ? name : "notenum", true,

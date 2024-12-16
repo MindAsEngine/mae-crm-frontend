@@ -21,15 +21,21 @@ type DateRangeProps = {
 	oneCalendar: boolean
 	withTime: boolean,
 	inputStyle: string
-	isValidStyle: boolean
+	isValidStyle: boolean,
+	needToReset: boolean,
+	setNeedToReset: ()=>{},
+	isTouchedDefault?: boolean;
 };
 
 const DateRange = ({
 	withTime=true, iconPosition=undefined, oneCalendar=false, inputStyle="",
 	isValidStyle=true,
+	needToReset=false,
 	range, setRange,
+	isTouchedDefault=false,
 					   // startDate,
 					   id="",
+	setNeedToReset
 					   // endDate, setStartDate, setEndDate
 }: DateRangeProps) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +48,15 @@ const DateRange = ({
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
 	const [rawValue, setRawValue] = useState(""); // Значение без маски
 	const [maskedValue, setMaskedValue] = useState(""); // Значение с маской
+	useEffect(() => {
+		if (needToReset){
+			setChosenRange({ start: null, end: null });
+			setRawValue("");
+			setMaskedValue("");
+			setNeedToReset(false);
+			// setIsOpen(false);
+		}
+	}, [needToReset]);
 
 	const toggleCalendar = () => {
 		setIsFocused(true);
@@ -145,7 +160,8 @@ const DateRange = ({
 					onChange={(e)=>handleInputChange(e.target.value)}
 					maxLength={23}
 					className={clsx(styles.inputDate, inputStyle)}
-					isValid={isValidInput}
+					isValid={isValidInput&&isValidStyle}
+					isTouchedDefault={isTouchedDefault}
 				/>
 			</div>
 			{isOpen && (
@@ -157,7 +173,7 @@ const DateRange = ({
 									endDate={chosenRange.end}
 									direction={0}
 									startDate={chosenRange.start}
-									currentMonth={currentMonth}
+									currentMonth={nextMonth}
 									handleDayClick={handleDayClick}
 									handleMonthChange={handleMonthChange}
 								/>

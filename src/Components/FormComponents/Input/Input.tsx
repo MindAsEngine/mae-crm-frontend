@@ -1,6 +1,7 @@
 import styles from "./input.module.scss";
 import React, {Component} from "react";
 import clsx from "clsx";
+import {is} from "date-fns/locale";
 
 type InputProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
@@ -16,11 +17,12 @@ type InputProps = {
     isValid?: boolean,
     as?: any,
     name?: string
+    isTouchedDefault?: boolean
 }
 export default function Input({
                                   onChange,
                                   // props,
-    name,
+    name, isTouchedDefault=false,
                                   readOnly,
                                   value,
                                   before,
@@ -33,13 +35,13 @@ export default function Input({
                                     as: Component='input'
                               }: InputProps) {
     const [isFocused, setIsFocused] = React.useState(false);
-    const [isTouched, setIsTouched] = React.useState(false);
+    const [isTouched, setIsTouched] = React.useState(isTouchedDefault);
     return (
         <div
             onClick={() => setIsTouched(true)}
             className={clsx(styles.inputContainer, isFocused && styles.focused,
             // isValid && styles.valid,
-            isTouched && isValid === false && styles.invalid,
+                (isTouched||isTouchedDefault) && isValid === false && styles.invalid,
             className)}>
             {before}
             <Component
