@@ -95,59 +95,62 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                 </>}
             >
                 {audiencesFromDB ?
-                    <> <label className={styles.labelDate}>
+                    <>
+                        <Select
+                            onChange={(selected) =>
+                                setAdvert(prevState => ({...prevState, cabinet: selected}))}
+                            selected={advert.cabinet}
+                            title="Кабинет"
+                            required={true}
+                            multiple={false}
+                            options={[
+                                {name: Cabinets.Facebook, title: "Facebook Ads"},
+                                {name: Cabinets.Google, title: "Google Ads"},
+                                {name: Cabinets.Yandex, title: "Яндекс.Аудитории"},
+
+                            ]}
+                            isValid={advert.cabinet?.length > 0}
+                            isTouchedDefault={isTouched}
+                        />
+                        <Select
+                            onChange={(selected) => setChosenAudiences(selected)}
+                            name={"list_audiences"}
+                            selected={chosenAudiences}
+                            title="Список аудиторий"
+                            required={true}
+                            multiple={true}
+                            options={audiencesFromDB.map(audience => ({name: audience.id, title: audience.name}))}
+                            isValid={chosenAudiences?.length !== 0}
+                            isTouchedDefault={isTouched}
+                        />
+                        <label className={styles.labelDate}>
                                        <span className={clsx(styles.span, styles.required)}>
 Срок исполнения задачи</span>
 
-                    <DateRange
-                        needToReset={needToR}
-                        setNeedToReset={setNeedToR}
-                        inputStyle={styles.inputDate_}
-                        isTouchedDefault={isTouched}
-                        // startDate={Advert.start}
-                        // endDate={Advert.end}
-                        isValidStyle={advert.start !== null && advert.end !== null}
-                        // setStartDate={(date) => setAdvert({ ...Advert, start: date })}
-                        // setEndDate={(date) => setAdvert({ ...Advert, end: date })}
-                        range={{start: advert.start, end: advert.end}}
-                        setRange={(date) => setAdvert({...advert, start: date.start, end: date.end})}
-                        iconPosition={"right"}
-                        oneCalendar={true}
-                        withTime={false}
-                    />
-                </label>
-                    <Select
-                    onChange={(selected) =>
-                    setAdvert(prevState => ({...prevState, cabinet: selected}))}
-                selected={advert.cabinet}
-                title="Кабинет"
-                required={true}
-                multiple={false}
-                options={[
-                    {name: Cabinets.Facebook, title: "Facebook Ads"},
-                    {name: Cabinets.Google, title: "Google Ads"},
-                    {name: Cabinets.Yandex, title: "Яндекс.Аудитории"},
+                            <DateRange
+                                needToReset={needToR}
+                                setNeedToReset={setNeedToR}
+                                inputStyle={styles.inputDate_}
+                                isTouchedDefault={isTouched}
+                                // startDate={Advert.start}
+                                // endDate={Advert.end}
+                                isValidStyle={advert.start !== null && advert.end !== null}
+                                // setStartDate={(date) => setAdvert({ ...Advert, start: date })}
+                                // setEndDate={(date) => setAdvert({ ...Advert, end: date })}
+                                range={{start: advert.start, end: advert.end}}
+                                setRange={(date) => setAdvert({...advert, start: date.start, end: date.end})}
+                                iconPosition={"right"}
+                                oneCalendar={true}
+                                withTime={false}
+                            />
+                        </label>
 
-                ]}
-                isValid={advert.cabinet?.length > 0}
-                    isTouchedDefault={isTouched}
-            />
-    <Select
-        onChange={(selected) => setChosenAudiences(selected)}
-        name={"list_audiences"}
-        selected={chosenAudiences}
-        title="Список аудиторий"
-        required={true}
-        multiple={true}
-        options={audiencesFromDB.map(audience => ({name: audience.id, title: audience.name}))}
-        isValid={chosenAudiences?.length !== 0}
-        isTouchedDefault={isTouched}
-    /></> : <Loading/>
-}
-                
+                    </> : <Loading/>
+                }
+
             </Form>
-        );}
-
+        );
+}
 
 
 export default AdvertCreate;

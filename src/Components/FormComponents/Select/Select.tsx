@@ -19,10 +19,13 @@ type SelectProps = {
     isValid?: boolean;
     required?: boolean;
     isTouchedDefault?: boolean
+    isLastSelect?:boolean
 };
 
 
-export default function Select({required=false, name, title, options, isTouchedDefault=false,selected, onChange, multiple = false, isValid=true }: SelectProps) {
+export default function Select({required=false, name, title,
+isLastSelect=false,
+                                   options, isTouchedDefault=false,selected, onChange, multiple = false, isValid=true }: SelectProps) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState(isTouchedDefault);
     const toggleDropdown = () => setIsOpen(!isOpen);
@@ -77,7 +80,7 @@ export default function Select({required=false, name, title, options, isTouchedD
                         : `Выберите ${title.toLowerCase()}`}
 
                 {isOpen && (
-                    <ul className={style.menu}>
+                    <ul className={clsx(style.menu, isLastSelect && style.isLastSelect)}>
                         {options.map((option) => (
                             <li
                                 key={option.name}

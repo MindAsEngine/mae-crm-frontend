@@ -152,6 +152,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                         { name: AudienceStatus.Canceled, title: "Отменена" },
                     ]}
                     isValid={audience.statuses?.length > 0}
+
                 />
                 {/*<Select*/}
                 {/*    onChange={(selected) =>*/}
@@ -184,6 +185,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                 {/*        { name: AudienceStatus.Canceled, title: "Отменена" },*/}
                 {/*    ]}*/}
                 {/*    // isValid={audience.type?.length > 0}*/}
+                {/*isLastSelect={true}*/}
                 {/*/>*/}
             </Form>
         );}
