@@ -7,7 +7,8 @@ import clsx from 'clsx'
 
 const userImage = '/images/user.png'
 export default function Sidebar() {
-	const [isOpened, setIsOpened] = React.useState<boolean>(true)
+	const [isOpened, setIsOpened] = React.useState<boolean>(true);
+	const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
 	const navigate = useNavigate();
 	const handleLogout = () => {
 		navigate('/login')
@@ -97,9 +98,9 @@ export default function Sidebar() {
 							</li>
 						</ul>
 					</li>
-					<li
-
-					>
+					{isAdmin &&
+						<>
+					<li>
 						<span
 							className={clsx(
 								styles.list__item,
@@ -123,6 +124,8 @@ export default function Sidebar() {
 							/>
 
 						</li>
+					</>
+					}
 				</ul>
 			</nav>
 			<div className={styles.profile}>

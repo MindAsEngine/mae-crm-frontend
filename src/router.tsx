@@ -13,9 +13,9 @@ export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
 	'/tasks': 'Заявки',
 	'/audience': 'Аудитория',
-	'/login': 'Вход',
-	'/admin': 'АДМИН',
-	'/admin/users': 'Пользователи',
+	// '/login': 'Вход',
+	// '/admin': 'АДМИН',
+	// '/admin/users': 'Пользователи',
 	// '/advertisement': 'Реклама',
 	'/reports': 'Отчеты',
 	'/reports/regions': 'Регионы покупки недвижимости',
@@ -27,7 +27,8 @@ export const router = createBrowserRouter(
 	[
 		{
 			path: '*',
-			element: <NotFoundPage />,
+			element: <Navigate to={'/audience'}/>
+			// element: <NotFoundPage />,
 		},
 		{
 			path: '/',
@@ -35,12 +36,12 @@ export const router = createBrowserRouter(
 			children: [
 				{
 					index: true,
-					element: <Navigate to={'/tasks'}/>
+					element: <Navigate to={'/audience'}/>
 				},
-				{
-					path: '/tasks',
-					element: <TasksPage />,
-				},
+				// {
+				// 	path: '/tasks',
+				// 	element: <TasksPage />,
+				// },
 				{
 					path: '/audience',
 					element: <AudiencePage/>,
@@ -49,46 +50,46 @@ export const router = createBrowserRouter(
 				// 	path: '/advertisement',
 				// 	element: <Navigate to={'/'} />,
 				// },
-				{
-					path: '/reports',
-					children: [
-						{
-							index: true,
-							element: <Navigate to={'regions'} />,
-						},
-						{
-							path: 'regions',
-							element: <RegionsReport />,
-						},
-						{
-							path: 'call-center',
-							element: <CallCenterReport />,
-						},
-						{
-							path: 'processed-requests-speed',
-							element: <ProcessedRequestsSpeedReport />,
-						},
-					],
-				},
-				{
-					path: '/admin',
-					children: [
-						{
-							index: true,
-							element: <Navigate to={'users'} />,
-						},
-						{
-							path: 'users',
-							element: <UsersPage />,
-						}
-						]
-				}
+		// 		{
+		// 			path: '/reports',
+		// 			children: [
+		// 				{
+		// 					index: true,
+		// 					element: <Navigate to={'regions'} />,
+		// 				},
+		// 				{
+		// 					path: 'regions',
+		// 					element: <RegionsReport />,
+		// 				},
+		// 				{
+		// 					path: 'call-center',
+		// 					element: <CallCenterReport />,
+		// 				},
+		// 				{
+		// 					path: 'processed-requests-speed',
+		// 					element: <ProcessedRequestsSpeedReport />,
+		// 				},
+		// 			],
+		// 		},
+		// 		{
+		// 			path: '/admin',
+		// 			children: [
+		// 				{
+		// 					index: true,
+		// 					element: <Navigate to={'users'} />,
+		// 				},
+		// 				{
+		// 					path: 'users',
+		// 					element: <UsersPage />,
+		// 				}
+		// 				]
+		// 		}
 			],
 		},
-		{
-			path: '/login',
-			element: <LoginPage/>,
-		}
+		// {
+		// 	path: '/login',
+		// 	element: <LoginPage/>,
+		// }
 	],
 	{
 		future: {
