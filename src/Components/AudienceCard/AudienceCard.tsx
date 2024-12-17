@@ -10,13 +10,10 @@ type AudienceCardProps = {
     id: number;
     name: string;
     duration: string;
-    created: Date;
-    updated: Date;
-    integrated: {
-        cabinet: {
-            title: string;
-            id: number;
-        }
+    created_at: Date;
+    updated_at: Date;
+    integrations: {
+        cabinet_name: string
     }[];
     chosen?: [];
     setChosen?: (nevers: never[]) => void;
@@ -27,10 +24,10 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, duration, created, updated, integrated, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
+    const { id, name, duration, updated_at, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
 
-    const [created_, setCreated_] = React.useState(created);
-    const [updated_, setUpdated_] = React.useState(updated);
+    const [created_, setCreated_] = React.useState(created_at);
+    const [updated_, setUpdated_] = React.useState(updated_at);
 
     const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = React.useState(false);
@@ -50,13 +47,13 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
     }, []);
     useEffect(() => {
         try{
-        setCreated_(format(parseISO(created), 'dd.MM.yyyy') + ' в ' + format(parseISO(created), 'HH:mm'));
-        setUpdated_(format(parseISO(updated), 'dd.MM.yyyy') + ' в ' + format(parseISO(updated), 'HH:mm'));
+        setCreated_(format(parseISO(created_at), 'dd.MM.yyyy') + ' в ' + format(parseISO(created_at), 'HH:mm'));
+        setUpdated_(format(parseISO(updated_at), 'dd.MM.yyyy') + ' в ' + format(parseISO(updated_at), 'HH:mm'));
         } catch (e) {
             console.log(e);
-            setCreated_(created);
-            setUpdated_(updated);}
-    }, [created, updated]);
+            setCreated_(created_at);
+            setUpdated_(updated_at);}
+    }, [created_at, updated_at]);
     const handleDelete = () => {
         fetch(apiUrl+`/audiences/${id}`, {
             method: 'DELETE',
@@ -167,8 +164,8 @@ const handleDisconnect = () => {
                     </div>
                 </div>
                 <div className={styles.connections}>
-                    {integrated.map((item, index) => (
-                        <span key={index} className={clsx(styles.item, item.cabinet.title && styles[item.cabinet.title])} />
+                    {Array.isArray(integrations) && integrations.map((item, index) => (
+                        <span key={index} className={clsx(styles.item, item.cabinet_name && styles[item.cabinet_name])} />
                     ))}
                 </div>
             </div>

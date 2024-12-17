@@ -55,7 +55,7 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             if (advert.cabinet&&Array.isArray(advert.cabinet) && chosenAudiences.length > 0 ) {
-                console.log("Advert data:", advert, chosenAudiences);
+                // console.log("Advert data:", advert, chosenAudiences);
                 postIntegration(advert.cabinet[0], chosenAudiences.map(audience => audience.name))
                 // advert.start, advert.end);
 

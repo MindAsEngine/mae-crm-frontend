@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "./error.module.scss";
-const Error = ({title="Ошибка загрузки данных"}) => {
+const ErrorComponent = ({title="Ошибка загрузки данных"}) => {
     return(
     <div className={styles.error}>
 
@@ -8,4 +8,4 @@ const Error = ({title="Ошибка загрузки данных"}) => {
 
                     </div>
     )}
-export default Error;
+export default ErrorComponent;

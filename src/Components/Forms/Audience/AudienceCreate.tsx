@@ -122,7 +122,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             filter.creation_date_to = handleDateFormat(creation_date_to);
             // console.log(creation_date_to, creation_date_from)
         }
-        fetch(apiUrl+`/audiences/`, {
+        fetch(apiUrl+`/audiences`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

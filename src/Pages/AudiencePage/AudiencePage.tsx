@@ -3,7 +3,7 @@ import styles from './audiencePage.module.scss'
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import AudienceCard from "../../Components/AudienceCard/AudienceCard.tsx";
 import Loading from "../../Components/Loading/Loading.tsx";
-import Error from  "../../Components/Error/Error.tsx"
+import ErrorComponent from "../../Components/Error/ErrorComponent.tsx"
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import AdvertCreate from "../../Components/Forms/Advert/AdvertCreate.tsx";
 import {useEffect, useState} from "react";
@@ -25,14 +25,13 @@ export default function AudiencePage() {
             setStatus("loading");
             await fetch(apiUrl+`/audiences?`, {
                 method: 'GET',
-                // mode: 'no-cors',
-                // credentials: 'include',
+                // mode: "no-cors",
                 headers: {
                     'Accept': 'application/json', // Явно указываем, что ожидаем JSON
                     'Content-Type': 'application/json',
                 }})
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     if (!res.ok) {
                         throw new Error(`HTTP error! status: ${res.status}`);
                     }
@@ -65,9 +64,14 @@ export default function AudiencePage() {
         setExportClicked(true);
     }
     useEffect(() => {
+        // todo test export
         const handleExport = async () => {
             await fetch(apiUrl+`/audiences/export?`, {
                 method: 'GET',
+                headers: {
+                    'Content-Type': "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "Content-Disposition": 'attachment; filename="audience_export.xlsx"'
+                }
             }).then(res => {
                 if (!res.ok) {
                     throw new Error('Ошибка при получении файла');
@@ -125,7 +129,8 @@ export default function AudiencePage() {
                         onClick={()=>setIsOpenCreateAudience(true)}
 
                 />
-                {isOpenCreateAudience&&<AudienceCreate
+                {isOpenCreateAudience&&
+                    <AudienceCreate
                     setInitToReload={setInitToReload}
                     isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}
 
@@ -148,7 +153,7 @@ export default function AudiencePage() {
                 {status === "loading" &&
                     <Loading/>
                     }
-                {status === "error" && <Error/>}
+                {status === "error" && <ErrorComponent/>}
             </div>
 
 

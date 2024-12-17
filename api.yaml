@@ -1116,8 +1116,10 @@ components:
       type: object
       description: Вид подключения для отображения
       properties:
-        cabinet:
-          $ref: '#/components/schemas/Cabinet'
+        cabinet_name:
+          type: string
+          example: yandex
+#          $ref: '#/components/schemas/Cabinet'
         id:
           type: integer
           description: Идентификатор интеграции
@@ -1126,11 +1128,11 @@ components:
       type: object
       description: Запрос на подключение
       properties:
-        cabinet:
-          type: integer
-          example: 1
-          description: id кабинета
-        audiences:
+        cabinet_name:
+          type: string
+          example: yandex
+          description: название кабинета
+        audience_ids:
           type: array
           items:
             type: integer
@@ -1152,15 +1154,15 @@ components:
           type: string
           description: Продолжительность
           example: '1 день 3 часа'
-        created:
+        created_at:
           type: string
           description: Дата создания
           example: '2024-11-14T21:00:00.000Z'
-        updated:
+        updated_at:
           type: string
           description: Дата изменения
           example: '2024-11-14T21:00:00.000Z'
-        integrated:
+        integrations:
           type: array
           items:
             $ref: '#/components/schemas/Integration'
@@ -1172,18 +1174,34 @@ components:
           type: string
           description: Название
           example: "Бронь"
-        start:
+          required: true
+        filter:
+          $ref: '#/components/schemas/AudienceCreateRequestFilter'
+#          required: true
+#          type: object
+
+    AudienceCreateRequestFilter:
+      type: object
+      minProperties: 1
+      properties:
+        creation_date_from:
           type: string
           example: Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)
-        end:
+        creation_date_to:
           type: string
           example: Sat Oct 19 2024 17:47:50 GMT+0300 (Москва, стандартное время)
-        status_id:
-          type: integer
-        reason_status_reject:
-          type: integer
-        reason_status_no_purpose:
-          type: integer
+        statuses:
+          type: array
+          items:
+            type: string
+        rejection_reasons:
+          type: array
+          items:
+            type: string
+        non_target_reasons:
+          type: array
+          items:
+            type: string
         applications:
           type: array
           items:
