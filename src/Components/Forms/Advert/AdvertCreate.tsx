@@ -89,7 +89,7 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                     setInitToReload(true);
                     return;
                 }
-               return new Error('Не удалось подключить');
+               throw new Error('Не удалось подключить');
             })
             .catch((err) => {
                 setErrMessage(err.error);

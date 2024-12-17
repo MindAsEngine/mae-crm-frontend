@@ -12,7 +12,7 @@ npm install -g @stoplight/prism-cli
 prism mock api.yaml
 ```
 
-[//]: # (todo create forms audience, user, login, task, connection) 
+[//]: # (todo create forms user, login, task) 
 
 [//]: # (todo filters + onckick)
 
