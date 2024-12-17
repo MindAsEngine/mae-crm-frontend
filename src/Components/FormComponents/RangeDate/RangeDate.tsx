@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { addMonths, format, isValid, parse, subMonths } from "date-fns";
+import {addHours, addMonths, format, isValid, parse, subMonths } from "date-fns";
 import styles from "./rangedate.module.scss";
 import Input from "../Input/Input.tsx";
 import Calendar from "./Calendar.tsx";
@@ -65,7 +65,8 @@ const DateRange = ({
 
 	const handleClickOut = (e: MouseEvent) => {
 		const dialog = document.getElementById("calendarDropdown"+id);
-		if (dialog && !dialog.contains(e.target as Node)) {
+		if (dialog && !dialog.contains(e.target as Node)&&isOpen) {
+			setNeedToReset(true);
 			setIsOpen(false);
 		}
 	};

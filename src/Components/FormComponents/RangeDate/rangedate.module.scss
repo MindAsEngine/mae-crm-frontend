@@ -38,15 +38,12 @@
   border: var(--border-grey-200-medium);
   border-radius: var(--border-radius-m);
   box-shadow: var(--effect-shadow-l-center);
-  //top: 0;
-  //left: 0;
-  //width: 757px;
-  //width: 100%;
+
 }
 .oneCalendar{
   top: unset;
   bottom: -255px;
-
+  //todo pos
   right: calc(-396px - 30px);
   left: unset;
   .footer{

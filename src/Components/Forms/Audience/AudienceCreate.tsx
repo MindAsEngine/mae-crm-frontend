@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useState} from "react";
 import Input from "../../FormComponents/Input/Input.tsx";
 import styles from "../form.module.scss";
 import Select from "../../FormComponents/Select/Select.tsx";
@@ -6,6 +6,7 @@ import DateRange from "../../FormComponents/RangeDate/RangeDate.tsx";
 import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
+import { format } from "date-fns";
 
 class AudienceStatus {
     static New = "New";
@@ -17,7 +18,6 @@ class AudienceStatus {
 class Audience {
     id: number;
     title: string;
-    description: string;
     statuses: [];
     rejection_reasons:[];
     non_target_reasons: [];
@@ -28,39 +28,84 @@ type AudienceCreateProps = {
     isOpenCreateAudience: boolean;
     setIsOpenCreateAudience: any;
 }
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: AudienceCreateProps) => {
         const [audience, setAudience] = useState<Audience>({
             id: 0,
             title:'',
-            description: "",
             statuses: [],
             rejection_reasons:[],
             non_target_reasons: [],
-
             start: null,
             end: null,
         });
     const [isTouched, setIsTouched] = useState(false);
+    const [needToR, setNeedToR] = useState(false);
+
 
         const resetAudience = () => {
             setAudience({
                 id: 0,
                 title: "",
-                description: "",
                 statuses: [],
                 rejection_reasons:[],
                 non_target_reasons: [],
                 start: null,
                 end: null,
             });
+            setNeedToR(true);
         };
+        const handleDateFormat = (date) =>{
+            const userInputDate = format(date, "yyyy-MM-dd")
+            const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+            return `${year}-${month}-${day}T00:00:00`;
+        }
+    const postAudiences = (name,
+        statuses, rejection_reasons,
+        non_target_reasons, creation_date_from,
+         creation_date_to
+        ) => {
+        const filter = {};
+        if (Array.isArray(statuses) && statuses.length > 0)
+            filter.statuses = statuses;
+        if (Array.isArray(rejection_reasons) && rejection_reasons.length > 0)
+            filter.rejection_reasons = rejection_reasons;
+        if (Array.isArray(non_target_reasons) && non_target_reasons.length > 0)
+            filter.non_target_reasons = non_target_reasons;
+        if (creation_date_from && creation_date_to){
+            filter.creation_date_from = handleDateFormat(creation_date_from);
+            filter.creation_date_to = handleDateFormat(creation_date_to);
+            console.log(creation_date_to, creation_date_from)
+        }
+        fetch(apiUrl+`/audiences/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                filter: filter
+            })
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return new Error('Не удалось подключить');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
 
+    }
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (audience.title && audience.end && audience.start && audience.statuses) {
+            if (audience.title && (audience.end && audience.start || audience.statuses ||
+                audience.rejection_reasons || audience.non_target_reasons)) {
                 console.log("Audience data:", audience);
-
+                postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,
+                    audience.start,  audience.end )
+                resetAudience();
                 setIsOpenCreateAudience(false); // Закрыть модалку после отправки
             } else{
                 setIsTouched(true);
@@ -78,7 +123,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
             }));
         }
         return (
-            // todo create audience
+
             <Form
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}
@@ -114,12 +159,14 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                         // maxLength={100}
                         isTouchedDefault={isTouched}
                         isValid={audience.title?.length > 0}
+
+
                     />
                 </label>
                 <label className={styles.labelDate}>
                                        <span className={clsx(styles.span, styles.required)}>
 Срок исполнения задачи</span>
-                    {/*TODO setting date and adptive*/}
+
                     <DateRange
                         inputStyle={styles.inputDate_}
                         // startDate={audience.start}
@@ -133,6 +180,8 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                         oneCalendar={true}
                         withTime={false}
                         isTouchedDefault={isTouched}
+                        needToReset={needToR}
+                        setNeedToReset={setNeedToR}
                                         />
                 </label>
                 <Select

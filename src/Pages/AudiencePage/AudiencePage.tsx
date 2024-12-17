@@ -4,10 +4,8 @@ import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import AudienceCard from "../../Components/AudienceCard/AudienceCard.tsx";
 import Loading from "../../Components/Loading/Loading.tsx";
 import Error from  "../../Components/Error/Error.tsx"
-// import audienceData from "./audienceData.json";
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import AdvertCreate from "../../Components/Forms/Advert/AdvertCreate.tsx";
-import {useEffect} from "react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -76,8 +74,9 @@ export default function AudiencePage() {
                 <AdvertCreate isOpenCreateAdvert={isOpenCreateAdvert} setIsOpenCreateAdvert={setIsOpenCreateAdvert}
                               audiencesFromDB={audiences} chosenAudiences={chosenAudiences}
                               setChosenAudiences={setChosenAudiences}
+                              setInitToReload={setInitToReload}
                 />}
-                {/*     todo new form for integration*/}
+
                 <Button stylizedAs={'blue-dark'}
                         children={'Создать аудиторию'}
                         createButton={true}
@@ -91,7 +90,7 @@ export default function AudiencePage() {
             </div>
 
             <div className={styles.cards}>
-                {status === "success" && audiences && <>
+                {status === "success" && Array.isArray(audiences) && <>
                 {audiences.map((audience, index) => (
                     <AudienceCard key={index} chosen={chosenAudiences}
                                     setChosen={setChosenAudiences}

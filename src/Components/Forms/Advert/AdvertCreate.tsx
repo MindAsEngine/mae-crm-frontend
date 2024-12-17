@@ -1,9 +1,6 @@
-import React, { useEffect, useState} from "react";
-import Input from "../../FormComponents/Input/Input.tsx";
+import React, { useState} from "react";
 import styles from "../form.module.scss";
 import Select from "../../FormComponents/Select/Select.tsx";
-import DateRange from "../../FormComponents/RangeDate/RangeDate.tsx";
-import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import Loading from "../../Loading/Loading.tsx";
@@ -16,10 +13,8 @@ class Cabinets {
 const apiUrl = import.meta.env.VITE_API_URL;
 
 class Advert {
-    // audiences: number[];
     cabinet: Cabinets | undefined;
-    start: Date | undefined;
-    end: Date | undefined;
+
 }
 type AdvertCreateProps = {
     isOpenCreateAdvert: boolean;
@@ -27,40 +22,43 @@ type AdvertCreateProps = {
     audiencesFromDB: [];
     chosenAudiences: [];
     setChosenAudiences: [];
+    setInitToReload: ()=> {}
 }
 
 const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
-                          audiencesFromDB=[], chosenAudiences=[],
+                          audiencesFromDB=[], chosenAudiences=[], setInitToReload,
     setChosenAudiences
                       }: AdvertCreateProps) => {
     const [isTouched, setIsTouched] = useState(false);
     const [advert, setAdvert] = useState<Advert>({
             cabinet: null,
             // audiences: chosenAudiences,
-            start: null,
-            end: null,
+            // start: null,
+            // end: null,
         });
-    const [needToR, setNeedToR] = useState(false);
+    // const [needToR, setNeedToR] = useState(false);
 
 
         const resetAdvert = () => {
             setAdvert({
                 cabinet: null,
                 // audiences:[],
-                start: null,
-                end: null,
+                // start: null,
+                // end: null,
             });
             setChosenAudiences([]);
-            setNeedToR(true);
+            // setNeedToR(true);
         };
         // console.log(advert);
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            // todo post
-            if (advert.cabinet && chosenAudiences.length > 0 && advert.start && advert.end) {
+            if (advert.cabinet&&Array.isArray(advert.cabinet) && chosenAudiences.length > 0 ) {
                 console.log("Advert data:", advert, chosenAudiences);
+                postIntegration(advert.cabinet[0], chosenAudiences.map(audience => audience.name))
+                // advert.start, advert.end);
                 resetAdvert();
                 setIsOpenCreateAdvert(false); // Закрыть модалку после отправки
+                setInitToReload(true);
             } else{
                 setIsTouched(true);
                 console.log("true")
@@ -71,30 +69,29 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
             resetAdvert();
             setIsOpenCreateAdvert(false);
         };
-    const postIntegration = () => {
+    const postIntegration = (cabinet, audiences,) => {
         fetch(apiUrl+`/integrations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                // cabinet: 1,
-                // audiences: [id]
-
+                cabinet_name: cabinet.name,
+                audience_ids: audiences,
             })
         })
             .then((res) => {
-                console.log(res);
-                console.log('Подключить');
-
-
+                if (res.ok) {
+                    return res.json();
+                }
+               return new Error('Не удалось подключить');
             })
             .catch((err) => {
                 console.log(err);
             })
 
     }
-        // console.log(advert.start !== null && advert.end !== null, "wdbwb");
+
         return (
             <Form
                 isOpen={isOpenCreateAdvert}
@@ -146,27 +143,27 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                             isValid={chosenAudiences?.length !== 0}
                             isTouchedDefault={isTouched}
                         />
-                        <label className={styles.labelDate}>
-                                       <span className={clsx(styles.span, styles.required)}>
-Срок исполнения задачи</span>
+{/*                        <label className={styles.labelDate}>*/}
+{/*                                       <span className={clsx(styles.span, styles.required)}>*/}
+{/*Срок исполнения задачи</span>*/}
 
-                            <DateRange
-                                needToReset={needToR}
-                                setNeedToReset={setNeedToR}
-                                inputStyle={styles.inputDate_}
-                                isTouchedDefault={isTouched}
-                                // startDate={Advert.start}
-                                // endDate={Advert.end}
-                                isValidStyle={advert.start !== null && advert.end !== null}
-                                // setStartDate={(date) => setAdvert({ ...Advert, start: date })}
-                                // setEndDate={(date) => setAdvert({ ...Advert, end: date })}
-                                range={{start: advert.start, end: advert.end}}
-                                setRange={(date) => setAdvert({...advert, start: date.start, end: date.end})}
-                                iconPosition={"right"}
-                                oneCalendar={true}
-                                withTime={false}
-                            />
-                        </label>
+{/*                            <DateRange*/}
+{/*                                needToReset={needToR}*/}
+{/*                                setNeedToReset={setNeedToR}*/}
+{/*                                inputStyle={styles.inputDate_}*/}
+{/*                                isTouchedDefault={isTouched}*/}
+{/*                                // startDate={Advert.start}*/}
+{/*                                // endDate={Advert.end}*/}
+{/*                                isValidStyle={advert.start !== null && advert.end !== null}*/}
+{/*                                // setStartDate={(date) => setAdvert({ ...Advert, start: date })}*/}
+{/*                                // setEndDate={(date) => setAdvert({ ...Advert, end: date })}*/}
+{/*                                range={{start: advert.start, end: advert.end}}*/}
+{/*                                setRange={(date) => setAdvert({...advert, start: date.start, end: date.end})}*/}
+{/*                                iconPosition={"right"}*/}
+{/*                                oneCalendar={true}*/}
+{/*                                withTime={false}*/}
+{/*                            />*/}
+{/*                        </label>*/}
 
                     </> : <Loading/>
                 }

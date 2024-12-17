@@ -5,7 +5,6 @@ import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
 import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
-import AdvertCreate from "../Forms/Advert/AdvertCreate.tsx";
 
 type AudienceCardProps = {
     id: number;
