@@ -107,7 +107,7 @@ export default function Form({
                         />
                     </header>
 
-                    <div className={clsx(styles.content, classNameContent)}>
+                    <div className={clsx(styles.content, classNameContent, errMessage && styles.contentWithErr)}>
                         {children}
                         {errMessage && <div className={styles.error}>
                             {errMessage}

@@ -83,7 +83,9 @@ export default function AudiencePage() {
                         onClick={()=>setIsOpenCreateAudience(true)}
 
                 />
-                {isOpenCreateAudience&&<AudienceCreate isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}
+                {isOpenCreateAudience&&<AudienceCreate
+                    setInitToReload={setInitToReload}
+                    isOpenCreateAudience={isOpenCreateAudience} setIsOpenCreateAudience={setIsOpenCreateAudience}
 
                 />}
 

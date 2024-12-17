@@ -30,6 +30,8 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
     setChosenAudiences
                       }: AdvertCreateProps) => {
     const [isTouched, setIsTouched] = useState(false);
+    const [errMessage, setErrMessage] = useState(null);
+
     const [advert, setAdvert] = useState<Advert>({
             cabinet: null,
             // audiences: chosenAudiences,
@@ -56,12 +58,11 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                 console.log("Advert data:", advert, chosenAudiences);
                 postIntegration(advert.cabinet[0], chosenAudiences.map(audience => audience.name))
                 // advert.start, advert.end);
-                resetAdvert();
-                setIsOpenCreateAdvert(false); // Закрыть модалку после отправки
-                setInitToReload(true);
+
             } else{
                 setIsTouched(true);
-                console.log("true")
+                // console.log("true")
+                setErrMessage("Заполните обязательные поля");
             }
         };
         const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,12 +83,16 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
         })
             .then((res) => {
                 if (res.ok) {
-                    return res.json();
+                    // return res.json();
+                    resetAdvert();
+                    setIsOpenCreateAdvert(false); // Закрыть модалку после отправки
+                    setInitToReload(true);
+                    return;
                 }
                return new Error('Не удалось подключить');
             })
             .catch((err) => {
-                console.log(err);
+                setErrMessage(err.error);
             })
 
     }
@@ -113,6 +118,7 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                     </Button>
 
                 </>}
+                errMessage={errMessage}
             >
                 {audiencesFromDB ?
                     <>

@@ -20,6 +20,8 @@ class Audience {
 type AudienceCreateProps = {
     isOpenCreateAudience: boolean;
     setIsOpenCreateAudience: any;
+    setInitToReload: ()=> {}
+
 }
 const non_target_reasons_options = [
     {name: "Повторная заявка", title: "Повторная заявка"},
@@ -72,7 +74,7 @@ const statuses_options = [
     ]
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: AudienceCreateProps) => {
+const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreateAudience }: AudienceCreateProps) => {
         const [audience, setAudience] = useState<Audience>({
             id: 0,
             title:'',
@@ -132,12 +134,16 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
         })
             .then((res) => {
                 if (res.ok) {
-                    return res.json();
+                    // return res.json();
+                    resetAudience();
+                    setIsOpenCreateAudience(false);
+                    setInitToReload(true);
+                    return;
                 }
                 return new Error('Не удалось подключить');
             })
             .catch((err) => {
-                console.log(err);
+                setErrMessage(err.error);
             })
 
     }
@@ -147,9 +153,9 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                 audience.rejection_reasons || audience.non_target_reasons)) {
                 // console.log("Audience data:", audience);
                 postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,
-                    audience.start,  audience.end )
-                resetAudience();
-                setIsOpenCreateAudience(false); // Закрыть модалку после отправки
+                    audience.start,  audience.end );
+
+                 // Закрыть модалку после отправки
             } else{
                 setIsTouched(true);
                 setErrMessage("Заполните хотя бы одно поле из 4 необязательных");
@@ -209,7 +215,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                     />
                 </label>
                 <label className={styles.labelDate}>
-                                       <span className={clsx(styles.span, styles.required)}>
+                                       <span className={clsx(styles.span)}>
 Срок исполнения задачи</span>
 
                     <DateRange
@@ -242,7 +248,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                     // todo statuses
                     isTouchedDefault={isTouched}
                     options={statuses_options}
-                    isValid={audience.statuses?.length > 0}
+                    // isValid={audience.statuses?.length > 0}
 
                 />
                 <Select

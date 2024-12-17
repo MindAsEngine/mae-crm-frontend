@@ -79,6 +79,7 @@
   box-shadow: var(--effect-shadow-l-center);
 }
 
+
 .modal.windowMode.isOpen .window{
   flex-grow: 0;
   width: 408px;
@@ -134,7 +135,12 @@
   padding: 4px 20px;
   //padding: 4px 4px 4px 20px;
   border-radius: var(--border-radius-m);
+  //position: relative;
 }
+.contentWithErr{
+  //padding-bottom: 20px;
+}
+
 
 .footer{
   display: flex;
@@ -163,6 +169,8 @@
   border-top-right-radius: 0;
 }
 .error{
+  //position: absolute;
   color: var(--color-red-500);
   font: var(--font-s-regular);
+  //bottom: -20px;
 }
