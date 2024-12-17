@@ -5,6 +5,7 @@ import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
 import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
+import AdvertCreate from "../Forms/Advert/AdvertCreate.tsx";
 
 type AudienceCardProps = {
     id: number;
@@ -21,12 +22,13 @@ type AudienceCardProps = {
     chosen?: [];
     setChosen?: (nevers: never[]) => void;
     setInitToReload?: () => void;
+    setIsModalConnectOpen: (id) => void;
 };
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, duration, created, updated, integrated, chosen, setChosen,setInitToReload } = audienceData;
+    const { id, name, duration, created, updated, integrated, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
 
     const [created_, setCreated_] = React.useState(created);
     const [updated_, setUpdated_] = React.useState(updated);
@@ -34,14 +36,11 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
     const [isOptionsOpen, setIsOptionsOpen] = React.useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = React.useState(false);
     const [isConfirmDisconnectOpen, setIsConfirmDisconnectOpen] = React.useState(false);
-    // todo modal
-    const [isModalConnectOpen, setIsModalConnectOpen] = React.useState(false);
 
     useEffect(() => {
         const handleClick = (event: MouseEvent) => {
             const actionListElement = document.getElementById('actionList');
             if (actionListElement && !event.composedPath().includes(actionListElement)) {
-
                 setIsOptionsOpen(false);
             }
         };
@@ -76,29 +75,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
             })
     };
 
-const handleConnect = () => {
-    fetch(apiUrl+`/integrations`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            cabinet: 1,
-            audiences: [id]
 
-        })
-    })
-    .then((res) => {
-        console.log(res);
-        console.log('Подключить', id);
-        setIsModalConnectOpen(false);
-        setInitToReload(true);
-        })
-    .catch((err) => {
-        console.log(err);
-        })
-
-}
 const handleDisconnect = () => {
     fetch(apiUrl+`/audiences/${id}/disconnect`,{
         method: 'DELETE',
@@ -161,14 +138,19 @@ const handleDisconnect = () => {
                             <li className={clsx(styles.item, styles.options)}>
                                 Опции
                             </li>
-                            <a className={styles.item} onClick={() => handleConnect()}>
+                            <a className={styles.item} onClick={() => {
+                                setChosen([{"title": name, "name": id}]);
+                                setIsModalConnectOpen(true);}
+                            }>
                                 Подключить рекламу
                             </a>
+
                             <a className={styles.item} onClick={() => {setIsConfirmDisconnectOpen(true);}}>Отключить рекламу</a>
                             <span className={styles.divider} />
                             <a className={clsx(styles.item, styles.delete)} onClick={() => setIsConfirmDeleteOpen(true)}>Удалить</a>
                         </ul>
                     </div>
+
                 </Button>
             </div>
             <div className={styles.content}>

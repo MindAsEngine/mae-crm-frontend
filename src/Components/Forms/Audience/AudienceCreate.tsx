@@ -55,7 +55,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setIsOpenCreateAudience }: Audie
                 end: null,
             });
         };
-        // console.log(new Date(1731048164 * 1000));
+
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             if (audience.title && audience.end && audience.start && audience.statuses) {

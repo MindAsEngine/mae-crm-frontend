@@ -13,12 +13,13 @@ class Cabinets {
     static Google = "google";
     static Yandex = "yandex";
 }
+const apiUrl = import.meta.env.VITE_API_URL;
 
 class Advert {
     // audiences: number[];
-    cabinet: Cabinets;
-    start: Date;
-    end: Date;
+    cabinet: Cabinets | undefined;
+    start: Date | undefined;
+    end: Date | undefined;
 }
 type AdvertCreateProps = {
     isOpenCreateAdvert: boolean;
@@ -70,7 +71,29 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
             resetAdvert();
             setIsOpenCreateAdvert(false);
         };
+    const postIntegration = () => {
+        fetch(apiUrl+`/integrations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // cabinet: 1,
+                // audiences: [id]
 
+            })
+        })
+            .then((res) => {
+                console.log(res);
+                console.log('Подключить');
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
         // console.log(advert.start !== null && advert.end !== null, "wdbwb");
         return (
             <Form

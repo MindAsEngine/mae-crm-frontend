@@ -97,6 +97,7 @@ export default function AudiencePage() {
                                     setChosen={setChosenAudiences}
                                     {...audience}
                                     setInitToReload={setInitToReload}
+                                  setIsModalConnectOpen={setIsOpenCreateAdvert}
                     />
                 ))}
                     
