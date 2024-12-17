@@ -161,5 +161,8 @@
   z-index: 1;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-
+}
+.error{
+  color: var(--color-red-500);
+  font: var(--font-s-regular);
 }

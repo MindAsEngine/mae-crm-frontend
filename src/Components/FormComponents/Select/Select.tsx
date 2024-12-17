@@ -19,12 +19,13 @@ type SelectProps = {
     isValid?: boolean;
     required?: boolean;
     isTouchedDefault?: boolean
-    isLastSelect?:boolean
+    isLastSelect?:boolean;
+    placeholder?: string
 };
 
 
 export default function Select({required=false, name, title,
-isLastSelect=false,
+isLastSelect=false, placeholder,
                                    options, isTouchedDefault=false,selected, onChange, multiple = false, isValid=true }: SelectProps) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState(isTouchedDefault);
@@ -77,7 +78,7 @@ isLastSelect=false,
                                     () => handleUnselectOne(s)
                                 )}
                             </span>)
-                        : `Выберите ${title.toLowerCase()}`}
+                        : `Выберите ${placeholder || title.toLowerCase()}`}
 
                 {isOpen && (
                     <ul className={clsx(style.menu, isLastSelect && style.isLastSelect)}>

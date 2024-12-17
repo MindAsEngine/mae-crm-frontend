@@ -19,7 +19,8 @@ type ModalProps = {
     needScroll?:boolean;
     onClose?: () => void;
     stylizedAs?: "red" | "blue-dark" | "blue-light" | "white",
-    footer?: React.ReactNode
+    footer?: React.ReactNode,
+    errMessage?: React.ReactNode
 }
 export default function Form({
                                   isOpen,
@@ -37,7 +38,7 @@ export default function Form({
                                   onClose,
                                   classNameHeader,
                                   classNameFooter,
-    footer="",
+    footer="", errMessage,
                                   stylizedAs="blue-dark"
                               }: ModalProps) {
 
@@ -108,6 +109,9 @@ export default function Form({
 
                     <div className={clsx(styles.content, classNameContent)}>
                         {children}
+                        {errMessage && <div className={styles.error}>
+                            {errMessage}
+                        </div>}
                     </div>
                     <footer className={clsx(styles.footer, classNameFooter)}>
                         {footer}

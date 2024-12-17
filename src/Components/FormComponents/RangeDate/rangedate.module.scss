@@ -41,8 +41,10 @@
 
 }
 .oneCalendar{
-  top: unset;
-  bottom: -255px;
+
+  bottom: -400px;
+  top: -195px;
+  height: min-content;
   //todo pos
   right: calc(-396px - 30px);
   left: unset;
