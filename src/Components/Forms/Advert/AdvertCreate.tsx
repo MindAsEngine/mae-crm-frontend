@@ -71,15 +71,29 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
             setIsOpenCreateAdvert(false);
         };
     const postIntegration = (cabinet, audiences,) => {
-        fetch(apiUrl+`/integrations`, {
+        fetch(apiUrl+`/audiences/integrations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 cabinet_name: cabinet.name,
-                audience_ids: audiences,
-            })
+                audience_ids: audiences.filter(id => {
+            // Найти аудиторию в audiencesFromDB по id
+            const audience = audiencesFromDB.find(one => one.id === id);
+
+            // Если аудитория не найдена, оставить id
+            if (!audience) return true;
+
+            // Проверить, есть ли интеграции и совпадает ли cabinet.name
+            const hasIntegration = Array.isArray(audience.integrations) &&
+                audience.integrations.includes(cabinet.name);
+
+            // Возвращаем true, если интеграции нет (т.е. id останется в массиве)
+            return !hasIntegration;
+                    })
+                }),
+
         })
             .then((res) => {
                 if (res.ok) {

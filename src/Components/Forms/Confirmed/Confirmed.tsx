@@ -20,7 +20,7 @@ export default function Confirmed({ title, description, onConfirm, setIsOpen, is
             onClickDarkBlueButton={() => {
                 onConfirm();
                 // console.log(title + ' confirmed');
-                setIsOpen(false);
+                // setIsOpen(false);
             }}
             stylizedAs="red"
             darkBlueButtonText={"Удалить"}

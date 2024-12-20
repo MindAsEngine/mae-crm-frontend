@@ -67,7 +67,7 @@ paths:
             application/json:
               schema:
                 type: object
-  /api/integrations:
+  /api/audiences/integrations:
     post:
       requestBody:
         required: true

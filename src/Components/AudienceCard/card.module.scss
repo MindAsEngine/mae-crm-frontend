@@ -61,7 +61,7 @@
   .settingButton:hover,  .settingArea.opened{
     .settingArea {
       width: 234px;
-      height: calc(8px * 2 + var(--icon-lg) + 177px);
+      height: calc(8px * 2 + var(--icon-lg) + 221px);
     }
 
     .settingArea:hover .actionsList {
@@ -72,7 +72,7 @@
       align-items: start;
       box-sizing: border-box;
       width: calc(2px + 100%);
-      height: 177px;
+      height: 221px;
       margin-top: calc(8px * 2 + var(--icon-lg));
       cursor: default;
       background-color: var(--color-white);

@@ -89,6 +89,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     const [errMessage, setErrMessage] = useState(null);
 
         const resetAudience = () => {
+            setNeedToR(true);
             setAudience({
                 id: 0,
                 title: "",
@@ -98,12 +99,12 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                 start: null,
                 end: null,
             });
-            setNeedToR(true);
+            // setNeedToR(true);
         };
         const handleDateFormat = (date) =>{
             const userInputDate = format(date, "yyyy-MM-dd")
             const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
-            return `${year}-${month}-${day}T00:00:00`;
+            return `${year}-${month}-${day}T00:00:00Z`;
         }
     const postAudiences = (name,
         statuses, rejection_reasons,
@@ -134,23 +135,23 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
         })
             .then((res) => {
                 if (res.ok) {
-                    // return res.json();
                     resetAudience();
                     setIsOpenCreateAudience(false);
                     setInitToReload(true);
                     return;
                 }
-                throw new Error('Не удалось подключить');
-            })
+                return res.json();
+            }).then(err => {throw new Error(err.error)})
             .catch((err) => {
-                setErrMessage(err.error);
+                if (err.toString().indexOf("uniq") !== -1) {
+                    setErrMessage("Такое название аудитории уже существует");
+                }
             })
 
     }
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (audience.title && (audience.end && audience.start || audience.statuses ||
-                audience.rejection_reasons || audience.non_target_reasons)) {
+            if (audience.title && (audience.end && audience.start) ) {
                 // console.log("Audience data:", audience);
                 postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,
                     audience.start,  audience.end );
@@ -158,7 +159,9 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                  // Закрыть модалку после отправки
             } else{
                 setIsTouched(true);
-                setErrMessage("Заполните хотя бы одно поле из 4 необязательных");
+                if (!audience.title || !(audience.end && audience.start)) {
+                    setErrMessage("Заполните все обязательные поля");
+                }
             }
         };
         const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,13 +212,13 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                         name="title"
                         // maxLength={100}
                         isTouchedDefault={isTouched}
-                        isValid={audience.title?.length > 0}
+                        isValid={audience.title?.length > 0 }
 
 
                     />
                 </label>
                 <label className={styles.labelDate}>
-                                       <span className={clsx(styles.span)}>
+                                       <span className={clsx(styles.span, styles.required)}>
 Срок исполнения задачи</span>
 
                     <DateRange
@@ -233,6 +236,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                         isTouchedDefault={isTouched}
                         needToReset={needToR}
                         setNeedToReset={setNeedToR}
+                        isValidStyle={audience.start !== null && audience.end !== null}
                                         />
                 </label>
                 <Select
@@ -245,7 +249,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                     name="statuses"
                     placeholder={"статус"}
 
-                    // todo statuses
+
                     isTouchedDefault={isTouched}
                     options={statuses_options}
                     // isValid={audience.statuses?.length > 0}

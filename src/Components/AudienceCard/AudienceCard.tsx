@@ -1,5 +1,5 @@
 import {format, parseISO} from "date-fns";
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import styles from './card.module.scss';
 import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
@@ -24,7 +24,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, duration, updated_at, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
+    const { id, name, updated_at, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
 
     const [created_, setCreated_] = React.useState(created_at);
     const [updated_, setUpdated_] = React.useState(updated_at);
@@ -62,12 +62,16 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
             },
             }
         ).then((res) => {
-            console.log(res);
-            console.log('Удалить', id)
-            setInitToReload(true);
+            if (res.ok) {
+                setInitToReload(true);
+                setIsConfirmDeleteOpen(false);
+            }
+
             }
         ).catch((err) => {
             console.log(err);
+            setIsConfirmDeleteOpen(false);
+
             })
     };
 
@@ -79,14 +83,54 @@ const handleDisconnect = () => {
             'Content-Type': 'application/json'
         },
     }).then((res) => {
-            console.log(res);
-            console.log('Отключить', id)
+        if (res.ok) {
             setInitToReload(true);
-            }).
+            setIsConfirmDisconnectOpen(false);
+        }
+    }).
         catch((err) => {
             console.log(err);
+        setIsConfirmDeleteOpen(false);
             })
         }
+    const [exportClicked, setExportClicked] = useState(false);
+
+    const handleExportClick = () => {
+        setExportClicked(true);
+    }
+
+    useEffect(() => {
+
+        const handleExport = async () => {
+            await fetch(apiUrl+`/audiences/${id}/export`, {
+                method: 'GET',
+
+            }).then(res => {
+                // console.log(res);
+                if (!res.ok) {
+                    throw new Error('Ошибка при получении файла');
+                }
+                return res.blob();
+            }).then((blob) => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+                document.body.appendChild(link);
+                link.click();
+                link?.parentNode?.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }).catch(err => {
+                    console.log(err)
+                }
+            ).finally(() => {
+                setExportClicked(false);
+            });
+        }
+        if (exportClicked) {
+            handleExport();
+        }
+    }, [exportClicked]);
 
     return (
         <div className={styles.card}>
@@ -140,6 +184,11 @@ const handleDisconnect = () => {
                             }>
                                 Подключить рекламу
                             </a>
+                            <a className={styles.item} onClick={() => {
+                                handleExportClick()
+                            }}>
+                            Экспорт аудитории
+                        </a>
 
                             <a className={styles.item} onClick={() => {setIsConfirmDisconnectOpen(true);}}>Отключить рекламу</a>
                             <span className={styles.divider} />
@@ -151,7 +200,7 @@ const handleDisconnect = () => {
             </div>
             <div className={styles.content}>
                 <div className={styles.text}>
-                    Время отправки: {duration}
+                    Время последней отправки: {updated_}
                 </div>
             </div>
             <div className={styles.footer}>

@@ -134,7 +134,7 @@ export default function Sidebar() {
 						<img alt={'Avatar'} src={userImage}/>
 					</div>
 					<div className={styles.profile__text}>
-						<span className={styles.profile__name}>Алина Иванова</span>
+						<span className={styles.profile__name}>Неизвестный менеджер</span>
 						<span className={styles.profile__role}>менеджер</span>
 					</div>
 				</div>

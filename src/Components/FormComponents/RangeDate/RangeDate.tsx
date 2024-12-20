@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {addHours, addMonths, format, isValid, parse, subMonths } from "date-fns";
+import { addMonths, format, intervalToDuration, isValid, parse, subMonths } from "date-fns";
 import styles from "./rangedate.module.scss";
 import Input from "../Input/Input.tsx";
 import Calendar from "./Calendar.tsx";
@@ -28,12 +28,12 @@ type DateRangeProps = {
 };
 
 const DateRange = ({
-	withTime=true, iconPosition=undefined, oneCalendar=false, inputStyle="",
+	withTime=true,  oneCalendar=false, inputStyle="",
 	isValidStyle=true,
 	needToReset=false,
 	range, setRange,
 	isTouchedDefault=false,
-					   // startDate,
+
 					   id="",
 	setNeedToReset
 					   // endDate, setStartDate, setEndDate
@@ -46,14 +46,15 @@ const DateRange = ({
 	const [chosenRange, setChosenRange] = useState({ start: range.start, end: range.end });
 	const [startTime, setStartTime] = useState({ hour: "00", minute: "00" });
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
-	const [rawValue, setRawValue] = useState(""); // Значение без маски
+	// const [rawValue, setRawValue] = useState(""); // Значение без маски
 	const [maskedValue, setMaskedValue] = useState(""); // Значение с маской
 	useEffect(() => {
 		if (needToReset){
 			setChosenRange({ start: null, end: null });
-			setRawValue("");
+			// setRawValue("");
 			setMaskedValue("");
 			setNeedToReset(false);
+			setRange({start: null, end: null});
 			// setIsOpen(false);
 		}
 	}, [needToReset]);
@@ -98,12 +99,20 @@ const DateRange = ({
 
 	const applySelection = (e) => {
 		e.preventDefault();
-		if (isValid(chosenRange.start) && isValid(chosenRange.end)) {
+		// const count = intervalToDuration({
+		// 	start: chosenRange.start,
+		// 	end: chosenRange.end
+		// });
+		if (isValid(chosenRange.start) && isValid(chosenRange.end) && intervalToDuration({
+			start: chosenRange.start,
+			end: chosenRange.end
+		})?.years < 1) {
 			setRange({end: chosenRange.end, start: chosenRange.start})
 			// setEndDate(chosenRange.end);
 			setIsOpen(false);
 		}
 	};
+	// const isRangeValid = (start, )
 
 	const handleInputChange = (val) => {
 		const value = val.replace(/\D/g, ""); // Убираем всё, кроме цифр
@@ -115,7 +124,7 @@ const DateRange = ({
 		if (value.length > 10) formattedValue = `${formattedValue.slice(0, 15)}.${formattedValue.slice(15)}`;
 		if (value.length > 12) formattedValue = `${formattedValue.slice(0, 18)}.${formattedValue.slice(18)}`;
 		setChosenRange({ start: null, end: null });
-		setRawValue(value);
+		// setRawValue(value);
 		setMaskedValue(formattedValue);
 		setIsValidInput(false);
 		if (formattedValue.length === 23) {
@@ -218,7 +227,7 @@ const DateRange = ({
 								stylizedAs="white"
 								onClick={() => {
 									setChosenRange({ start: null, end: null });
-									setRawValue("");
+									// setRawValue("");
 									setMaskedValue("");
 									setIsOpen(false);
 								}}

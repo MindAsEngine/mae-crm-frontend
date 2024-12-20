@@ -6,8 +6,6 @@ import Loading from "../../Components/Loading/Loading.tsx";
 import ErrorComponent from "../../Components/Error/ErrorComponent.tsx"
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import AdvertCreate from "../../Components/Forms/Advert/AdvertCreate.tsx";
-import {useEffect, useState} from "react";
-import {format} from "date-fns";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -18,7 +16,6 @@ export default function AudiencePage() {
     const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
     const [isOpenCreateAdvert, setIsOpenCreateAdvert] = React.useState(false);
     const [initToReload, setInitToReload] = React.useState(true);
-    const [exportClicked, setExportClicked] = useState(false);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -60,53 +57,12 @@ export default function AudiencePage() {
         // }, 2000)
 
         }, [initToReload]);
-    const handleExportClick = () => {
-        setExportClicked(true);
-    }
-    useEffect(() => {
-        // todo test export
-        const handleExport = async () => {
-            await fetch(apiUrl+`/audiences/export?`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    "Content-Disposition": 'attachment; filename="audience_export.xlsx"'
-                }
-            }).then(res => {
-                if (!res.ok) {
-                    throw new Error('Ошибка при получении файла');
-                }
-                return res.blob();
-            }).then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
-                document.body.appendChild(link);
-                link.click();
-                link?.parentNode?.removeChild(link);
-                window.URL.revokeObjectURL(url);
-            }).catch(err => {
-                console.log(err)
-                }
-            ).finally(() => {
-                setExportClicked(false);
-            });
-        }
-        if (exportClicked) {
-            handleExport()
-        }
-    }, [exportClicked]);
+
+
     return (
         <>
             <div className={styles.buttons}>
-                <Button
-                    stylizedAs={'white'}
-                    exportButton={'white'}
-                    onClick={handleExportClick}
-                >
-                    Экспорт
-                </Button>
+
 
                 <Button stylizedAs={'blue-light'}
                         children={'Подключить рекламу'}
