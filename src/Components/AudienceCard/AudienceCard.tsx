@@ -15,6 +15,7 @@ type AudienceCardProps = {
     integrations: {
         cabinet_name: string
     }[];
+    application_count: number;
     chosen?: [];
     setChosen?: (nevers: never[]) => void;
     setInitToReload?: () => void;
@@ -24,7 +25,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, updated_at, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
+    const { id, name, updated_at, application_count, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
 
     const [created_, setCreated_] = React.useState(created_at);
     const [updated_, setUpdated_] = React.useState(updated_at);
@@ -200,7 +201,7 @@ const handleDisconnect = () => {
             </div>
             <div className={styles.content}>
                 <div className={styles.text}>
-                    Время последней отправки: {updated_}
+                    Количество заявок: {application_count}
                 </div>
             </div>
             <div className={styles.footer}>
