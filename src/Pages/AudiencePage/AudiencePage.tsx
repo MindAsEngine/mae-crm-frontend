@@ -24,8 +24,8 @@ export default function AudiencePage() {
                 method: 'GET',
                 // mode: "no-cors",
                 headers: {
-                    'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-                    'Content-Type': 'application/json',
+                    // 'Accept': 'application/json', // Явно указываем, что ожидаем JSON
+                    // 'Content-Type': 'application/json',
                 }})
                 .then((res) => {
                     // console.log(res);

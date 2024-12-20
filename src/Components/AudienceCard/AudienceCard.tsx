@@ -58,7 +58,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
         fetch(apiUrl+`/audiences/${id}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/json'
             },
             }
         ).then((res) => {
@@ -80,7 +80,7 @@ const handleDisconnect = () => {
     fetch(apiUrl+`/audiences/${id}/disconnect`,{
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/json'
         },
     }).then((res) => {
         if (res.ok) {
