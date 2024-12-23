@@ -152,6 +152,13 @@ const DateRange = ({
 			}
 		}
 	};
+	useEffect(() => {
+		if (range.start && range.end){
+			handleInputChange(format(range.start, "dd.MM.yyyy") + " - "
+				+format(range.end, " - dd.MM.yyyy"));
+		}
+	}, []);
+
 
 	return (
 		<div className={styles.container} id={"calendarDropdown"+id}

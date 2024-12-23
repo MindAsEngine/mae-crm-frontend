@@ -16,23 +16,12 @@ type FilterProps = {
     setFilters: any;
     setIsOpenModal: any;
     isOpenModal: boolean;
-
     setInitToReload?: any;
     isLoading?: boolean;
 }
-// todo right type input
-export default function FilterTask({filters, setFilters, isLoading, setIsOpenModal, isOpenModal, setInitToReload}: FilterProps) {
-    const countBadge = () => {
-        let count = 0;
-        if (filters.selects && Array.isArray(filters.selects)) {
-            count += filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0);
-        }
-        if (filters.start&&filters.end) {
-            count++;
-        }
 
-        return count;
-    };
+export default function FilterTask({filters, setFilters, isLoading, setIsOpenModal, isOpenModal, setInitToReload}: FilterProps) {
+
     const handleResetClick = (e) => {
         e.preventDefault();
         setFilters({
@@ -41,7 +30,10 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
             start: null,
             end: null
         });
+        setNeedToR(true);
         setIsOpenModal(false);
+        setInitToReload(true);
+
     }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -51,16 +43,8 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
     }
     const [needToR, setNeedToR] = useState(false);
     return (
-        <Button
-            as={'div'}
-            badge={countBadge() !== 0 ? countBadge().toString() : undefined}
-            stylizedAs={'white'}
-            filterButton={true}
-            onClick={() => setIsOpenModal(true)}
-        >
-            Фильтр
-            {isOpenModal && <Form
-                key={"filter"}
+        <Form
+                key={"1"}
                 isOpen={isOpenModal}
                                   title={"Фильтр"}
                                   needScroll={false}
@@ -72,6 +56,8 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                                           end: null
                                       });
                                       // onClickWhiteButton();
+                                      setInitToReload(true);
+                                        setNeedToR(true);
                                       setIsOpenModal(false);
                                   }}
                                   classNameContent={styles.form}
@@ -79,10 +65,14 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                                   isDropDown={false}
                                   footer={
                                       <>
-                                          <Button stylizedAs="white" onClick={handleResetClick}>
+                                          <Button stylizedAs="white"
+                                                  key={"reset"}
+                                                  onClick={handleResetClick}>
                                               Отменить
                                           </Button>
-                                          <Button stylizedAs={"blue-dark"} onClick={handleSubmit}>
+                                          <Button stylizedAs={"blue-dark"}
+                                                    key={"submit"}
+                                                  onClick={handleSubmit}>
                                               Создать
                                           </Button>
 
@@ -99,7 +89,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                             <DateRange
                             inputStyle={styles.inputDate_}
                             range={{start: filters.start, end: filters.end}}
-
+                            key={"date"}
                             setRange={(date) => setFilters({...filters, start: date.start, end: date.end})}
                             iconPosition={"right"}
                             oneCalendar={true}
@@ -112,7 +102,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                     }
                 <Select
                     isLastSelect={index === filters.selects.length - 1}
-                    multiple={true}
+                    multiple={false}
                             name={item.name}
                             title={item.title}
                             options={item.options}
@@ -128,7 +118,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                     <Loading/>
                 }
 
-            </Form>}
-        </Button>
+            </Form>
+
     )
 }

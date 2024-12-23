@@ -7,33 +7,111 @@ import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import {format} from "date-fns";
 import {switchEnum} from "../../Components/Table/switchEnum.tsx";
+import {useNavigate,  useSearchParams} from "react-router-dom";
+
 const apiUrl = import.meta.env.VITE_API_URL ;
 export default function TasksPage() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const [initToReload, setInitToReload] = useState(true);
-	const [page, setPage] = useState(1); // Текущая страница
-	const pageSize = 25; // Количество элементов на странице
 	const [data, setData] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
-	const [footer, setFooter] = useState([]); // Футер таблицы
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [isFilterLoading, setIsFilterLoading] = useState(true); // Состояние загрузки фильтров
 	const [exportClicked, setExportClicked] = useState(false);
+
 	const [filters, setFilters] = useState({
-		page: 1, // Текущая страница
-		start: null, // Начальная дата
-		end: null, // Конечная дата
-		selects: [], // Выбранные фильтры
-		sortField: "", // Поле для сортировки
-		sortOrder: "asc", // Порядок сортировки: asc или desc
+		page: searchParams.get('page') || 1, // Текущая страница,
+		pageSize: searchParams.get('page_size') || 25, // Количество элементов на странице
+		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
+		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
+		selects: [
+			{
+				name: "regions", // Имя фильтра
+				options: [], // Опции фильтра
+				title: "Регион", // Заголовок фильтра
+				selectedOptions: searchParams.get('region') ? [
+					{
+						name:searchParams.get('region'),
+						title: searchParams.get('region'),
+					}] : [], // Выбранные опции
+			},
+			{
+				name: "property_types",
+				options: [],
+				title: "Тип недвижимости",
+				selectedOptions: searchParams.get('property_type') ? [{
+					name: searchParams.get('property_type'),
+					title: switchEnum(searchParams.get('property_type'), 'property_type'),
+				}] : [],
+			},
+			{
+				name: "status_names",
+				options: [],
+				title: "Статус",
+				selectedOptions: searchParams.get('status') ? [{
+					name: searchParams.get('status'),
+					title: searchParams.get('status'),
+				}] : [],
+			},
+			{
+				name: "project_names",
+				options: [],
+				title: "Проект",
+				selectedOptions: searchParams.get('project_name') ? [{
+					name: searchParams.get('project_name'),
+					title: searchParams.get('project_name'),
+				}] : [],
+			},
+			{
+				name: "audience_names",
+				options: [],
+				title: "Аудитория",
+				selectedOptions: searchParams.get('audience_name') ? [{
+					name: searchParams.get('audience_name'),
+					title: searchParams.get('audience_name'),
+				}] : [],
+
+			}
+		], // Выбранные фильтры
+		sortField: searchParams.get('order_field') || "", // Поле сортировки
+		sortOrder: searchParams.get('order_direction') || "", // Порядок сортировки
 	});
+	// console.log(filters);
 	const [chosenData, setChosenData] = useState([]);
 	const getParamsForRequest = () => {
-		const {start, end, sortField, sortOrder} = filters;
+		const {start, end, sortField, sortOrder, page, selects, pageSize
+		} = filters;
 		// Формирование параметров для запроса
 		const params = new URLSearchParams();
 		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
 		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
-		if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+		if (sortField !== "") params.append("order_field", sortField); // Поле сортировки
+		if (sortOrder) params.append("order_direction", sortOrder); // Порядок сортировки
+		if (selects) {
+			selects.forEach((select) => {
+				if (select.selectedOptions.length > 0) {
+					if (select.name === 'property_types') {
+						params.append('property_type', select.selectedOptions[0].name);
+					}
+					if (select.name === 'regions') {
+						params.append('region', select.selectedOptions[0].name);
+					}
+					if (select.name === 'status_names') {
+						params.append('status', select.selectedOptions[0].name);
+					}
+					if (select.name === 'project_names') {
+						params.append('project_name', select.selectedOptions[0].name);
+					}
+					if (select.name === 'audience_names') {
+						params.append('audience_name', select.selectedOptions[0].name);
+					}
+				}
+			});
+		}
+		if (pageSize) params.append("page_size", pageSize.toString()); // Количество элементов на странице
+		if (page) params.append("page", page.toString()); // Текущая страница
+
 		return params.toString();
 	}
 	const handleDateFormat = (date) =>{
@@ -73,6 +151,37 @@ export default function TasksPage() {
 				.then((res) => {
 
 					const selects = Object.keys(res).map((item) => {
+						const selected = []
+						if (item === 'property_types' && searchParams.get("property_type")) {
+							selected.push({
+								name: searchParams.get("property_type"),
+								title: switchEnum(searchParams.get("property_type"), 'property_type'),
+							})
+						} else if (item === 'regions' && searchParams.get("region")) {
+							selected.push({
+								name: searchParams.get("region"),
+								title: searchParams.get("region"),
+							})
+						} else if (item === 'status_names' && searchParams.get("status")) {
+							selected.push({
+								name: searchParams.get("status"),
+								title: searchParams.get("status"),
+							})
+
+						} else if (item === 'project_names' && searchParams.get("project_name")) {
+							selected.push({
+								name: searchParams.get("project_name"),
+								title: searchParams.get("project_name"),
+							})
+						}
+						else if (item === 'audience_names' && searchParams.get("audience_name")) {
+							selected.push({
+								name: searchParams.get("audience_name"),
+								title: searchParams.get("audience_name"),
+							})
+						}
+						// console.log(selected);
+
 
 						return {
 							name: item,
@@ -89,7 +198,7 @@ export default function TasksPage() {
 								};
 							}),
 							title: getTitleByName(item),
-							selectedOptions: [],
+							selectedOptions: selected
 						};
 					})
 					setFilters({...filters, selects: selects}); // Установка данных
@@ -108,23 +217,41 @@ export default function TasksPage() {
 	useEffect(() => {
 		const handleExport = async () => {
 			const params = getParamsForRequest();
-		}
-		if (exportClicked) {
-			handleExport();
-		}
+			await fetch(apiUrl+`/applications/export?${params}`, {
+			method: 'GET',
+
+			}).then(res => {
+			// console.log(res);
+			if (!res.ok) {
+				throw new Error('Ошибка при получении файла');
+			}
+			return res.blob();
+		}).then((blob) => {
+			const url = window.URL.createObjectURL(new Blob([blob]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+			document.body.appendChild(link);
+			link.click();
+			link?.parentNode?.removeChild(link);
+			window.URL.revokeObjectURL(url);
+		}).catch(err => {
+				console.log(err)
+			}
+		).finally(() => {
+			setExportClicked(false);
+		});
+	}
+	if (exportClicked) {
+		handleExport();
+	}
 	}, [exportClicked]);
-	// useEffect(() => {
-	// // 	todo change path params
-	// }, [filters]);
+
 	// useEffect(() => {
 	// // 	todo in the end of page set page + 1 and fetch new data
 	// // 		or -1 and fetch new data
 	// }, []);
 
-
-
-	console.log(chosenData)
-	console.log(filters)
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
@@ -133,7 +260,6 @@ export default function TasksPage() {
 			await fetch(apiUrl+`/applications?${params}`, {
 				method: 'GET',
 				headers: {
-
 				}})
 				.then((res) => {
 					if (!res.ok) {
@@ -157,6 +283,8 @@ export default function TasksPage() {
 		if (initToReload) {
 			fetchData();
 			setInitToReload(false);
+			// alert('fetchData' + getParamsForRequest());
+			navigate(`/tasks?${getParamsForRequest()}`);
 		}
 
 	}, [initToReload]);
@@ -166,10 +294,21 @@ export default function TasksPage() {
 
 
 
+	const countBadge = () => {
+		let count = 0;
+		if (filters.selects && Array.isArray(filters.selects)) {
+			count += filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0);
+		}
+		if (filters.start&&filters.end) {
+			count++;
+		}
 
+		return count;
+	};
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		console.log(rowPos, columnPos, cellData);
+
 	// 	todo for sorting
 	}
 
@@ -187,9 +326,20 @@ export default function TasksPage() {
 
 		>
 			<div className={styles.custom}>
+				<Button
+					stylizedAs={'blue-light'}
+					exportButton={true}
+					onClick={() => setExportClicked(true)}> Экспорт</Button>
 
-
-				 <FilterTask filters={filters}
+				<Button
+					as={'div'}
+					badge={countBadge() !== 0 ? countBadge().toString() : undefined}
+					stylizedAs={'white'}
+					filterButton={true}
+					onClick={() => setIsOpenFilters(true)}
+				>
+					Фильтр</Button>
+					{isOpenFilters && <FilterTask filters={filters}
 								setFilters={setFilters}
 								setIsOpenModal={setIsOpenFilters}
 								isOpenModal={isOpenFilters}
@@ -199,7 +349,9 @@ export default function TasksPage() {
 								// onClickWhiteButton={() =>
 								// {setDefaultOnCustomSetting(customFiltersFromServer);
 								// setIsOpenFilters(false)}}
-					/>
+					/>}
+
+
 
 
 
@@ -225,11 +377,14 @@ export default function TasksPage() {
 				>
 					Создать аудиторию
 				</Button>
-				<AudienceCreate
+				{isOpenCreateAudience && <AudienceCreate
 					// setInitToReload={setInitToReload}
 					isOpenCreateAudience={isOpenCreateAudience}
 								setIsOpenCreateAudience={setIsOpenCreateAudience}
-				/>
+				/>}
+
+
+
 
 
 			</div>
