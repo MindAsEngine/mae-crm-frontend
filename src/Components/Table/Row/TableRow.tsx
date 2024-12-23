@@ -19,7 +19,8 @@ export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows
 		<tr className={clsx(style.tableRow, row?.is_anomaly && style.anomaly,
 			isFooter && style.footer,
 			)}>
-			{header.map((headerCell, index) => (
+			{Array.isArray(header) &&
+				header.map((headerCell, index) => (
 				  (headerCell.is_hidden_by_user === false || headerCell.is_visible )  &&
 				  (
 							  <Cell

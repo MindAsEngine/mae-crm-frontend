@@ -20,7 +20,7 @@ class Audience {
 type AudienceCreateProps = {
     isOpenCreateAudience: boolean;
     setIsOpenCreateAudience: any;
-    setInitToReload: ()=> {}
+    setInitToReload?: ()=> {}
 
 }
 const non_target_reasons_options = [
@@ -137,7 +137,8 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                 if (res.ok) {
                     resetAudience();
                     setIsOpenCreateAudience(false);
-                    setInitToReload(true);
+                    if (typeof setInitToReload === "function")
+                        setInitToReload(true);
                     return;
                 }
                 return res.json();
@@ -178,6 +179,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
         return (
 
             <Form
+                key={"createAudience"}
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}
                 onClickWhiteButton={() =>{
@@ -222,6 +224,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
 Срок исполнения задачи</span>
 
                     <DateRange
+
                         inputStyle={styles.inputDate_}
                         // startDate={audience.start}
                         // endDate={audience.end}

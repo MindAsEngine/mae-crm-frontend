@@ -82,10 +82,10 @@ const TaskCreate = forwardRef<HTMLFormElement>(
                         startDate={task.startDate}
                         endDate={task.endDate}
                         setStartDate={(startDate) =>
-                            setTask({ ...task, startDate })
+                            setTask({ ...task, startDate: start })
                         }
                         setEndDate={(endDate) =>
-                            setTask({ ...task, endDate })
+                            setTask({ ...task, endDate: end })
                         }
                     />
                 </label>

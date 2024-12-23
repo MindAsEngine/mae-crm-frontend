@@ -185,7 +185,8 @@ const handleDisconnect = () => {
                             }>
                                 Подключить рекламу
                             </a>
-                            <a className={styles.item} onClick={() => {
+                            <a className={clsx(styles.item, application_count === 0 && styles.disabled)
+                            } onClick={() => {
                                 handleExportClick()
                             }}>
                             Экспорт аудитории

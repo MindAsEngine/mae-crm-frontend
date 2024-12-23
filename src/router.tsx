@@ -27,7 +27,7 @@ export const router = createBrowserRouter(
 	[
 		{
 			path: '*',
-			element: <Navigate to={'/audience'}/>
+			element: <Navigate to={'/tasks'}/>
 			// element: <NotFoundPage />,
 		},
 		{
@@ -36,12 +36,12 @@ export const router = createBrowserRouter(
 			children: [
 				{
 					index: true,
-					element: <Navigate to={'/audience'}/>
+					element: <Navigate to={'/tasks'}/>
 				},
-				// {
-				// 	path: '/tasks',
-				// 	element: <TasksPage />,
-				// },
+				{
+					path: '/tasks',
+					element: <TasksPage />,
+				},
 				{
 					path: '/audience',
 					element: <AudiencePage/>,

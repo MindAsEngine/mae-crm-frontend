@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { TableHeaderCell } from "./TableHeader/HeaderCell/HeaderCell.tsx";
 import clsx from "clsx";
 import {useLocation} from "react-router-dom";
+import Loading from "../Loading/Loading.tsx";
 
 type TableProps = {
 	data: Array<object>
@@ -48,9 +49,9 @@ export default function Table({
 	};
 
 	useEffect(() => {
-		setAllUnchecked(checkedRows?.length === 0);
-		setAllChecked(checkedRows?.length === data.length);
-	}, [checkedRows, data.length]);  // Depend on checkedRows and data.length
+		setAllUnchecked(Array.isArray(checkedRows) && checkedRows.length === 0);
+		setAllChecked(Array.isArray(checkedRows) && checkedRows.length === data?.length);
+	}, [checkedRows, data?.length]);  // Depend on checkedRows and data.lengthff
 
 	useEffect(() => {
 		if (tableWrapperRef.current && tableHeadRef.current) {
@@ -71,9 +72,7 @@ export default function Table({
 
 	if (isLoading) {
 		return (
-			<div className={styles.tableWrapper}>
-				<div className={styles.loading}>Loading...</div>
-			</div>
+			<Loading/>
 		);
 	}
 	return (
@@ -97,7 +96,8 @@ export default function Table({
 				/>
 				</thead>
 				<tbody className={styles.tableBody}>
-				{data.filter(
+				{Array.isArray(data) &&
+					data.filter(
 					(row) => !row['is_footer']
 				).map((row, index) => (
 					<TableRow

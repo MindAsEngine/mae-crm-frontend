@@ -2,7 +2,7 @@
 
 export const headerFromServerTasks = [
     {name: "id",is_id:true, title: "ID", is_visible: true, is_additional: false, format: 'number'},
-    {name: "date", format: 'date', is_visible: true, is_additional: 'false', is_id: false, title: 'Дата'},
+    {name: "date", format: 'date', is_visible: true, is_additional: false, is_id: false, title: 'Дата'},
     {name: 'fio', title: "ФИО", is_visible: true, is_additional: false, format: 'array'},
     {name: 'process', title: "Этап", is_visible: true, is_additional: false, format: 'enum'},
     {name: 'phone_number', title: "Номер телефона", is_visible: true, is_additional: false, format: 'array'},

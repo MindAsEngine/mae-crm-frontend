@@ -75,6 +75,8 @@
   box-shadow: var(--effect-shadow-m-center);
   display: flex;
   flex-direction: column;
+
+  box-sizing: border-box;
 }
 .isLastSelect{
   top: unset;
@@ -99,6 +101,7 @@
 
 .option {
   //align-self: start;
+  //max-width: ;
   padding: 10px 16px;
   color: var(--color-grey-700);
   font: var(--font-m-regular);

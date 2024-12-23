@@ -16,7 +16,8 @@ export default function
 	TableHeader({ row, isAllChecked=false, handleAllChecked, isAllUnchecked=true }: TableHeaderProps) {
 	return (
 		<tr className={styles.tableRow}>
-			{row.map((cellData, index) =>
+			{Array.isArray(row) &&
+				row.map((cellData, index) =>
 					(cellData.is_hidden_by_user === false || cellData.is_visible) && (
 						<HeaderCell
 							key={cellData.name + index}
