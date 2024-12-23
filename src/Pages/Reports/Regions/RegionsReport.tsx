@@ -5,24 +5,36 @@ import {Button} from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import jsonData from "./regions.json"; // Локальные данные для теста
+
+import {format} from "date-fns";
+import {useNavigate} from "react-router-dom"; // Локальные данные для теста
 const apiUrl = import.meta.env.VITE_API_URL ;
 
 export default function RegionsReport() {
+	const navigate = useNavigate();
+	const [initToReload, setInitToReload] = useState(true);
 	const [data, setData] = useState([]); // Данные для таблицы
+	const [dataOnPage, setDataOnPage] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
 	const [footer, setFooter] = useState([]); // Футер таблицы
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [exportClicked, setExportClicked] = useState(false);
+	const [needToResetData, setNeedToResetData] = useState(false);
+	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
+
 	const [filters, setFilters] = useState({
-		search: "", // Поиск по ФИО
-		startDate: null, // Начальная дата
-		endDate: null, // Конечная дата
+		// search: "", // Поиск по ФИО
+		start: null, // Начальная дата
+		end: null, // Конечная дата
 		sortField: "", // Поле для сортировки
-		sortOrder: "asc", // Порядок сортировки: asc или desc
+		sortOrder: "", // Порядок сортировки: asc или desc
 	});
 	const [customSettings, setCustomSettings] = useState([]);
+	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
+	const [page, setPage] = useState(1);
+	const [pageSize, setPageSize] = useState(30);
+	const [lock, setLock] = useState(false);
 
 
 	const setDefaultCustomSettings = (header) => {
@@ -35,21 +47,22 @@ export default function RegionsReport() {
 					// applied_visible: !cell.is_hidden_by_user if is to prev custom set(before apply)
 				}))
 		);
+		setNeedToResetDateTime(true);
+		setFilters({
+			// search: "", // Поиск по ФИО
+			start: null, // Начальная дата
+			end: null, // Конечная дата
+			sortField: "", // Поле для сортировки
+			sortOrder: "", // Порядок сортировки: asc или desc
+		})
+
 	}
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
-
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			// Формирование параметров для запроса
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start_date", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end_date", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			await fetch(apiUrl+`/regions?${params.toString()}`, {
+			const params = getParamsForRequest();
+			await fetch(apiUrl+`/regions?${params}`, {
 				method: 'GET',
 
 				headers: {
@@ -62,7 +75,7 @@ export default function RegionsReport() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
-					setData(data?.data); // Установка данных
+					setDataOnPage(data?.data); // Установка данных
 					setFooter(data?.footer); // Установка футера
 					setHeaderBefore(data?.headers); // Установка заголовков
 					setDefaultCustomSettings(data?.headers);
@@ -78,8 +91,26 @@ export default function RegionsReport() {
 					// setDefaultCustomSettings(data?.headers);
 				});
 		};
-		fetchData();
-	}, [filters]);
+		fetchData().then(() => {
+
+			if (initToReload) {
+				console.log('fetchData' + getParamsForRequest());
+				setNeedToResetData(true);
+				setInitToReload(false);
+				// alert('fetchData' + getParamsForRequest());
+			} else {
+				setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
+				setLock(false);
+			}
+		});
+	}, [initToReload, page]);
+	useEffect(() => {
+		if (needToResetData) {
+			// console.log('needToResetData', needToResetData, dataOnPage);
+			setData(dataOnPage);
+			setNeedToResetData(false);
+		}
+	}, [needToResetData]);
 
 	useEffect(() => {
 		// @ts-ignore
@@ -87,25 +118,6 @@ export default function RegionsReport() {
 			is_hidden_by_user: !cell.is_visible })));
 		setLoading(false);
 	}, [headerBefore]);
-	const handleStartDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (start date):', updatedFilters);
-			return {
-				...prevFilters,
-				startDate: date,
-			};
-		});
-	};
-
-	const handleEndDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (end date):', updatedFilters);
-			return {
-				...prevFilters,
-				endDate: date,
-			};
-		});
-	};
 
 	const onCustomSettingApplied = () => {
 		// @ts-ignore
@@ -133,27 +145,101 @@ export default function RegionsReport() {
 		console.log(rowPos, columnPos, cellData);
 		// setIsOpenCurtain(true);
 	}
-	const handleExport = async (api) => {
-		console.log("export", api);
+	const getParamsForRequest = () => {
+		const {start, end, sortField, sortOrder} = filters;
+		// Формирование параметров для запроса
+		const params = new URLSearchParams();
+		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
+		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
+		if (sortField !== "") params.append("order_field", sortField); // Поле сортировки
+		if (sortOrder !== "") params.append("order_direction", sortOrder); // Порядок сортировки
+		if (pageSize) params.append("page_size", pageSize.toString()); // Количество элементов на странице
+		if (page) params.append("page", page.toString()); // Текущая страница
+		return params.toString();
 	}
+	const handleDateFormat = (date) =>{
+		const userInputDate = format(date, "yyyy-MM-dd")
+		const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+		return `${year}-${month}-${day}T00:00:00Z`;
+	}
+	useEffect(() => {
+		const handleExport = async () => {
+			const params = getParamsForRequest();
+			await fetch(apiUrl+`/applications/export?${params}`, {
+				method: 'GET',
+
+			}).then(res => {
+				// console.log(res);
+				if (!res.ok) {
+					throw new Error('Ошибка при получении файла');
+				}
+				return res.blob();
+			}).then((blob) => {
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link?.parentNode?.removeChild(link);
+				window.URL.revokeObjectURL(url);
+			}).catch(err => {
+					console.log(err)
+				}
+			).finally(() => {
+				setExportClicked(false);
+			});
+		}
+		if (exportClicked) {
+			handleExport();
+		}
+	}, [exportClicked]);
 	const handleExportClick = () => {
 		setExportClicked(true);
 	}
-	useEffect(() => {
-		if (exportClicked) {
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
-				.then(() => {
-					setExportClicked(false);
-				});
+	const onHeaderClick = (columnPos: string) => {
+		let direction = '';
+		let field = '';
+		if (columnPos === "name") {
+			field = "client_name";
+		} else {
+			field = columnPos;
 		}
-	}, [exportClicked]);
+
+		if (countOfClickOnHeader === 0) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'ASC';
+		} else if (countOfClickOnHeader === 1 && filters.sortField === field) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'DESC';
+		} else {
+			setCountOfClickOnHeader(0);
+			if (filters.sortField === field) {
+				direction = 'ASC';
+			} else {
+				direction = '';
+
+			}
+
+		}
+		if (direction == 'ASC' || direction == 'DESC') {
+			setFilters({
+				...filters,
+				sortField: field,
+				sortOrder: direction,
+			})
+			setInitToReload(true);
+		}
+	}
+	const onScrollEnd = () => {
+		if (!lock){
+			setLock(prev => !prev);
+			setPage(prev => +prev + 1);
+			console.log('onScrollEnd');
+		}
+
+	}
+	console.log('data', filters.end, filters.start);
 	return (
 		<>
 
@@ -163,13 +249,12 @@ export default function RegionsReport() {
 				isLoading={loading}
 				filters={filters}
 				setFilters={setFilters}
-
+				onHeaderClick={onHeaderClick}
 				onClickCell={onClickCell}
 		>
 
 			<div className={styles.custom}>
 				<ModalCustom
-
 					customSettings={customSettings}
 					setCustomSettings={setCustomSettings}
 					header={header}
@@ -178,24 +263,25 @@ export default function RegionsReport() {
 					onCheckboxChanged={onCheckboxChanged}
 					/>
 
-				{/*<RangeDate*/}
-				{/*	startDate={filters.startDate}*/}
-				{/*	endDate={filters.endDate}*/}
-				{/*	setStartDate={(date) => {*/}
-				{/*		handleStartDateChange(date)*/}
-				{/*		// console.log('Set start date IN FILTER BAR', date)*/}
-				{/*	}}*/}
-				{/*	setEndDate={(date) => {*/}
-				{/*		handleEndDateChange(date)*/}
-				{/*		// console.log('Set end date IN FILTER BAR', date)*/}
-				{/*	}}*/}
-				{/*/>*/}
+				<RangeDate
+					setNeedToReset={setNeedToResetDateTime}
+					needToReset={needToResetDateTime}
+					oneCalendar={false}
+					withTime={false}
+					range={{start: filters.start, end: filters.end}}
+					setRange={range =>{
+						setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
+						setInitToReload(true);
+					}}
+				/>
 
 
 
 
-
+				{/*todo buttin export disable on tasks and fix  */}
 				<Button
+
+					disabled={filters.end === null || filters.start === null}
 					stylizedAs={'blue-dark'}
 					exportButton={'white'}
 					onClick={handleExportClick}

@@ -83,11 +83,11 @@ export default function Table({
 
 	}, [data, header, url]); // Rerun when data changes
 
-	// if (data === null) {
-	// 	return (
-	// 		<ErrorComponent title={"Не удалось найти заявки по данному запросу"}/>
-	// 	);
-	// }
+	if (data === null || data === undefined) {
+		return (
+			<Loading/>
+		);
+	}
 	return (
 		<div className={clsx(styles.tableWrapper, hasScrollHorizontal && styles.hasHorizontalScroll,
 			hasScrollVertical && styles.hasVerticalScroll

@@ -31,7 +31,9 @@ export default function ModalCustom({
             stylizedAs={'white'}
             className={styles.additional}
             filterButton={true}
-            onClick={() => setIsOpen(true)}>Кастом<Modal isOpen={isOpen}
+            onClick={() => setIsOpen(true)}>Кастом
+            {isOpen &&<Modal isOpen={isOpen}
+                    needScroll={true}
 
                    onClose={onClose}
                    title={"Кастом"}
@@ -52,7 +54,7 @@ export default function ModalCustom({
                         />
                     </div>
                 ))}
-            </Modal>
+            </Modal>}
         </Button>
     )
 }

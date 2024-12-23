@@ -182,7 +182,7 @@ const DateRange = ({
 				/>
 			</div>
 			{isOpen && (
-				<div className={clsx(styles.oneCalendar, styles.calendarDropdown)}>
+				<div className={clsx( oneCalendar&&styles.oneCalendar, styles.calendarDropdown)}>
 					<div className={styles.calendarArea}>
 						{oneCalendar ?
 							<div className={clsx(styles.timeCalendar)}>
