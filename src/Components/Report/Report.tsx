@@ -16,10 +16,14 @@ type ReportProps = {
     noDataRange?: boolean,
     footer?: any
     isLoading?: boolean
+    onHeaderClick?: (columnPos: string) => void
+    onScrollEnd?: (e: any) => void
 
 }
 
 export default function Report({data, isLoading,
+                                    onHeaderClick,
+    onScrollEnd,
                                    footer,noDataRange, onClickCell, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
 
 	return (
@@ -40,6 +44,8 @@ export default function Report({data, isLoading,
                 checkedRows={chosenData}
                 setCheckedRows={setChosenData}
                 onClickCell={onClickCell}
+                onHeaderClick={onHeaderClick}
+                onScrollEnd={onScrollEnd}
             />
 
 		</main>

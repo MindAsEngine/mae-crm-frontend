@@ -8,12 +8,13 @@ export type TableHeaderProps = {
 	// setAllChecked?: (isChecked: boolean) => void;
 	isAllUnchecked?: boolean;
 	handleAllChecked?: () => void;
+	onClickHeaderCell?: (columnPos: string) => void;
 };
 
 
 
 export default function
-	TableHeader({ row, isAllChecked=false, handleAllChecked, isAllUnchecked=true }: TableHeaderProps) {
+	TableHeader({ row, isAllChecked=false, handleAllChecked, isAllUnchecked=true, onClickHeaderCell }: TableHeaderProps) {
 	return (
 		<tr className={styles.tableRow}>
 			{Array.isArray(row) &&
@@ -25,7 +26,7 @@ export default function
 							isAllChecked={isAllChecked}
 							handleAllChecked={handleAllChecked}
 							isAllUnchecked={isAllUnchecked}
-							onClickHeaderCell={() => console.log(cellData.name + " sort")}
+							onClickHeaderCell={() => onClickHeaderCell(cellData.name)}
 						/>
 					)
 			)}

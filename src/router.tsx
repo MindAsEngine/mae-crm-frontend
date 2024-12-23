@@ -50,27 +50,27 @@ export const router = createBrowserRouter(
 				// 	path: '/advertisement',
 				// 	element: <Navigate to={'/'} />,
 				// },
-		// 		{
-		// 			path: '/reports',
-		// 			children: [
-		// 				{
-		// 					index: true,
-		// 					element: <Navigate to={'regions'} />,
-		// 				},
-		// 				{
-		// 					path: 'regions',
-		// 					element: <RegionsReport />,
-		// 				},
-		// 				{
-		// 					path: 'call-center',
-		// 					element: <CallCenterReport />,
-		// 				},
-		// 				{
-		// 					path: 'processed-requests-speed',
-		// 					element: <ProcessedRequestsSpeedReport />,
-		// 				},
-		// 			],
-		// 		},
+				{
+					path: '/reports',
+					children: [
+						{
+							index: true,
+							element: <Navigate to={'regions'} />,
+						},
+						{
+							path: 'regions',
+							element: <RegionsReport />,
+						},
+						// {
+						// 	path: 'call-center',
+						// 	element: <CallCenterReport />,
+						// },
+						// {
+						// 	path: 'processed-requests-speed',
+						// 	element: <ProcessedRequestsSpeedReport />,
+						// },
+					],
+				},
 		// 		{
 		// 			path: '/admin',
 		// 			children: [

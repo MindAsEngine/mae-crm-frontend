@@ -15,14 +15,18 @@ export default function TasksPage() {
 	const navigate = useNavigate();
 	const [initToReload, setInitToReload] = useState(true);
 	const [data, setData] = useState([]); // Данные для таблицы
+	const [dataOnPage, setDataOnPage] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [isFilterLoading, setIsFilterLoading] = useState(true); // Состояние загрузки фильтров
 	const [exportClicked, setExportClicked] = useState(false);
-
+	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
+	const [page, setPage] = useState(searchParams.get('page') || 1);
+	const [pageSize, setPageSize] = useState(searchParams.get('page_size') || 30);
+	const [lock, setLock] = useState(false);
+	const [needToResetData, setNeedToResetData] = useState(false);
 	const [filters, setFilters] = useState({
-		page: searchParams.get('page') || 1, // Текущая страница,
-		pageSize: searchParams.get('page_size') || 25, // Количество элементов на странице
+
 		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
 		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
 		selects: [
@@ -80,8 +84,7 @@ export default function TasksPage() {
 	// console.log(filters);
 	const [chosenData, setChosenData] = useState([]);
 	const getParamsForRequest = () => {
-		const {start, end, sortField, sortOrder, page, selects, pageSize
-		} = filters;
+		const {start, end, sortField, sortOrder, selects} = filters;
 		// Формирование параметров для запроса
 		const params = new URLSearchParams();
 		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
@@ -247,14 +250,12 @@ export default function TasksPage() {
 	}
 	}, [exportClicked]);
 
-	// useEffect(() => {
-	// // 	todo in the end of page set page + 1 and fetch new data
-	// // 		or -1 and fetch new data
-	// }, []);
+
 
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
+
 			setLoading(true); // Установка состояния загрузки
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/applications?${params}`, {
@@ -268,7 +269,7 @@ export default function TasksPage() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
-					setData(data?.items); // Установка данных
+					setDataOnPage(data?.items); // Установка данных
 					// setFooter(data?.footer); // Установка футера
 					setHeader(data?.header); // Установка заголовков
 					 // Состояние загрузки
@@ -280,14 +281,35 @@ export default function TasksPage() {
 					setLoading(false); // Состояние загрузки
 				});
 		};
-		if (initToReload) {
-			fetchData();
-			setInitToReload(false);
-			// alert('fetchData' + getParamsForRequest());
+		fetchData().then(() => {
 			navigate(`/tasks?${getParamsForRequest()}`);
-		}
+			if (initToReload) {
+				console.log('fetchData' + getParamsForRequest());
+				setNeedToResetData(true);
+				setInitToReload(false);
+				// alert('fetchData' + getParamsForRequest());
+			} else {
+				setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
+				setLock(false);
+			}
+		});
 
-	}, [initToReload]);
+	}, [initToReload, page]);
+
+	useEffect(() => {
+
+		if (needToResetData) {
+			console.log('needToResetData', needToResetData, dataOnPage);
+			setData(dataOnPage);
+			setNeedToResetData(false);
+		}
+	}, [needToResetData]);
+
+
+
+
+
+
 	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
 	// const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
@@ -306,10 +328,47 @@ export default function TasksPage() {
 		return count;
 	};
 
-	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
-		console.log(rowPos, columnPos, cellData);
+	const onClickCell = (columnPos: string) => {
+		let direction = '';
+		let field = '';
+		if (columnPos === "name") {
+			field = "client_name";
+		} else {
+			field = columnPos;
+		}
 
-	// 	todo for sorting
+		if (countOfClickOnHeader === 0) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'ASC';
+		} else if (countOfClickOnHeader === 1 && filters.sortField === field) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'DESC';
+		} else {
+			setCountOfClickOnHeader(0);
+			if (filters.sortField === field) {
+				direction = 'ASC';
+			} else {
+				direction = '';
+
+			}
+
+		}
+		if (direction == 'ASC' || direction == 'DESC') {
+			setFilters({
+				...filters,
+				sortField: field,
+				sortOrder: direction,
+			})
+			setInitToReload(true);
+		}
+	}
+	const onScrollEnd = () => {
+		if (!lock){
+			setLock(prev => !prev);
+			setPage(prev => +prev + 1);
+			console.log('onScrollEnd');
+		}
+
 	}
 
 	return (
@@ -321,6 +380,8 @@ export default function TasksPage() {
 				chosenData={chosenData}
 				setChosenData={setChosenData}
 				isLoading={loading}
+				onHeaderClick={onClickCell}
+				onScrollEnd={onScrollEnd}
 				// filters={filters}
 				// setFilters={setFilters}
 
@@ -382,9 +443,6 @@ export default function TasksPage() {
 					isOpenCreateAudience={isOpenCreateAudience}
 								setIsOpenCreateAudience={setIsOpenCreateAudience}
 				/>}
-
-
-
 
 
 			</div>

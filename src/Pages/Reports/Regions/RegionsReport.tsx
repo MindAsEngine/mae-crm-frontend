@@ -49,13 +49,11 @@ export default function RegionsReport() {
 			if (endDate) params.append("end_date", endDate?.toISOString()); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/reports/regions?${params.toString()}`, {
+			await fetch(apiUrl+`/regions?${params.toString()}`, {
 				method: 'GET',
-				credentials: 'include',
-				mode: 'no-cors',
+
 				headers: {
-					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-					'Content-Type': 'application/json',
+
 				}})
 				.then((res) => {
 					if (!res.ok) {
@@ -180,18 +178,18 @@ export default function RegionsReport() {
 					onCheckboxChanged={onCheckboxChanged}
 					/>
 
-				<RangeDate
-					startDate={filters.startDate}
-					endDate={filters.endDate}
-					setStartDate={(date) => {
-						handleStartDateChange(date)
-						// console.log('Set start date IN FILTER BAR', date)
-					}}
-					setEndDate={(date) => {
-						handleEndDateChange(date)
-						// console.log('Set end date IN FILTER BAR', date)
-					}}
-				/>
+				{/*<RangeDate*/}
+				{/*	startDate={filters.startDate}*/}
+				{/*	endDate={filters.endDate}*/}
+				{/*	setStartDate={(date) => {*/}
+				{/*		handleStartDateChange(date)*/}
+				{/*		// console.log('Set start date IN FILTER BAR', date)*/}
+				{/*	}}*/}
+				{/*	setEndDate={(date) => {*/}
+				{/*		handleEndDateChange(date)*/}
+				{/*		// console.log('Set end date IN FILTER BAR', date)*/}
+				{/*	}}*/}
+				{/*/>*/}
 
 
 

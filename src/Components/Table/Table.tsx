@@ -7,6 +7,7 @@ import { TableHeaderCell } from "./TableHeader/HeaderCell/HeaderCell.tsx";
 import clsx from "clsx";
 import {useLocation} from "react-router-dom";
 import Loading from "../Loading/Loading.tsx";
+import ErrorComponent from "../Error/ErrorComponent.tsx";
 
 type TableProps = {
 	data: Array<object>
@@ -16,6 +17,8 @@ type TableProps = {
 	onClickCell?: (rowPos: string | number, columnPos: string, cellData: string) => void
 	footer?: any
 	isLoading?: boolean
+	onHeaderClick?: (columnPos: string) => void
+	onScrollEnd?: () => void
 }
 
 export default function Table({
@@ -25,7 +28,10 @@ export default function Table({
 								  onClickCell,
 								  checkedRows,
 								  setCheckedRows,
-								  isLoading
+								  isLoading,
+	onScrollEnd,
+
+	onHeaderClick
 							  }: TableProps) {
 	const url = useLocation();
 
@@ -43,15 +49,20 @@ export default function Table({
 		if (typeof setCheckedRows === 'function') {
 			setCheckedRows(prev => {
 				const allChecked = !prev.length;
-				return allChecked ? data.map(row => row['id']) : []; // Select all or none
+				return allChecked && Array.isArray(data)
+					? data.map(row => row['id']) : []; // Select all or none
 			});
 		}
 	};
-
+	console.log(data?.length);
+	// useEffect(() => {
+	// 	setAllUnchecked(Array.isArray(checkedRows) && checkedRows.length === 0);
+	// 	setAllChecked(Array.isArray(checkedRows) && checkedRows.length === data.length);
+	// }, [checkedRows, data?.length]);  // Depend on checkedRows and data.lengthff
 	useEffect(() => {
-		setAllUnchecked(Array.isArray(checkedRows) && checkedRows.length === 0);
-		setAllChecked(Array.isArray(checkedRows) && checkedRows.length === data?.length);
-	}, [checkedRows, data?.length]);  // Depend on checkedRows and data.lengthff
+		setAllUnchecked(checkedRows?.length === 0);
+		setAllChecked(data?.length > 0 && checkedRows?.length === data.length );
+	}, [checkedRows, data]);
 
 	useEffect(() => {
 		if (tableWrapperRef.current && tableHeadRef.current) {
@@ -66,19 +77,31 @@ export default function Table({
 				setHasScrollVertical(true);
 				tableBefore.current.style.top = tableWrapperRef.current.offsetTop + "px";
 			}
+
 		}
+
 
 	}, [data, header, url]); // Rerun when data changes
 
-	if (isLoading) {
-		return (
-			<Loading/>
-		);
-	}
+	// if (data === null) {
+	// 	return (
+	// 		<ErrorComponent title={"Не удалось найти заявки по данному запросу"}/>
+	// 	);
+	// }
 	return (
 		<div className={clsx(styles.tableWrapper, hasScrollHorizontal && styles.hasHorizontalScroll,
 			hasScrollVertical && styles.hasVerticalScroll
 		)} ref={tableWrapperRef}
+			 onScroll={event => {
+				 if (tableWrapperRef.current) {
+
+					 if (tableWrapperRef.current.scrollTop + tableWrapperRef.current.clientHeight >= tableWrapperRef.current.scrollHeight) {
+						 if (typeof onScrollEnd === 'function') {
+							 onScrollEnd();
+						 }
+					 }
+				 }
+			 }}
 		>
 			 <span
 				className={clsx(hasScrollVertical && styles.before)}
@@ -93,6 +116,7 @@ export default function Table({
 					row={header}
 					isAllChecked={isAllChecked}
 					handleAllChecked={handleCheckAll}
+					onClickHeaderCell={onHeaderClick}
 				/>
 				</thead>
 				<tbody className={styles.tableBody}>
@@ -102,14 +126,21 @@ export default function Table({
 				).map((row, index) => (
 					<TableRow
 						onClickCell={onClickCell}
-						key={row['id']} // Use unique key (row['id']) instead of index
+						key={index} // Use unique key (row['id']) instead of index
 						row={row}
 						isChecked={checkedRows?.includes(row['id'])}
 						setCheckedRows={setCheckedRows}
 						header={header}
 					/>
 				))}
+				{isLoading &&
+				<tr>
+					<td colSpan={header?.length || 1}
+					><Loading/></td>
+				</tr>}
+
 				</tbody>
+
 				{footer &&
 				<tfoot className={styles.tableFoot}>
 
@@ -123,6 +154,7 @@ export default function Table({
 					/>
 
 				</tfoot>}
+
 			</table>
 		</div>
 	);
