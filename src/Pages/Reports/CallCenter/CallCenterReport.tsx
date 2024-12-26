@@ -6,6 +6,7 @@ import Report from "../../../Components/Report/Report.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import jsonData from "./call-center.json";
+import {format} from "date-fns";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -77,12 +78,8 @@ export default function CallCenterReport() {
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
 			await fetch(apiUrl+`/call-center?${params.toString()}`, {
-					method: 'GET',
-					credentials: 'include',
-					headers: {
-						'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-						'Content-Type': 'application/json',
-					}})
+				method: 'GET',
+			})
 				.then((res) => {
 					if (!res.ok) {
 						throw new Error(`HTTP error! status: ${res.status}`);
@@ -90,6 +87,7 @@ export default function CallCenterReport() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
+					// throw new Error("asd");
 					setData(data?.data); // Установка данных
 					setFooter(data?.footer); // Установка футера
 					setHeaderBefore(data?.headers); // Установка заголовков
@@ -98,11 +96,11 @@ export default function CallCenterReport() {
 				.catch((err) => {
 					setTimeout(() => {
 					}, 1000); // Имитация задержки в 1 секунду
-					const data = jsonData;
-					setData(data?.data); // Установка данных
-					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					// const data = jsonData;
+					// setData(data?.data); // Установка данных
+					// setFooter(data?.footer); // Установка футера
+					// setHeaderBefore(data?.headers); // Установка заголовков
+					// setDefaultCustomSettings(data?.headers);
 				})
 				.finally(() =>{
 					setLoading(false);
@@ -130,51 +128,40 @@ export default function CallCenterReport() {
 		setExportClicked(true);
 	}
 	useEffect(() => {
-		const handleExport = async (api) => {
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const reqBody :object = {};
-			if (search !== "") reqBody.append("search", search); // Добавляем параметр поиска
-			if (startDate) reqBody.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) reqBody.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") reqBody.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+		const handleExport = async () => {
+			// const params = getParamsForRequest();
+			await fetch(apiUrl+`/call-center/export?`, {
+				method: 'GET',
 
-			const res = await fetch(api, {
-				method: 'POST',
-				credentials: 'include',
-				headers: {
-					'Accept': 'application/vnd.ms-excel',
-					'Content-Type': 'application/vnd.ms-excel',
-
-				},
-				body: JSON.stringify(reqBody),
-			}).then((res) => {
+			}).then(res => {
+				// console.log(res);
 				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
+					throw new Error('Ошибка при получении файла');
 				}
 				return res.blob();
 			}).then((blob) => {
-				const url = window.URL.createObjectURL(blob);
-				const a = document.createElement ('a');
-				a.href = url;
-				a.download = 'report.xlsx';
-				a.click();
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `call-center_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link?.parentNode?.removeChild(link);
 				window.URL.revokeObjectURL(url);
-
-			}).catch((err) => console.error(err));
-		}
-		if (exportClicked) {
-
-			handleExport(apiUrl+`/call-center/export`)
-				.then(() => {
+			}).catch(err => {
+					console.log(err)
+				}
+			).finally(() => {
 				setExportClicked(false);
 			});
 		}
+		if (exportClicked) {
+			handleExport();
+		}
 	}, [exportClicked]);
 
+	//todo sorting, 	date filter
 
-
-	// console.log("filters", filters);
-	//todo sorting
 	return (
 		<Report
 			data={data}
@@ -185,21 +172,22 @@ export default function CallCenterReport() {
 			isLoading={loading}
 		>
 			<div className={styles.custom}>
-				<ModalCustom
-					customSettings={customSettings}
-					setCustomSettings={setCustomSettings}
-					header={header}
-					setDefaultCustomSettings={setDefaultCustomSettings}
-					onCustomSettingApplied={onCustomSettingApplied}
-					onCheckboxChanged={onCheckboxChanged}
-				/>
-				<RangeDate
-					startDate={filters.startDate}
-					endDate={filters.endDate}
-					setStartDate={(date) => handleStartDateChange(date)}
-					setEndDate={(date) => handleEndDateChange(date)}
-				/>
+				{/*<ModalCustom*/}
+				{/*	customSettings={customSettings}*/}
+				{/*	setCustomSettings={setCustomSettings}*/}
+				{/*	header={header}*/}
+				{/*	setDefaultCustomSettings={setDefaultCustomSettings}*/}
+				{/*	onCustomSettingApplied={onCustomSettingApplied}*/}
+				{/*	onCheckboxChanged={onCheckboxChanged}*/}
+				{/*/>onCheckboxChanged*/}
+				{/*<RangeDate*/}
+				{/*	startDate={filters.startDate}*/}
+				{/*	endDate={filters.endDate}*/}
+				{/*	setStartDate={(date) => handleStartDateChange(date)}*/}
+				{/*	setEndDate={(date) => handleEndDateChange(date)}*/}
+				{/*/>*/}
 				<Button
+					disabled={loading}
 					stylizedAs={"blue-dark"}
 					exportButton={"white"}
 					onClick={handleExportClick}

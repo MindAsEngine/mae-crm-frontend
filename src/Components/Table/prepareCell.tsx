@@ -15,7 +15,7 @@ export const prepareCell= (cellData, format, enumName, onClick)=> {
     switch (format) {
         case 'percent':
             return typeof cellData === "number" ?
-                `${(cellData as number) * 100}%` : '';
+                `${((cellData as number) * 100).toFixed(2)}%` : '';
         case 'enum':
             return switchEnum(cellData as string, enumName || 'process', false, onClick);
         case 'date':

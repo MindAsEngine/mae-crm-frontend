@@ -61,14 +61,14 @@ export const router = createBrowserRouter(
 							path: 'regions',
 							element: <RegionsReport />,
 						},
-						// {
-						// 	path: 'call-center',
-						// 	element: <CallCenterReport />,
-						// },
-						// {
-						// 	path: 'processed-requests-speed',
-						// 	element: <ProcessedRequestsSpeedReport />,
-						// },
+						{
+							path: 'call-center',
+							element: <CallCenterReport />,
+						},
+						{
+							path: 'processed-requests-speed',
+							element: <ProcessedRequestsSpeedReport />,
+						},
 					],
 				},
 		// 		{

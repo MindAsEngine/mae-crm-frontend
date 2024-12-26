@@ -50,9 +50,16 @@
   overflow: hidden auto;
   background-color: var(--color-white);
   border-radius: var(--border-radius-m);
-
-
 }
+//.modal.dropDown.isOpen .forScroll{
+//  display: flex;
+//  justify-content: center;
+//  box-sizing: border-box;
+//  max-height: 70vh ;
+//  overflow: hidden auto;
+//  background-color: var(--color-white);
+//  border-radius: var(--border-radius-m);
+//}
 
 .forScroll::-webkit-scrollbar{
   width: 16px;

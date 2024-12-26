@@ -23,6 +23,7 @@ export default function TasksPage() {
 	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
 	const [page, setPage] = useState(searchParams.get('page') || 1);
 	const [pageSize, setPageSize] = useState(searchParams.get('page_size') || 30);
+	const [totalResults, setTotalResults] = useState(0);
 	const [lock, setLock] = useState(false);
 	const [needToResetData, setNeedToResetData] = useState(false);
 	const [filters, setFilters] = useState({
@@ -233,7 +234,7 @@ export default function TasksPage() {
 			const url = window.URL.createObjectURL(new Blob([blob]));
 			const link = document.createElement('a');
 			link.href = url;
-			link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+			link.setAttribute('download', `applications_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
 			document.body.appendChild(link);
 			link.click();
 			link?.parentNode?.removeChild(link);
@@ -269,6 +270,7 @@ export default function TasksPage() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
+					setTotalResults(data?.totalResults); // Установка общего количества элементов
 					setDataOnPage(data?.items); // Установка данных
 					// setFooter(data?.footer); // Установка футера
 					setHeader(data?.header); // Установка заголовков
@@ -297,7 +299,6 @@ export default function TasksPage() {
 	}, [initToReload, page]);
 
 	useEffect(() => {
-
 		if (needToResetData) {
 			console.log('needToResetData', needToResetData, dataOnPage);
 			setData(dataOnPage);
@@ -363,7 +364,7 @@ export default function TasksPage() {
 		}
 	}
 	const onScrollEnd = () => {
-		if (!lock){
+		if (!lock && data.length < totalResults) {
 			setLock(prev => !prev);
 			setPage(prev => +prev + 1);
 			console.log('onScrollEnd');

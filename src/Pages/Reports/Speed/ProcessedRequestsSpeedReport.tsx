@@ -71,14 +71,8 @@ export default function ProcessedRequestsSpeedReport(){
 			if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
 			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/reports/speed?${params.toString()}`, {
-				method: 'GET',
-				mode: 'no-cors',
-				credentials: 'include',
-				headers: {
-					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-					'Content-Type': 'application/json',
-				}})
+			await fetch(apiUrl+`/speed?${params.toString()}`, {
+				method: 'GET',})
 				.then((res) => {
 					if (!res.ok) {
 						throw new Error(`HTTP error! status: ${res.status}`);
@@ -189,18 +183,18 @@ export default function ProcessedRequestsSpeedReport(){
 								 onCustomSettingApplied={onCustomSettingApplied}
 								 onCheckboxChanged={onCheckboxChanged}
 					/>
-					<RangeDate
-						startDate={filters.startDate}
-						endDate={filters.endDate}
-						setStartDate={(date) => {
-							handleStartDateChange(date)
-							// console.log('Set start date IN FILTER BAR', date)
-						}}
-						setEndDate={(date) => {
-							handleEndDateChange(date)
-							// console.log('Set end date IN FILTER BAR', date)
-						}}
-					/>
+					{/*<RangeDate*/}
+					{/*	startDate={filters.startDate}*/}
+					{/*	endDate={filters.endDate}*/}
+					{/*	setStartDate={(date) => {*/}
+					{/*		handleStartDateChange(date)*/}
+					{/*		// console.log('Set start date IN FILTER BAR', date)*/}
+					{/*	}}*/}
+					{/*	setEndDate={(date) => {*/}
+					{/*		handleEndDateChange(date)*/}
+					{/*		// console.log('Set end date IN FILTER BAR', date)*/}
+					{/*	}}*/}
+					{/*/>*/}
 					<Button
 						stylizedAs={'blue-dark'}
 						exportButton={true}

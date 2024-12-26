@@ -42,7 +42,7 @@ export default function ModalCustom({
                    classNameModal={styles.modal}
                    classNameContent={styles.modalContent}
                    classNameWindow={styles.modalWindow}
-                   isDropDown={true}>
+                   isDropDown={false}>
                 {customSettings.map((item, index) => (
                     <div key={index} className={styles.label}
                          onClick={() => {onCheckboxChanged(item.name)}}
