@@ -25,6 +25,8 @@ export default function TasksPage() {
 	const [pageSize, setPageSize] = useState(searchParams.get('page_size') || 30);
 	const [totalResults, setTotalResults] = useState(0);
 	const [lock, setLock] = useState(false);
+	// todo create from chosen
+	//  check export
 	const [needToResetData, setNeedToResetData] = useState(false);
 	const [filters, setFilters] = useState({
 
@@ -270,7 +272,7 @@ export default function TasksPage() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
-					setTotalResults(data?.totalResults); // Установка общего количества элементов
+					setTotalResults(data?.total_pages); // Установка общего количества элементов
 					setDataOnPage(data?.items); // Установка данных
 					// setFooter(data?.footer); // Установка футера
 					setHeader(data?.header); // Установка заголовков
@@ -362,9 +364,10 @@ export default function TasksPage() {
 			})
 			setInitToReload(true);
 		}
+
 	}
 	const onScrollEnd = () => {
-		if (!lock && data.length < totalResults) {
+		if (!lock && page < totalResults) {
 			setLock(prev => !prev);
 			setPage(prev => +prev + 1);
 			console.log('onScrollEnd');

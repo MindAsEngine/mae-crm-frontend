@@ -6,10 +6,13 @@ import Report from "../../../Components/Report/Report.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import {format} from "date-fns";
+import {useNavigate, useSearchParams} from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL ;
 
 export default function RegionsReport() {
-	// const [initToReload, setInitToReload] = useState(true);
+	const [searchParams] = useSearchParams();
+
+	const navigate = useNavigate();
 	const [data, setData] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
@@ -27,6 +30,14 @@ export default function RegionsReport() {
 	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
 	// const [page, setPage] = useState(1);
 	// const [pageSize, setPageSize] = useState(30);
+
+	// useEffect(() => {
+	// 	if (needToResetDateTime) {
+	// 		setFilters(prevFilters => ({...prevFilters, start: null, end: null}));
+	// 		setNeedToResetDateTime(false);
+	// 		console.log(filters)
+	// 	}
+	// }, [needToResetDateTime]);
 	const setDefaultCustomSettings = (header) => {
 		setCustomSettings(header.filter(cell => cell.is_additional)
 			.map(cell => ({
@@ -34,13 +45,6 @@ export default function RegionsReport() {
 					title: cell.title,
 					applied_visible: cell.is_visible }))
 		);
-		setNeedToResetDateTime(true);
-		setFilters({
-			start: null, // Начальная дата
-			end: null, // Конечная дата
-			sortField: "", // Поле для сортировки
-			sortOrder: "", // Порядок сортировки: asc или desc
-		})
 	}
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
@@ -55,6 +59,7 @@ export default function RegionsReport() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
+					console.log(data[0]);
 					setData(data?.data); // Установка данных
 					setFooter(data?.footer); // Установка футера
 					setHeaderBefore(data?.headers); // Установка заголовков
@@ -64,9 +69,10 @@ export default function RegionsReport() {
 					console.error(err);
 				});
 		};
-		fetchData();
-
-	}, []);
+		fetchData().then(() => {
+			navigate('?'+getParamsForRequest());
+		});
+	}, [filters]);
 
 
 	useEffect(() => {
@@ -118,7 +124,7 @@ export default function RegionsReport() {
 	useEffect(() => {
 		const handleExport = async () => {
 			const params = getParamsForRequest();
-			await fetch(apiUrl+`/applications/export?${params}`, { method: 'GET',})
+			await fetch(apiUrl+`/regions/export?${params}`, { method: 'GET',})
 			.then(res => {
 				if (!res.ok) {
 					throw new Error('Ошибка при получении файла');
@@ -128,7 +134,7 @@ export default function RegionsReport() {
 				const url = window.URL.createObjectURL(new Blob([blob]));
 				const link = document.createElement('a');
 				link.href = url;
-				link.setAttribute('download', `audiences_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				link.setAttribute('download', `regions_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
 				document.body.appendChild(link);
 				link.click();
 				link?.parentNode?.removeChild(link);
@@ -202,15 +208,16 @@ export default function RegionsReport() {
 						needToReset={needToResetDateTime}
 						oneCalendar={false}
 						withTime={false}
+						{/*todo allow set only one start*/}
 						range={{start: filters.start, end: filters.end}}
 						setRange={range =>{
 							setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
 							// setInitToReload(true);
 						}}/>
 
-					{/*todo buttin export disable on tasks and fix  */}
+
 					<Button
-						disabled={filters.end === null || filters.start === null}
+						disabled={Array.isArray(data) && data.length === 0}
 						stylizedAs={'blue-dark'}
 						exportButton={'white'}
 						onClick={handleExportClick}>Экспорт</Button>

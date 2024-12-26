@@ -32,7 +32,8 @@ export default function ModalCustom({
             className={styles.additional}
             filterButton={true}
             onClick={() => setIsOpen(true)}>Кастом
-            {isOpen &&<Modal isOpen={isOpen}
+            {isOpen &&<Modal
+                isOpen={isOpen}
                     needScroll={true}
 
                    onClose={onClose}
@@ -42,7 +43,9 @@ export default function ModalCustom({
                    classNameModal={styles.modal}
                    classNameContent={styles.modalContent}
                    classNameWindow={styles.modalWindow}
-                   isDropDown={false}>
+                isDropDown={true}
+                   // isDropDown={false}
+            >
                 {customSettings.map((item, index) => (
                     <div key={index} className={styles.label}
                          onClick={() => {onCheckboxChanged(item.name)}}

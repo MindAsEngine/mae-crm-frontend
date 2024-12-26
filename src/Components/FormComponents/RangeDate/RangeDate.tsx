@@ -55,6 +55,7 @@ const DateRange = ({
 			setMaskedValue("");
 			setNeedToReset(false);
 			setRange({start: null, end: null});
+			console.log("reset");
 			// setIsOpen(false);
 		}
 	}, [needToReset]);
@@ -233,10 +234,8 @@ const DateRange = ({
 								children="Отменить"
 								stylizedAs="white"
 								onClick={() => {
-									setChosenRange({ start: null, end: null });
-									// setRawValue("");
-									setMaskedValue("");
 									setIsOpen(false);
+									setNeedToReset(true);
 								}}
 							/>
 							<Button children="Применить" stylizedAs="blue-dark" onClick={applySelection} />
