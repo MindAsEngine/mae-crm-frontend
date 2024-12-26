@@ -13,7 +13,7 @@ const apiUrl = import.meta.env.VITE_API_URL ;
 export default function TasksPage() {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
-	const [initToReload, setInitToReload] = useState(true);
+	const [initToReload, setInitToReload] = useState(false);
 	const [data, setData] = useState([]); // Данные для таблицы
 	const [dataOnPage, setDataOnPage] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
@@ -214,6 +214,7 @@ export default function TasksPage() {
 				})
 				.finally(() => {
 					setIsFilterLoading(false); // Состояние загрузки
+					setInitToReload(true);
 				});
 		}
 		handleFetchFilters();
@@ -285,18 +286,21 @@ export default function TasksPage() {
 					setLoading(false); // Состояние загрузки
 				});
 		};
-		fetchData().then(() => {
-			navigate(`/tasks?${getParamsForRequest()}`);
-			if (initToReload) {
-				console.log('fetchData' + getParamsForRequest());
-				setNeedToResetData(true);
-				setInitToReload(false);
-				// alert('fetchData' + getParamsForRequest());
-			} else {
-				setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
-				setLock(false);
-			}
-		});
+		if(!isFilterLoading) {
+			fetchData().then(() => {
+				navigate(`/tasks?${getParamsForRequest()}`);
+				if (initToReload) {
+					console.log('fetchData' + getParamsForRequest());
+					setNeedToResetData(true);
+					setInitToReload(false);
+					// alert('fetchData' + getParamsForRequest());
+				} else {
+					setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
+					setLock(false);
+				}
+
+			});
+		}
 
 	}, [initToReload, page]);
 

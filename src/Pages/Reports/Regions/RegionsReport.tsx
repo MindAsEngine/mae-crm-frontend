@@ -59,7 +59,7 @@ export default function RegionsReport() {
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
-					console.log(data[0]);
+					// console.log(data[0]);
 					setData(data?.data); // Установка данных
 					setFooter(data?.footer); // Установка футера
 					setHeaderBefore(data?.headers); // Установка заголовков
@@ -208,11 +208,12 @@ export default function RegionsReport() {
 						needToReset={needToResetDateTime}
 						oneCalendar={false}
 						withTime={false}
-						{/*todo allow set only one start*/}
 						range={{start: filters.start, end: filters.end}}
 						setRange={range =>{
 							setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
 							// setInitToReload(true);
+							{/*todo allow set only one start*/}
+
 						}}/>
 
 

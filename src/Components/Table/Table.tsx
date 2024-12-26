@@ -54,7 +54,7 @@ export default function Table({
 			});
 		}
 	};
-	console.log(data?.length);
+	// console.log(data?.length);
 	// useEffect(() => {
 	// 	setAllUnchecked(Array.isArray(checkedRows) && checkedRows.length === 0);
 	// 	setAllChecked(Array.isArray(checkedRows) && checkedRows.length === data.length);
@@ -71,7 +71,7 @@ export default function Table({
 			}
 		}
 		if (tableWrapperRef.current && tableRef.current && tableBefore.current) {
-			console.log(tableRef.current.scrollHeight, tableWrapperRef.current.clientHeight);
+			// console.log(tableRef.current.scrollHeight, tableWrapperRef.current.clientHeight);
 			if (tableRef.current.scrollHeight > tableWrapperRef.current.clientHeight
 			|| tableWrapperRef.current.clientHeight > document.body.clientHeight) {
 				setHasScrollVertical(true);
@@ -82,10 +82,11 @@ export default function Table({
 
 
 	}, [data, header, url]); // Rerun when data changes
-
-	if (data === null || data === undefined) {
+	// console.log(data);
+	if (data === null || data === undefined || header === null || header === undefined || data.length === 0) {
+		// console.log("error");
 		return (
-			<Loading/>
+			<Loading key={"table"}/>
 		);
 	}
 	return (
