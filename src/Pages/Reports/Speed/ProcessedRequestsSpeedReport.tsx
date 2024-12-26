@@ -7,7 +7,8 @@ import Report from "../../../Components/Report/Report.tsx";
 
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import jsonData from "./speed.json"; // Локальные данные для теста
+import jsonData from "./speed.json";
+import {format} from "date-fns"; // Локальные данные для теста
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function ProcessedRequestsSpeedReport(){
@@ -18,8 +19,8 @@ export default function ProcessedRequestsSpeedReport(){
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [filters, setFilters] = useState({
 		search: "", // Поиск по ФИО
-		startDate: new Date(0),
-		endDate: new Date(),
+		// startDate: new Date(0),
+		// endDate: new Date(),
 		sortField: "", // Поле для сортировки
 		sortOrder: "asc", // Порядок сортировки: asc или desc
 	});
@@ -63,15 +64,15 @@ export default function ProcessedRequestsSpeedReport(){
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
 
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
+			// const { search, startDate, endDate, sortField, sortOrder } = filters;
 			// Формирование параметров для запроса
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start_date", formatDate(startDate)); // Начальная дата в формате ISO
-			if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
+			// const params = new URLSearchParams();
+			// if (search !== "") params.append("search", search); // Добавляем параметр поиска
+			// if (startDate) params.append("start_date", formatDate(startDate)); // Начальная дата в формате ISO
+			// if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
+			// if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/speed?${params.toString()}`, {
+			await fetch(apiUrl+`/speed?`, {
 				method: 'GET',})
 				.then((res) => {
 					if (!res.ok) {
@@ -126,21 +127,35 @@ export default function ProcessedRequestsSpeedReport(){
 	}
 
 	useEffect(() => {
-		const handleExport = async (api) => {
+		const handleExport = async () => {
+			// const params = getParamsForRequest();
+			await fetch(apiUrl+`/speed/export?`, {
+				method: 'GET',
 
+			}).then(res => {
+				// console.log(res);
+				if (!res.ok) {
+					throw new Error('Ошибка при получении файла');
+				}
+				return res.blob();
+			}).then((blob) => {
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `call-center_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link?.parentNode?.removeChild(link);
+				window.URL.revokeObjectURL(url);
+			}).catch(err => {
+					console.log(err)
+				}
+			).finally(() => {
+				setExportClicked(false);
+			});
 		}
 		if (exportClicked) {
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
-				.then(() => {
-					setExportClicked(false);
-				});
+			handleExport();
 		}
 	}, [exportClicked]);
 	const handleStartDateChange = (date) => {
@@ -195,13 +210,13 @@ export default function ProcessedRequestsSpeedReport(){
 					{/*		// console.log('Set end date IN FILTER BAR', date)*/}
 					{/*	}}*/}
 					{/*/>*/}
-					<Button
-						stylizedAs={'blue-dark'}
-						exportButton={true}
-						onClick={handleExportClick}
-					>
-						Экспорт
-					</Button>
+					{/*<Button*/}
+					{/*	stylizedAs={'blue-dark'}*/}
+					{/*	exportButton={true}*/}
+					{/*	onClick={handleExportClick}*/}
+					{/*>*/}
+					{/*	Экспорт*/}
+					{/*</Button>*/}
 
 
 				</div>
