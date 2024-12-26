@@ -36,6 +36,7 @@ export default function Report({data, isLoading,
                        children={children}
                        noDataRange={noDataRange}
             />
+
 			<Table
                 isLoading={isLoading}
                 data={data}

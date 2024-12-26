@@ -83,10 +83,16 @@ export default function Table({
 
 	}, [data, header, url]); // Rerun when data changes
 	// console.log(data);
-	if (data === null || data === undefined || header === null || header === undefined || data.length === 0) {
+	if (data === undefined || header === null || header === undefined || data?.length === 0) {
 		// console.log("error");
 		return (
 			<Loading key={"table"}/>
+		);
+	}
+	if (data === null) {
+		return (
+			<ErrorComponent key={"table"}
+							title={"Данных с такими параметрами фильтрации не найдено"}/>
 		);
 	}
 	return (
