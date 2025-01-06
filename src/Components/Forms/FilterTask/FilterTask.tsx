@@ -24,11 +24,13 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
 
     const handleResetClick = (e) => {
         e.preventDefault();
+
         setFilters({
             ...filters,
             selects: filters.selects.map((select) => ({...select, selectedOptions: []})),
             start: null,
-            end: null
+            end: null,
+            // page: 1
         });
         setNeedToR(true);
         setIsOpenModal(false);
@@ -37,10 +39,11 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(filters);
-        setInitToReload(true);
+        // setFilters({...filters, page: 1});
         setIsOpenModal(false);
+        setInitToReload(true);
     }
+    // console.log(filters);
     const [needToR, setNeedToR] = useState(false);
     return (
         <Form
@@ -48,16 +51,16 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                 isOpen={isOpenModal}
                                   title={"Фильтр"}
                                   needScroll={false}
-                                  onClickWhiteButton={() => {
-                                      setFilters({
-                                          ...filters,
-                                          selects: filters.selects.map((select) => ({...select, selectedOptions: []})),
-                                          start: null,
-                                          end: null
-                                      });
+                                  onClose={() => {
+                                      // setFilters({
+                                      //     ...filters,
+                                      //     selects: filters.selects.map((select) => ({...select, selectedOptions: []})),
+                                      //     start: null,
+                                      //     end: null
+                                      // });
                                       // onClickWhiteButton();
-                                      setInitToReload(true);
-                                        setNeedToR(true);
+                                      // setInitToReload(true);
+                                      //   setNeedToR(true);
                                       setIsOpenModal(false);
                                   }}
                                   classNameContent={styles.form}
@@ -68,12 +71,12 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                                           <Button stylizedAs="white"
                                                   key={"reset"}
                                                   onClick={handleResetClick}>
-                                              Отменить
+                                              Сбросить
                                           </Button>
                                           <Button stylizedAs={"blue-dark"}
                                                     key={"submit"}
                                                   onClick={handleSubmit}>
-                                              Создать
+                                                Применить
                                           </Button>
 
                                       </>
@@ -81,7 +84,8 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
 
                 {!isLoading && filters.selects && Array.isArray(filters.selects)
                     ? filters.selects.map((item, index) => (<>
-                        {index === 1 &&
+                        {(index === 1  || filters.selects.length === 1)
+                            &&
                             <label className={styles.labelDate}>
                                 <span className={clsx(styles.span)}>Дата создания</span>
 
@@ -100,20 +104,24 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
 
                             </label>
                     }
+                            {item &&
                 <Select
-                    isLastSelect={index === filters.selects.length - 1}
+                    isLastSelect={index === filters.selects.length - 1 || filters.selects.length === 1}
                     multiple={false}
                             name={item.name}
                             title={item.title}
                             options={item.options}
                             key={index} selected={item.selectedOptions}
-                            onChange={(selected) => setFilters({
+                            onChange={(selected) =>
+                                setFilters({
                                 ...filters,
                                 selects: filters.selects.map((select) => select.name === item.name
                                     ? {...select, selectedOptions: selected}
                                     : select)
                             })}
-                        /></>
+                        />
+                            }
+                        </>
                     )) :
                     <Loading/>
                 }

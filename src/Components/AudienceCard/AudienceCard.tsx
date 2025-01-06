@@ -5,6 +5,7 @@ import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
 import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
+import { Link } from "react-router-dom";
 
 type AudienceCardProps = {
     id: number;
@@ -201,9 +202,10 @@ const handleDisconnect = () => {
                 </Button>
             </div>
             <div className={styles.content}>
-                <div className={styles.text}>
+                <Link to={'/tasks?audience_name=' + name}
+                    className={styles.text}>
                     Количество заявок: {application_count}
-                </div>
+                </Link>
             </div>
             <div className={styles.footer}>
                 <div className={styles.info}>

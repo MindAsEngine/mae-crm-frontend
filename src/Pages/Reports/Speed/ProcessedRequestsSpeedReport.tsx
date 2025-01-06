@@ -8,7 +8,8 @@ import Report from "../../../Components/Report/Report.tsx";
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
 import jsonData from "./speed.json";
-import {format} from "date-fns"; // Локальные данные для теста
+import {format} from "date-fns";
+import {useNavigate, useSearchParams} from "react-router-dom"; // Локальные данные для теста
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function ProcessedRequestsSpeedReport(){
@@ -16,14 +17,34 @@ export default function ProcessedRequestsSpeedReport(){
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
 	const [footer, setFooter] = useState([]); // Футер таблицы
+
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [filters, setFilters] = useState({
-		search: "", // Поиск по ФИО
-		// startDate: new Date(0),
-		// endDate: new Date(),
-		sortField: "", // Поле для сортировки
-		sortOrder: "asc", // Порядок сортировки: asc или desc
+
+		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
+		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
+
+
 	});
+	const getParamsForRequest = () => {
+		const {start, end, } = filters;
+		const params = new URLSearchParams();
+		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
+		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
+
+		return params.toString();
+	}
+	const handleDateFormat = (date) =>{
+		const userInputDate = format(date, "yyyy-MM-dd")
+		const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+		return `${year}-${month}-${day}T00:00:00Z`;
+	}
+
+	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
+	const [initToReload, setInitToReload] = useState(false);
 
 	const [customSettings, setCustomSettings] = useState([]);
 	const [exportClicked, setExportClicked] = useState(false);
@@ -39,14 +60,7 @@ export default function ProcessedRequestsSpeedReport(){
 		);
 	}
 
-	const formatDate = (date) => {
-		const d = new Date(date);
-		const day = String(d.getDate()).padStart(2, '0'); // Добавляем ведущий ноль
-		const month = String(d.getMonth() + 1).padStart(2, '0'); // Добавляем ведущий ноль
-		const year = d.getFullYear();
 
-		return `${day}-${month}-${year}`;
-	};
 
 	const onCustomSettingApplied = () => {
 		// @ts-ignore
@@ -63,16 +77,11 @@ export default function ProcessedRequestsSpeedReport(){
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
+			setData([]);
 
-			// const { search, startDate, endDate, sortField, sortOrder } = filters;
-			// Формирование параметров для запроса
-			// const params = new URLSearchParams();
-			// if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			// if (startDate) params.append("start_date", formatDate(startDate)); // Начальная дата в формате ISO
-			// if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
-			// if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
 
-			await fetch(apiUrl+`/speed?`, {
+
+			await fetch(apiUrl+`/speed?${getParamsForRequest()}`, {
 				method: 'GET',})
 				.then((res) => {
 					if (!res.ok) {
@@ -98,7 +107,9 @@ export default function ProcessedRequestsSpeedReport(){
 					// setDefaultCustomSettings(data?.headers);
 				});
 		};
-		fetchData();
+		fetchData().then(() => {
+			navigate('?'+getParamsForRequest());
+		})
 	}, [filters]);
 
 	useEffect(() => {
@@ -128,8 +139,8 @@ export default function ProcessedRequestsSpeedReport(){
 
 	useEffect(() => {
 		const handleExport = async () => {
-			// const params = getParamsForRequest();
-			await fetch(apiUrl+`/speed/export?`, {
+			const params = getParamsForRequest();
+			await fetch(apiUrl+`/speed/export?`+ params, {
 				method: 'GET',
 
 			}).then(res => {
@@ -158,25 +169,7 @@ export default function ProcessedRequestsSpeedReport(){
 			handleExport();
 		}
 	}, [exportClicked]);
-	const handleStartDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (start date):', updatedFilters);
-			return {
-				...prevFilters,
-				startDate: date,
-			};
-		});
-	};
 
-	const handleEndDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (end date):', updatedFilters);
-			return {
-				...prevFilters,
-				endDate: date,
-			};
-		});
-	};
 	return (
 		<>
 
@@ -186,7 +179,7 @@ export default function ProcessedRequestsSpeedReport(){
 					filters={filters}
 					setFilters={setFilters}
 					onClickCell={onClickCell}
-					// isLoading={Loading}
+					isLoading={loading}
 			>
 
 				<div className={styles.custom}>
@@ -198,25 +191,25 @@ export default function ProcessedRequestsSpeedReport(){
 								 onCustomSettingApplied={onCustomSettingApplied}
 								 onCheckboxChanged={onCheckboxChanged}
 					/>
-					{/*<RangeDate*/}
-					{/*	startDate={filters.startDate}*/}
-					{/*	endDate={filters.endDate}*/}
-					{/*	setStartDate={(date) => {*/}
-					{/*		handleStartDateChange(date)*/}
-					{/*		// console.log('Set start date IN FILTER BAR', date)*/}
-					{/*	}}*/}
-					{/*	setEndDate={(date) => {*/}
-					{/*		handleEndDateChange(date)*/}
-					{/*		// console.log('Set end date IN FILTER BAR', date)*/}
-					{/*	}}*/}
-					{/*/>*/}
-					{/*<Button*/}
-					{/*	stylizedAs={'blue-dark'}*/}
-					{/*	exportButton={true}*/}
-					{/*	onClick={handleExportClick}*/}
-					{/*>*/}
-					{/*	Экспорт*/}
-					{/*</Button>*/}
+					<RangeDate
+						setNeedToReset={setNeedToResetDateTime}
+						needToReset={needToResetDateTime}
+						oneCalendar={false}
+						withTime={false}
+						range={{start: filters.start, end: filters.end}}
+						setRange={range =>{
+							setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
+							setInitToReload(true);
+							{/*todo allow set only one start*/}
+
+						}}/>
+					<Button
+						stylizedAs={'blue-dark'}
+						exportButton={true}
+						onClick={handleExportClick}
+					>
+						Экспорт
+					</Button>
 
 
 				</div>

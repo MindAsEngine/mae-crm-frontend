@@ -115,13 +115,13 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
             <Form
                 isOpen={isOpenCreateAdvert}
                 isDropDown={false}
-                onClickWhiteButton={() =>{
+                onClose={() =>{
                     resetAdvert();
                     setIsOpenCreateAdvert(false);
                 }}
                 title="Подключить рекламу"
                 classNameContent={styles.form}
-                onClose={resetAdvert}
+                // onClose={resetAdvert}
                 needScroll={false}
                 footer={<>
                     <Button stylizedAs="white" onClick={handleResetClick}>

@@ -182,13 +182,13 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                 key={"createAudience"}
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}
-                onClickWhiteButton={() =>{
+                onClose={() =>{
                     resetAudience();
                     setIsOpenCreateAudience(false);
                 }}
                 title="Создать аудиторию"
                 classNameContent={styles.form}
-                onClose={resetAudience}
+                // onClose={resetAudience}
                 needScroll={false}
                 footer={<>
                     <Button stylizedAs="white" onClick={handleResetClick}>
@@ -203,12 +203,12 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             >
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>
-                        Заголовок</span>
+                        Название аудитории</span>
                     <Input
                         onChange={handleChange}
                         value={audience?.title || ""}
                         className={styles.input}
-                        placeholder="Наберите заголовок задачи"
+                        placeholder="Наберите название аудитории"
                         type="text"
                         as="input"
                         name="title"
@@ -220,8 +220,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                     />
                 </label>
                 <label className={styles.labelDate}>
-                                       <span className={clsx(styles.span, styles.required)}>
-Срок исполнения задачи</span>
+                    <span className={clsx(styles.span, styles.required)}>Период заявок</span>
 
                     <DateRange
 

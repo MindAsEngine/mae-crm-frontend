@@ -42,46 +42,31 @@ export default function Form({
                                   stylizedAs="blue-dark"
                               }: ModalProps) {
 
-    const handleApplyClick = () => {
-        if (typeof onClickDarkBlueButton === "function") {
-            onClickDarkBlueButton();
-        }
-        if (typeof onClose === "function") {
+
+
+    const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape" && typeof onClose === "function") {
             onClose();
         }
     };
-    const handleResetClick = () => {
-        if (typeof onClickWhiteButton === "function") {
-            onClickWhiteButton();
-        }
-        if (typeof onClose === "function") {
-            onClose();
-        }
-    }
 
-    // const handleEscape = (e: KeyboardEvent) => {
-    //     if (e.key === "Escape" && typeof onClose === "function") {
-    //         onClose();
-    //     }
-    // };
-    //
-    // const handleClickOut = (e: MouseEvent) => {
-    //     const dialog = document.getElementById("modal" + title);
-    //     if (dialog && !dialog.contains(e.target as Node)) {
-    //         if (typeof onClose === "function") {
-    //             onClose();
-    //         }
-    //     }
-    // };
-    //
-    // useEffect(() => {
-    //     document.addEventListener("keydown", handleEscape);
-    //     document.addEventListener("mouseup", handleClickOut);
-    //     return () => {
-    //         document.removeEventListener("keydown", handleEscape);
-    //         document.removeEventListener("mouseup", handleClickOut);
-    //     };
-    // });
+    const handleClickOut = (e: MouseEvent) => {
+        const dialog = document.getElementById("modal" + title);
+        if (dialog && !dialog.contains(e.target as Node)) {
+            if (typeof onClose === "function") {
+                onClose();
+            }
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleEscape);
+        document.addEventListener("mouseup", handleClickOut);
+        return () => {
+            document.removeEventListener("keydown", handleEscape);
+            document.removeEventListener("mouseup", handleClickOut);
+        };
+    });
 
     return (
         <dialog
@@ -103,7 +88,7 @@ export default function Form({
                         <h2 className={styles.title}>{title}</h2>
                         <span
                             className={styles.close}
-                            onClick={handleResetClick}
+                            onClick={onClose}
                         />
                     </header>
 

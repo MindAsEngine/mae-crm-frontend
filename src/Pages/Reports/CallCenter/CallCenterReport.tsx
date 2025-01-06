@@ -49,6 +49,7 @@ export default function CallCenterReport() {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
+			setData([]);
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center?${params.toString()}`, {
 				method: 'GET',
@@ -177,14 +178,7 @@ export default function CallCenterReport() {
 				{/*	setStartDate={(date) => handleStartDateChange(date)}*/}
 				{/*	setEndDate={(date) => handleEndDateChange(date)}*/}
 				{/*/>*/}
-				<Button
-					disabled={loading}
-					stylizedAs={"blue-dark"}
-					exportButton={"white"}
-					onClick={handleExportClick}
-				>
-					Экспорт
-				</Button>
+
 				<RangeDate
 					setNeedToReset={setNeedToResetDateTime}
 					needToReset={needToResetDateTime}
@@ -197,6 +191,14 @@ export default function CallCenterReport() {
 						{/*todo allow set only one start*/}
 
 					}}/>
+				<Button
+					disabled={loading}
+					stylizedAs={"blue-dark"}
+					exportButton={"white"}
+					onClick={handleExportClick}
+				>
+					Экспорт
+				</Button>
 			</div>
 		</Report>
 	);

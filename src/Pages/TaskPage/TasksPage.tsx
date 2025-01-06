@@ -8,6 +8,7 @@ import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import {format} from "date-fns";
 import {switchEnum} from "../../Components/Table/switchEnum.tsx";
 import {useNavigate,  useSearchParams} from "react-router-dom";
+import TaskCreate from "../../Components/Forms/Task/TaskCreate.tsx";
 
 const apiUrl = import.meta.env.VITE_API_URL ;
 export default function TasksPage() {
@@ -25,8 +26,9 @@ export default function TasksPage() {
 	const [pageSize, setPageSize] = useState(searchParams.get('page_size') || 30);
 	const [totalResults, setTotalResults] = useState(0);
 	const [lock, setLock] = useState(false);
+
 	// todo create from chosen
-	//  check export
+
 	const [needToResetData, setNeedToResetData] = useState(false);
 	const [filters, setFilters] = useState({
 
@@ -37,8 +39,7 @@ export default function TasksPage() {
 				name: "regions", // Имя фильтра
 				options: [], // Опции фильтра
 				title: "Регион", // Заголовок фильтра
-				selectedOptions: searchParams.get('region') ? [
-					{
+				selectedOptions: searchParams.get('region') ? [{
 						name:searchParams.get('region'),
 						title: searchParams.get('region'),
 					}] : [], // Выбранные опции
@@ -95,6 +96,7 @@ export default function TasksPage() {
 		if (sortField !== "") params.append("order_field", sortField); // Поле сортировки
 		if (sortOrder) params.append("order_direction", sortOrder); // Порядок сортировки
 		if (selects) {
+
 			selects.forEach((select) => {
 				if (select.selectedOptions.length > 0) {
 					if (select.name === 'property_types') {
@@ -113,6 +115,7 @@ export default function TasksPage() {
 						params.append('audience_name', select.selectedOptions[0].name);
 					}
 				}
+				// console.log(selects)
 			});
 		}
 		if (pageSize) params.append("page_size", pageSize.toString()); // Количество элементов на странице
@@ -179,19 +182,16 @@ export default function TasksPage() {
 								name: searchParams.get("project_name"),
 								title: searchParams.get("project_name"),
 							})
-						}
-						else if (item === 'audience_names' && searchParams.get("audience_name")) {
+						} else if (item === 'audience_names' && searchParams.get("audience_name")) {
 							selected.push({
 								name: searchParams.get("audience_name"),
 								title: searchParams.get("audience_name"),
 							})
 						}
 						// console.log(selected);
+						if (Array.isArray(res[item])) {
 
-
-						return {
-							name: item,
-							options: res[item].map((one) => {
+							const options = res[item].map((one) => {
 								if (item === 'property_types') {
 									return {
 										name: one,
@@ -202,12 +202,20 @@ export default function TasksPage() {
 									name: one,
 									title: one,
 								};
-							}),
+							});
+
+						return {
+							name: item,
+							options: options,
 							title: getTitleByName(item),
 							selectedOptions: selected
 						};
+					}
 					})
-					setFilters({...filters, selects: selects}); // Установка данных
+					setFilters({...filters, selects: selects.filter(
+						item => item !== undefined
+
+						)}); // Установка данных
 				})
 				.catch((err) => {
 					console.error(err);
@@ -283,34 +291,36 @@ export default function TasksPage() {
 				.catch((err) => {
 					console.error(err);
 				}).finally(() => {
+					setInitToReload(true);
 					setLoading(false); // Состояние загрузки
 				});
 		};
 		if(!isFilterLoading) {
-			fetchData().then(() => {
-				navigate(`/tasks?${getParamsForRequest()}`);
-				if (initToReload) {
-					console.log('fetchData' + getParamsForRequest());
-					setNeedToResetData(true);
-					setInitToReload(false);
-					// alert('fetchData' + getParamsForRequest());
-				} else {
-					setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
-					setLock(false);
-				}
 
-			});
+			if (initToReload) {
+				// alert('fetchData');
+				setPage(1);
+				// setData([]);
+			}
+			if(page.toString() !== searchParams.get('page') || initToReload) {
+				fetchData().then(() => {
+					navigate(`/tasks?${getParamsForRequest()}`);
+					if (initToReload) {
+						setData(dataOnPage);
+						setInitToReload(false);
+					} else {
+						setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
+						setLock(false);
+					}
+
+
+				});
+			}
 		}
 
-	}, [initToReload, page]);
+	}, [filters, page]);
 
-	useEffect(() => {
-		if (needToResetData) {
-			console.log('needToResetData', needToResetData, dataOnPage);
-			setData(dataOnPage);
-			setNeedToResetData(false);
-		}
-	}, [needToResetData]);
+
 
 
 
@@ -318,7 +328,7 @@ export default function TasksPage() {
 
 
 	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
-	// const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
+	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
 	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
 
 
@@ -338,6 +348,9 @@ export default function TasksPage() {
 	const onClickCell = (columnPos: string) => {
 		let direction = '';
 		let field = '';
+		if (columnPos === "actions" || columnPos === "id") {
+			return;
+		}
 		if (columnPos === "name") {
 			field = "client_name";
 		} else {
@@ -381,7 +394,7 @@ export default function TasksPage() {
 
 	return (
 		<>
-		{/*<Switch/>*/}
+
 
 		<Report data={data}
 				header={header}
@@ -389,12 +402,11 @@ export default function TasksPage() {
 				setChosenData={setChosenData}
 				isLoading={loading}
 				onHeaderClick={onClickCell}
-				onScrollEnd={onScrollEnd}
-				// filters={filters}
-				// setFilters={setFilters}
+				onScrollEnd={onScrollEnd}>
 
-		>
 			<div className={styles.custom}>
+
+
 				<Button
 					stylizedAs={'blue-light'}
 					exportButton={true}
@@ -412,12 +424,9 @@ export default function TasksPage() {
 								setFilters={setFilters}
 								setIsOpenModal={setIsOpenFilters}
 								isOpenModal={isOpenFilters}
-							 								setInitToReload={setInitToReload}
+												  setInitToReload={setInitToReload}
 							 isLoading={isFilterLoading}
-								// onClickDarkBlueButton={onCustomSettingApplied}
-								// onClickWhiteButton={() =>
-								// {setDefaultOnCustomSetting(customFiltersFromServer);
-								// setIsOpenFilters(false)}}
+
 					/>}
 
 
@@ -452,7 +461,18 @@ export default function TasksPage() {
 								setIsOpenCreateAudience={setIsOpenCreateAudience}
 				/>}
 
-
+				<Button
+					stylizedAs={'blue-dark'}
+					createButton={true}
+					disabled={chosenData.length === 0}
+					onClick={
+						() => setIsOpenCreateTask(true)
+					}> Создать задачу</Button>
+				{isOpenCreateTask &&
+					<TaskCreate isOpenCreateTask={isOpenCreateTask}
+								setIsOpenCreateTask={setIsOpenCreateTask}
+								chosenApplications={chosenData}
+					/>}
 			</div>
 		</Report>
 		</>

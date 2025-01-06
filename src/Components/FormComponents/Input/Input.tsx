@@ -40,7 +40,10 @@ export default function Input({
 
         <div
             onClick={() => setIsTouched(true)}
-            className={clsx(styles.inputContainer, isFocused && styles.focused,
+            className={clsx(styles.container, isFocused && styles.focused,
+            Component==="input" && styles.inputContainer,
+            Component==="textarea" && styles.textareaContainer,
+
             // isValid && styles.valid,
                 (isTouched||isTouchedDefault) && isValid === false && styles.invalid,
             className)}>
@@ -61,6 +64,7 @@ export default function Input({
                 name={name}
                 spellCheck={false}
                 readOnly={readOnly}
+
 
             />
             {value?.length > 0 && after}
