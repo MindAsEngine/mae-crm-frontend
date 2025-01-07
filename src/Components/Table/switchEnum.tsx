@@ -6,6 +6,8 @@ export function switchEnum(cellData: string, enumName: string, inEdit?: boolean=
     switch (enumName) {
         case 'status_name':
             return <StatusPlate name={cellData} inEdit={inEdit} onClick={onClick}/>
+        case 'property_types':
+            return getPropertyType(cellData);
         case 'property_type':
             return getPropertyType(cellData);
         case 'action':

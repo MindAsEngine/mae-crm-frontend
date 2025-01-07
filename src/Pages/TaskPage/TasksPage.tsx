@@ -1,480 +1,281 @@
-import * as React from 'react'
-import {useEffect, useState} from "react";
-import Report from "../../Components/Report/Report.tsx";
-import styles from "./task-page.module.scss";
-import {Button} from "../../Components/FormComponents/Button/Button.tsx";
-import FilterTask from "../../Components/Forms/FilterTask/FilterTask.tsx";
-import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
-import {format} from "date-fns";
-import {switchEnum} from "../../Components/Table/switchEnum.tsx";
-import {useNavigate,  useSearchParams} from "react-router-dom";
-import TaskCreate from "../../Components/Forms/Task/TaskCreate.tsx";
+import * as React from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { format } from 'date-fns';
+import Report from '../../Components/Report/Report.tsx';
+import { Button } from '../../Components/FormComponents/Button/Button.tsx';
+import FilterTask from '../../Components/Forms/FilterTask/FilterTask.tsx';
+import AudienceCreate from '../../Components/Forms/Audience/AudienceCreate.tsx';
+import TaskCreate from '../../Components/Forms/Task/TaskCreate.tsx';
+import { switchEnum } from '../../Components/Table/switchEnum.tsx';
+import styles from './task-page.module.scss';
 
-const apiUrl = import.meta.env.VITE_API_URL ;
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export default function TasksPage() {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
-	const [initToReload, setInitToReload] = useState(false);
-	const [data, setData] = useState([]); // Данные для таблицы
-	const [dataOnPage, setDataOnPage] = useState([]); // Данные для таблицы
-	const [header, setHeader] = useState([]); // Заголовок таблицы
-	const [loading, setLoading] = useState(true); // Состояние загрузки
-	const [isFilterLoading, setIsFilterLoading] = useState(true); // Состояние загрузки фильтров
+
+	const [data, setData] = useState([]);
+	const [isFiltred, setIsFiltred] = useState(true);
+	const [header, setHeader] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [isFilterLoading, setIsFilterLoading] = useState(true);
 	const [exportClicked, setExportClicked] = useState(false);
-	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
-	const [page, setPage] = useState(searchParams.get('page') || 1);
-	const [pageSize, setPageSize] = useState(searchParams.get('page_size') || 30);
+	const [page, setPage] = useState(+searchParams.get('page') || 1);
+	const [pageSize, setPageSize] = useState(+searchParams.get('page_size') || 30);
 	const [totalResults, setTotalResults] = useState(0);
-	const [lock, setLock] = useState(false);
+	const [filters, setFilters] = useState(initializeFilters(searchParams));
 
-	// todo create from chosen
-
-	const [needToResetData, setNeedToResetData] = useState(false);
-	const [filters, setFilters] = useState({
-
-		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
-		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
-		selects: [
-			{
-				name: "regions", // Имя фильтра
-				options: [], // Опции фильтра
-				title: "Регион", // Заголовок фильтра
-				selectedOptions: searchParams.get('region') ? [{
-						name:searchParams.get('region'),
-						title: searchParams.get('region'),
-					}] : [], // Выбранные опции
-			},
-			{
-				name: "property_types",
-				options: [],
-				title: "Тип недвижимости",
-				selectedOptions: searchParams.get('property_type') ? [{
-					name: searchParams.get('property_type'),
-					title: switchEnum(searchParams.get('property_type'), 'property_type'),
-				}] : [],
-			},
-			{
-				name: "status_names",
-				options: [],
-				title: "Статус",
-				selectedOptions: searchParams.get('status') ? [{
-					name: searchParams.get('status'),
-					title: searchParams.get('status'),
-				}] : [],
-			},
-			{
-				name: "project_names",
-				options: [],
-				title: "Проект",
-				selectedOptions: searchParams.get('project_name') ? [{
-					name: searchParams.get('project_name'),
-					title: searchParams.get('project_name'),
-				}] : [],
-			},
-			{
-				name: "audience_names",
-				options: [],
-				title: "Аудитория",
-				selectedOptions: searchParams.get('audience_name') ? [{
-					name: searchParams.get('audience_name'),
-					title: searchParams.get('audience_name'),
-				}] : [],
-
-			}
-		], // Выбранные фильтры
-		sortField: searchParams.get('order_field') || "", // Поле сортировки
-		sortOrder: searchParams.get('order_direction') || "", // Порядок сортировки
-	});
-	// console.log(filters);
+	const [isOpenCreateAudience, setIsOpenCreateAudience] = useState(false);
+	const [isOpenCreateTask, setIsOpenCreateTask] = useState(false);
+	const [isOpenFilters, setIsOpenFilters] = useState(false);
 	const [chosenData, setChosenData] = useState([]);
-	const getParamsForRequest = () => {
-		const {start, end, sortField, sortOrder, selects} = filters;
-		// Формирование параметров для запроса
-		const params = new URLSearchParams();
-		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
-		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
-		if (sortField !== "") params.append("order_field", sortField); // Поле сортировки
-		if (sortOrder) params.append("order_direction", sortOrder); // Порядок сортировки
-		if (selects) {
 
-			selects.forEach((select) => {
-				if (select.selectedOptions.length > 0) {
-					if (select.name === 'property_types') {
-						params.append('property_type', select.selectedOptions[0].name);
-					}
-					if (select.name === 'regions') {
-						params.append('region', select.selectedOptions[0].name);
-					}
-					if (select.name === 'status_names') {
-						params.append('status', select.selectedOptions[0].name);
-					}
-					if (select.name === 'project_names') {
-						params.append('project_name', select.selectedOptions[0].name);
-					}
-					if (select.name === 'audience_names') {
-						params.append('audience_name', select.selectedOptions[0].name);
-					}
-				}
-				// console.log(selects)
+	function getTitleByName(name) {
+		switch (name) {
+			case 'regions':
+				return 'Регион';
+			case 'property_types':
+				return 'Тип недвижимости';
+			case 'status_names':
+				return 'Статус';
+			case 'project_names':
+				return 'Проект';
+			case 'audience_names':
+				return 'Аудитория';
+			default:
+				return name;
+		}
+	}
+	// Helper function to initialize filters
+	function initializeFilters(params) {
+		return {
+			start: params.get('start_date') ? new Date(params.get('start_date')) : null,
+			end: params.get('end_date') ? new Date(params.get('end_date')) : null,
+			selects: [
+				// createFilter('regions', params.get('region')),
+				createFilter('status_names', params.get('status')),
+				createFilter('property_types', params.get('property_type'), 'property_type'),
+				createFilter('project_names', params.get('project_name')),
+				createFilter('audience_names', params.get('audience_name')),
+			],
+			sortField: params.get('order_field') || '',
+			sortOrder: params.get('order_direction') || '',
+		};
+	}
+
+	// Helper function to create filter objects
+	function createFilter(name, value, enumType = '') {
+		return {
+			name,
+			options: [],
+			title: getTitleByName(name),
+			selectedOptions: value ? [{ name: value, title: switchEnum(value, enumType) || value }] : [],
+		};
+	}
+
+	// Fetch filters
+	const fetchFilters = useCallback(async () => {
+		setIsFilterLoading(true);
+		try {
+			const response = await fetch(`${apiUrl}/applications/filters`);
+			if (!response.ok) throw new Error(`Failed to fetch filters: ${response.status}`);
+			const result = await response.json();
+
+			const updatedFilters = filters.selects.map((filter) => {
+				const options = result[filter.name]?.map((item) => ({
+					name: item,
+					title: switchEnum(item, filter.name) || item,
+				}));
+				return options ? { ...filter, options } : filter;
 			});
+
+			setFilters((prev) => ({ ...prev, selects: updatedFilters }));
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsFilterLoading(false);
 		}
-		if (pageSize) params.append("page_size", pageSize.toString()); // Количество элементов на странице
-		if (page) params.append("page", page.toString()); // Текущая страница
-
-		return params.toString();
-	}
-	const handleDateFormat = (date) =>{
-		const userInputDate = format(date, "yyyy-MM-dd")
-		const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
-		return `${year}-${month}-${day}T00:00:00Z`;
-	}
-	useEffect(() => {
-		const getTitleByName = (name) => {
-			switch (name) {
-				case 'regions':
-					return 'Регион';
-				case 'property_types':
-					return 'Тип недвижимости';
-				case 'status_names':
-					return 'Статус';
-				case 'project_names':
-					return 'Проект';
-				case 'audience_names':
-					return 'Аудитория';
-				default:
-					return name;
-			}
-		}
-		const handleFetchFilters = async () => {
-			setIsFilterLoading(true); // Установка состояния загрузки
-			fetch(apiUrl + `/applications/filters`, {
-				method: 'GET',
-				headers: {}
-			})
-				.then((res) => {
-					if (!res.ok) {
-						throw new Error(`HTTP error! status: ${res.status}`);
-					}
-					return res.json(); // Парсим JSON только при успешном статусе
-				})
-				.then((res) => {
-
-					const selects = Object.keys(res).map((item) => {
-						const selected = []
-						if (item === 'property_types' && searchParams.get("property_type")) {
-							selected.push({
-								name: searchParams.get("property_type"),
-								title: switchEnum(searchParams.get("property_type"), 'property_type'),
-							})
-						} else if (item === 'regions' && searchParams.get("region")) {
-							selected.push({
-								name: searchParams.get("region"),
-								title: searchParams.get("region"),
-							})
-						} else if (item === 'status_names' && searchParams.get("status")) {
-							selected.push({
-								name: searchParams.get("status"),
-								title: searchParams.get("status"),
-							})
-
-						} else if (item === 'project_names' && searchParams.get("project_name")) {
-							selected.push({
-								name: searchParams.get("project_name"),
-								title: searchParams.get("project_name"),
-							})
-						} else if (item === 'audience_names' && searchParams.get("audience_name")) {
-							selected.push({
-								name: searchParams.get("audience_name"),
-								title: searchParams.get("audience_name"),
-							})
-						}
-						// console.log(selected);
-						if (Array.isArray(res[item])) {
-
-							const options = res[item].map((one) => {
-								if (item === 'property_types') {
-									return {
-										name: one,
-										title: switchEnum(one, 'property_type'),
-									};
-								}
-								return {
-									name: one,
-									title: one,
-								};
-							});
-
-						return {
-							name: item,
-							options: options,
-							title: getTitleByName(item),
-							selectedOptions: selected
-						};
-					}
-					})
-					setFilters({...filters, selects: selects.filter(
-						item => item !== undefined
-
-						)}); // Установка данных
-				})
-				.catch((err) => {
-					console.error(err);
-				})
-				.finally(() => {
-					setIsFilterLoading(false); // Состояние загрузки
-					setInitToReload(true);
-				});
-		}
-		handleFetchFilters();
 	}, []);
 
+	useEffect(() => {
+		fetchFilters();
+	}, [fetchFilters]);
+
+	// Fetch data
+	const fetchData = useCallback(async () => {
+
+		setLoading(true);
+		try {
+			const params = getParamsForRequest();
+			const response = await fetch(`${apiUrl}/applications?${params}`);
+			if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
+			const result = await response.json();
+
+			setData((prev) => (page === 1 ? result.items : [...prev, ...(result.items || [])]));
+			setHeader(result.header);
+			setTotalResults(result.total_pages);
+			const navigateParams = getParamsForRequest(true);
+			navigate(`?${navigateParams}`);
+			setIsFiltred(false);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	}, [page, isFiltred]);
 
 	useEffect(() => {
-		const handleExport = async () => {
-			const params = getParamsForRequest();
-			await fetch(apiUrl+`/applications/export?${params}`, {
-			method: 'GET',
+		if (isFiltred) {
+			page === 1 ? fetchData() : setPage(1);
+		} else {
+			fetchData()
+		}
 
-			}).then(res => {
-			// console.log(res);
-			if (!res.ok) {
-				throw new Error('Ошибка при получении файла');
+	}, [fetchData]);
+
+	// Export data
+	useEffect(() => {
+		if (!exportClicked) return;
+		const handleExport = async () => {
+			try {
+				const params = getParamsForRequest();
+				const response = await fetch(`${apiUrl}/applications/export?${params}`);
+				if (!response.ok) throw new Error('Failed to export data');
+
+				const blob = await response.blob();
+				const url = window.URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `applications_${format(new Date(), 'yyyy-MM-dd')}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				window.URL.revokeObjectURL(url);
+			} catch (error) {
+				console.error(error);
+			} finally {
+				setExportClicked(false);
 			}
-			return res.blob();
-		}).then((blob) => {
-			const url = window.URL.createObjectURL(new Blob([blob]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', `applications_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
-			document.body.appendChild(link);
-			link.click();
-			link?.parentNode?.removeChild(link);
-			window.URL.revokeObjectURL(url);
-		}).catch(err => {
-				console.log(err)
-			}
-		).finally(() => {
-			setExportClicked(false);
-		});
-	}
-	if (exportClicked) {
+		};
+
 		handleExport();
-	}
 	}, [exportClicked]);
 
-
-
-	useEffect(() => {
-		// Симуляция загрузки данных с сервера
-		const fetchData = async () => {
-
-			setLoading(true); // Установка состояния загрузки
-			const params = getParamsForRequest();
-			await fetch(apiUrl+`/applications?${params}`, {
-				method: 'GET',
-				headers: {
-				}})
-				.then((res) => {
-					if (!res.ok) {
-						throw new Error(`HTTP error! status: ${res.status}`);
-					}
-					return res.json(); // Парсим JSON только при успешном статусе
-				})
-				.then((data) => {
-					setTotalResults(data?.total_pages); // Установка общего количества элементов
-					setDataOnPage(data?.items); // Установка данных
-					// setFooter(data?.footer); // Установка футера
-					setHeader(data?.header); // Установка заголовков
-					 // Состояние загрузки
-
-				})
-				.catch((err) => {
-					console.error(err);
-				}).finally(() => {
-					setInitToReload(true);
-					setLoading(false); // Состояние загрузки
-				});
-		};
-		if(!isFilterLoading) {
-
-			if (initToReload) {
-				// alert('fetchData');
-				setPage(1);
-				// setData([]);
+	const getParamsForRequest = (navigate=false) => {
+		const params = new URLSearchParams();
+		const handleDateFormat = (date) =>{
+			const userInputDate = format(date, "yyyy-MM-dd")
+			const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+			return `${year}-${month}-${day}T00:00:00Z`;
+		}
+		if (filters.start) params.append('start_date', handleDateFormat(filters.start));
+		if (filters.end) params.append('end_date', handleDateFormat(filters.end));
+		filters.selects.forEach((select) => {
+			if (select.selectedOptions.length > 0) {
+				if (select.name === 'property_types') {
+					params.append('property_type', select.selectedOptions[0].name);
+				}
+				if (select.name === 'regions') {
+					params.append('region', select.selectedOptions[0].name);
+				}
+				if (select.name === 'status_names') {
+					params.append('status', select.selectedOptions[0].name);
+				}
+				if (select.name === 'project_names') {
+					params.append('project_name', select.selectedOptions[0].name);
+				}
+				if (select.name === 'audience_names') {
+					params.append('audience_name', select.selectedOptions[0].name);
+				}
 			}
-			if(page.toString() !== searchParams.get('page') || initToReload) {
-				fetchData().then(() => {
-					navigate(`/tasks?${getParamsForRequest()}`);
-					if (initToReload) {
-						setData(dataOnPage);
-						setInitToReload(false);
-					} else {
-						setData([...data, ...dataOnPage.filter((item) => !data.find((i) => i.id === item.id))]);
-						setLock(false);
-					}
-
-
-				});
-			}
+		});
+		if (filters.sortField) params.append('order_field', filters.sortField);
+		if (filters.sortOrder) params.append('order_direction', filters.sortOrder);
+		if (!navigate) {
+			params.append('page', page);
+			params.append('page_size', pageSize);
 		}
-
-	}, [filters, page]);
-
-
-
-
-
-
-
-
-	const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
-	const [isOpenCreateTask, setIsOpenCreateTask] = React.useState(false);
-	const [isOpenFilters, setIsOpenFilters] = React.useState(false);
-
-
-
-	const countBadge = () => {
-		let count = 0;
-		if (filters.selects && Array.isArray(filters.selects)) {
-			count += filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0);
-		}
-		if (filters.start&&filters.end) {
-			count++;
-		}
-
-		return count;
+		return params.toString();
 	};
 
-	const onClickCell = (columnPos: string) => {
-		let direction = '';
-		let field = '';
-		if (columnPos === "actions" || columnPos === "id") {
-			return;
-		}
-		if (columnPos === "name") {
-			field = "client_name";
-		} else {
-			field = columnPos;
-		}
-
-		if (countOfClickOnHeader === 0) {
-			setCountOfClickOnHeader(prevState => prevState+1);
-			direction = 'ASC';
-		} else if (countOfClickOnHeader === 1 && filters.sortField === field) {
-			setCountOfClickOnHeader(prevState => prevState+1);
-			direction = 'DESC';
-		} else {
-			setCountOfClickOnHeader(0);
-			if (filters.sortField === field) {
-				direction = 'ASC';
-			} else {
-				direction = '';
-
-			}
-
-		}
-		if (direction == 'ASC' || direction == 'DESC') {
-			setFilters({
-				...filters,
-				sortField: field,
-				sortOrder: direction,
-			})
-			setInitToReload(true);
-		}
-
-	}
+	const countBadge = () =>
+		filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0) + (filters.start && filters.end ? 1 : 0);
 	const onScrollEnd = () => {
-		if (!lock && page < totalResults) {
-			setLock(prev => !prev);
-			setPage(prev => +prev + 1);
-			console.log('onScrollEnd');
+		console.log('scroll end');
+		if (page < totalResults) {
+			setPage((prev) => prev + 1);
 		}
-
 	}
-
 	return (
 		<>
-
-
-		<Report data={data}
+			<Report
+				data={data}
 				header={header}
 				chosenData={chosenData}
 				setChosenData={setChosenData}
 				isLoading={loading}
-				onHeaderClick={onClickCell}
-				onScrollEnd={onScrollEnd}>
-
-			<div className={styles.custom}>
-
-
-				<Button
-					stylizedAs={'blue-light'}
-					exportButton={true}
-					onClick={() => setExportClicked(true)}> Экспорт</Button>
-
-				<Button
-					as={'div'}
-					badge={countBadge() !== 0 ? countBadge().toString() : undefined}
-					stylizedAs={'white'}
-					filterButton={true}
-					onClick={() => setIsOpenFilters(true)}
-				>
-					Фильтр</Button>
-					{isOpenFilters && <FilterTask filters={filters}
-								setFilters={setFilters}
-								setIsOpenModal={setIsOpenFilters}
-								isOpenModal={isOpenFilters}
-												  setInitToReload={setInitToReload}
-							 isLoading={isFilterLoading}
-
-					/>}
-
-
-
-
-
-				{/*<Button*/}
-				{/*	stylizedAs={'blue-dark'}*/}
-				{/*	createButton={true}*/}
-				{/*	disabled={chosenData.length === 0}*/}
-				{/*	as={'div'}*/}
-				{/*	// Loading={chosenData.length === 0}*/}
-				{/*	onClick={() => setIsOpenCreateTask(true)}*/}
-				{/*>*/}
-				{/*	Создать задачу*/}
-
-				{/*</Button>*/}
-				{/*{isOpenCreateTask && <TaskCreate isOpenCreateTask={isOpenCreateTask} setIsOpenCreateTask={setIsOpenCreateTask}/>}*/}
-
-				<Button
-
-					stylizedAs={'blue-dark'}
-					// Loading={chosenData.length === 0}
-					createButton={true}
-					onClick={() => setIsOpenCreateAudience(true)}
-				>
-					Создать аудиторию
-				</Button>
-				{isOpenCreateAudience && <AudienceCreate
-					// setInitToReload={setInitToReload}
-					isOpenCreateAudience={isOpenCreateAudience}
-								setIsOpenCreateAudience={setIsOpenCreateAudience}
-				/>}
-
-				<Button
-					stylizedAs={'blue-dark'}
-					createButton={true}
-					disabled={chosenData.length === 0}
-					onClick={
-						() => setIsOpenCreateTask(true)
-					}> Создать задачу</Button>
-				{isOpenCreateTask &&
-					<TaskCreate isOpenCreateTask={isOpenCreateTask}
-								setIsOpenCreateTask={setIsOpenCreateTask}
-								chosenApplications={chosenData}
-					/>}
-			</div>
-		</Report>
+				onScrollEnd={onScrollEnd}
+			>
+				<div className={styles.custom}>
+					<Button
+						stylizedAs="blue-light"
+						exportButton
+						onClick={() => setExportClicked(true)}
+					>
+						Экспорт
+					</Button>
+					<Button
+						stylizedAs="white"
+						filterButton
+						badge={countBadge() ? countBadge().toString() : undefined}
+						onClick={() => {
+							// console.log("t,fnm ndj. vfnm cerf ns t,fyfzz")
+							setIsOpenFilters(true)}}
+					>
+						Фильтр
+					</Button>
+					{isOpenFilters && (
+						<FilterTask
+							setInitToReload={setIsFiltred}
+							isOpenModal={isOpenFilters}
+							filters={filters}
+							setFilters={setFilters}
+							setIsOpenModal={setIsOpenFilters}
+							isLoading={isFilterLoading}
+						/>
+					)}
+					<Button
+						stylizedAs="blue-dark"
+						createButton
+						onClick={() => setIsOpenCreateAudience(true)}
+					>
+						Создать аудиторию
+					</Button>
+					{isOpenCreateAudience && (
+						<AudienceCreate
+							isOpenCreateAudience={isOpenCreateAudience}
+							setIsOpenCreateAudience={setIsOpenCreateAudience}
+						/>
+					)}
+					<Button
+						stylizedAs="blue-dark"
+						createButton
+						disabled={chosenData.length === 0}
+						onClick={() => setIsOpenCreateTask(true)}
+					>
+						Создать задачу
+					</Button>
+					{isOpenCreateTask && (
+						<TaskCreate
+							isOpenCreateTask={isOpenCreateTask}
+							setIsOpenCreateTask={setIsOpenCreateTask}
+							chosenApplications={chosenData}
+						/>
+					)}
+				</div>
+			</Report>
 		</>
-	)
+	);
 }
