@@ -130,8 +130,17 @@ export default function ProcessedRequestsSpeedReport(){
 	};
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
-		console.log(rowPos, columnPos, cellData);
-		// setIsOpenCurtain(true);
+		const params = new URLSearchParams();
+		// alert(`Строка: ${rowPos}, Столбец: ${columnPos}, Данные: ${cellData}`);
+		if(rowPos.toString() === '1')
+			params.append("status", columnPos.toString());
+		if (searchParams.get('start_date')) {
+			params.append("start_date", searchParams.get('start_date'));
+		}
+		if (searchParams.get('end_date')) {
+			params.append("end_date", searchParams.get('end_date'));
+		}
+		navigate('/tasks?' + params.toString());
 	}
 	const handleExportClick = () => {
 		setExportClicked(true);
@@ -192,6 +201,7 @@ export default function ProcessedRequestsSpeedReport(){
 								 onCheckboxChanged={onCheckboxChanged}
 					/>
 					<RangeDate
+						disabled={true}
 						setNeedToReset={setNeedToResetDateTime}
 						needToReset={needToResetDateTime}
 						oneCalendar={false}

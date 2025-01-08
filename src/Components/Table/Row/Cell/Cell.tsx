@@ -82,6 +82,7 @@ export default function Cell({onClickCell,isAsideHeader, isFooter,  isArrayInRow
                         <>
 
                             <Checkbox
+                                name={cellData}
                                 checked={isChecked}
                                 onChange={() =>
                                     typeof setCheckedRows === "function" &&

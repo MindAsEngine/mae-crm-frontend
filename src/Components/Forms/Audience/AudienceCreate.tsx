@@ -118,8 +118,12 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             filter.rejection_reasons = rejection_reasons.map(reason => reason.name);
         if (Array.isArray(non_target_reasons) && non_target_reasons.length > 0)
             filter.non_target_reasons = non_target_reasons.map(reason => reason.name);
-        if (creation_date_from && creation_date_to){
+        if (creation_date_from) {
             filter.creation_date_from = handleDateFormat(creation_date_from);
+
+            // console.log(creation_date_to, creation_date_from)
+        }
+        if (creation_date_to) {
             filter.creation_date_to = handleDateFormat(creation_date_to);
             // console.log(creation_date_to, creation_date_from)
         }
@@ -152,7 +156,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     }
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (audience.title && (audience.end && audience.start) ) {
+            if (audience.title && (audience.start) ) {
                 // console.log("Audience data:", audience);
                 postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,
                     audience.start,  audience.end );
@@ -160,7 +164,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                  // Закрыть модалку после отправки
             } else{
                 setIsTouched(true);
-                if (!audience.title || !(audience.end && audience.start)) {
+                if (!audience.title || !( audience.start)) {
                     setErrMessage("Заполните все обязательные поля");
                 }
             }
@@ -238,7 +242,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                         isTouchedDefault={isTouched}
                         needToReset={needToR}
                         setNeedToReset={setNeedToR}
-                        isValidStyle={audience.start !== null && audience.end !== null}
+                        isValidStyle={audience.start !== null}
                                         />
                 </label>
                 <Select

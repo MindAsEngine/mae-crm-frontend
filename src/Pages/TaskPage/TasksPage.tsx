@@ -15,7 +15,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export default function TasksPage() {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
-
+	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
 	const [data, setData] = useState([]);
 	const [isFiltred, setIsFiltred] = useState(true);
 	const [header, setHeader] = useState([]);
@@ -208,6 +208,44 @@ export default function TasksPage() {
 			setPage((prev) => prev + 1);
 		}
 	}
+	const onClickCell = (columnPos: string) => {
+		let direction = '';
+		let field = '';
+		if (columnPos === "actions" || columnPos === "id") {
+			return;
+		}
+		if (columnPos === "name") {
+			field = "client_name";
+		} else {
+			field = columnPos;
+		}
+
+		if (countOfClickOnHeader === 0) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'ASC';
+		} else if (countOfClickOnHeader === 1 && filters.sortField === field) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'DESC';
+		} else {
+			setCountOfClickOnHeader(0);
+			if (filters.sortField === field) {
+				direction = 'ASC';
+			} else {
+				direction = '';
+
+			}
+
+		}
+		if (direction == 'ASC' || direction == 'DESC') {
+			setFilters({
+				...filters,
+				sortField: field,
+				sortOrder: direction,
+			})
+			setIsFiltred(true);
+		}
+
+	}
 	return (
 		<>
 			<Report
@@ -217,6 +255,7 @@ export default function TasksPage() {
 				setChosenData={setChosenData}
 				isLoading={loading}
 				onScrollEnd={onScrollEnd}
+				onHeaderClick={onClickCell}
 			>
 				<div className={styles.custom}>
 					<Button

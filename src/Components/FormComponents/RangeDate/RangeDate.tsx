@@ -16,7 +16,7 @@ type DateRangeProps = {
 	// setStartDate: (date: Date) => void;
 	// setEndDate: (date: Date) => void;
 	id?: string;
-
+	disabled: boolean
 	iconPosition?: "right"
 	oneCalendar: boolean
 	withTime: boolean,
@@ -111,6 +111,11 @@ const DateRange = ({
 			setRange({end: chosenRange.end, start: chosenRange.start})
 			// setEndDate(chosenRange.end);
 			setIsOpen(false);
+		} else if (isValid(chosenRange.start) && !chosenRange.end) {
+			setRange({end: null, start: chosenRange.start})
+			// setEndDate(chosenRange.start);
+			setIsOpen(false);
+
 		}
 	};
 	// const isRangeValid = (start, )
@@ -147,6 +152,7 @@ const DateRange = ({
 			const startDate = parse(formattedValue, "dd.MM.yyyy", new Date());
 			if (isValid(startDate)) {
 				setChosenRange({ start: startDate, end: startDate });
+				// todo null
 				setIsValidInput(true);
 			} else {
 				setIsValidInput(false);
