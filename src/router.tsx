@@ -4,7 +4,6 @@ import CallCenterReport from './Pages/Reports/CallCenter/CallCenterReport.tsx'
 import Layout from './Components/Layout/Layout.tsx'
 import RegionsReport from './Pages/Reports/Regions/RegionsReport.tsx'
 import ProcessedRequestsSpeedReport from './Pages/Reports/Speed/ProcessedRequestsSpeedReport.tsx'
-import NotFoundPage from './Pages/NotFoundPage.tsx'
 import * as React from 'react'
 import UsersPage from "./Pages/Admin/UsersPage.tsx";
 import AudiencePage from "./Pages/AudiencePage/AudiencePage.tsx";
@@ -13,10 +12,9 @@ export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
 	'/tasks': 'Заявки',
 	'/audience': 'Аудитория',
-	// '/login': 'Вход',
-	// '/admin': 'АДМИН',
-	// '/admin/users': 'Пользователи',
-	// '/advertisement': 'Реклама',
+	'/login': 'Вход',
+	'/admin': 'АДМИН',
+	'/admin/users': 'Пользователи',
 	'/reports': 'Отчеты',
 	'/reports/regions': 'Регионы покупки недвижимости',
 	'/reports/processed-requests-speed': 'Скорость отработанных заявок',
@@ -46,10 +44,7 @@ export const router = createBrowserRouter(
 					path: '/audience',
 					element: <AudiencePage/>,
 				},
-				// {
-				// 	path: '/advertisement',
-				// 	element: <Navigate to={'/'} />,
-				// },
+
 				{
 					path: '/reports',
 					children: [
@@ -71,25 +66,25 @@ export const router = createBrowserRouter(
 						},
 					],
 				},
-		// 		{
-		// 			path: '/admin',
-		// 			children: [
-		// 				{
-		// 					index: true,
-		// 					element: <Navigate to={'users'} />,
-		// 				},
-		// 				{
-		// 					path: 'users',
-		// 					element: <UsersPage />,
-		// 				}
-		// 				]
-		// 		}
+				{
+					path: '/admin',
+					children: [
+						{
+							index: true,
+							element: <Navigate to={'users'} />,
+						},
+						{
+							path: 'users',
+							element: <UsersPage />,
+						}
+						]
+				}
 			],
 		},
-		// {
-		// 	path: '/login',
-		// 	element: <LoginPage/>,
-		// }
+		{
+			path: '/login',
+			element: <LoginPage/>,
+		}
 	],
 	{
 		future: {

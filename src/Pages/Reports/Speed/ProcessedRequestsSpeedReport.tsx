@@ -7,9 +7,10 @@ import Report from "../../../Components/Report/Report.tsx";
 
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import jsonData from "./speed.json";
+
 import {format} from "date-fns";
-import {useNavigate, useSearchParams} from "react-router-dom"; // Локальные данные для теста
+import {useNavigate, useSearchParams} from "react-router-dom";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function ProcessedRequestsSpeedReport(){
@@ -44,7 +45,7 @@ export default function ProcessedRequestsSpeedReport(){
 	}
 
 	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
-	const [initToReload, setInitToReload] = useState(false);
+	const [initToReload, setInitToReload] = useState(true);
 
 	const [customSettings, setCustomSettings] = useState([]);
 	const [exportClicked, setExportClicked] = useState(false);
@@ -107,10 +108,16 @@ export default function ProcessedRequestsSpeedReport(){
 					// setDefaultCustomSettings(data?.headers);
 				});
 		};
-		fetchData().then(() => {
-			navigate('?'+getParamsForRequest());
-		})
-	}, [filters]);
+		if (initToReload) {
+			fetchData().then(() => {
+				navigate('?'+getParamsForRequest());
+			})
+			setInitToReload(false);
+		}
+		// fetchData().then(() => {
+		// 	navigate('?'+getParamsForRequest());
+		// })
+	}, [initToReload]);
 
 	useEffect(() => {
 		// @ts-ignore
@@ -201,7 +208,7 @@ export default function ProcessedRequestsSpeedReport(){
 								 onCheckboxChanged={onCheckboxChanged}
 					/>
 					<RangeDate
-						disabled={true}
+						disabled={!(data?.length > 0)}
 						setNeedToReset={setNeedToResetDateTime}
 						needToReset={needToResetDateTime}
 						oneCalendar={false}
@@ -210,10 +217,10 @@ export default function ProcessedRequestsSpeedReport(){
 						setRange={range =>{
 							setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
 							setInitToReload(true);
-							{/*todo allow set only one start*/}
 
 						}}/>
 					<Button
+						disabled={!(data?.length > 0)}
 						stylizedAs={'blue-dark'}
 						exportButton={true}
 						onClick={handleExportClick}

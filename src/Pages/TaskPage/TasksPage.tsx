@@ -201,7 +201,8 @@ export default function TasksPage() {
 	};
 
 	const countBadge = () =>
-		filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0) + (filters.start && filters.end ? 1 : 0);
+		filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0) + (filters.start && filters.end ||  filters.start
+			? 1 : 0);
 	const onScrollEnd = () => {
 		console.log('scroll end');
 		if (page < totalResults) {
@@ -246,6 +247,7 @@ export default function TasksPage() {
 		}
 
 	}
+	// console.log('filters', filters);
 	return (
 		<>
 			<Report
@@ -259,6 +261,8 @@ export default function TasksPage() {
 			>
 				<div className={styles.custom}>
 					<Button
+						disabled={!(data?.length > 0)}
+
 						stylizedAs="blue-light"
 						exportButton
 						onClick={() => setExportClicked(true)}
@@ -266,6 +270,7 @@ export default function TasksPage() {
 						Экспорт
 					</Button>
 					<Button
+						// disabled={!(data?.length > 0)}
 						stylizedAs="white"
 						filterButton
 						badge={countBadge() ? countBadge().toString() : undefined}
@@ -286,6 +291,7 @@ export default function TasksPage() {
 						/>
 					)}
 					<Button
+
 						stylizedAs="blue-dark"
 						createButton
 						onClick={() => setIsOpenCreateAudience(true)}

@@ -164,22 +164,11 @@ export default function CallCenterReport() {
 			onHeaderClick={onHeaderClick}
 		>
 			<div className={styles.custom}>
-				{/*<ModalCustom*/}
-				{/*	customSettings={customSettings}*/}
-				{/*	setCustomSettings={setCustomSettings}*/}
-				{/*	header={header}*/}
-				{/*	setDefaultCustomSettings={setDefaultCustomSettings}*/}
-				{/*	onCustomSettingApplied={onCustomSettingApplied}*/}
-				{/*	onCheckboxChanged={onCheckboxChanged}*/}
-				{/*/>onCheckboxChanged*/}
-				{/*<RangeDate*/}
-				{/*	startDate={filters.startDate}*/}
-				{/*	endDate={filters.endDate}*/}
-				{/*	setStartDate={(date) => handleStartDateChange(date)}*/}
-				{/*	setEndDate={(date) => handleEndDateChange(date)}*/}
-				{/*/>*/}
+
 
 				<RangeDate
+					disabled={!(data?.length > 0)}
+
 					setNeedToReset={setNeedToResetDateTime}
 					needToReset={needToResetDateTime}
 					oneCalendar={false}
@@ -192,7 +181,7 @@ export default function CallCenterReport() {
 
 					}}/>
 				<Button
-					disabled={loading}
+					disabled={!(data?.length > 0)}
 					stylizedAs={"blue-dark"}
 					exportButton={"white"}
 					onClick={handleExportClick}

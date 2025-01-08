@@ -43,7 +43,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
         setIsOpenModal(false);
         setInitToReload(true);
     }
-    // console.log(filters);
+    // console.log("start: " + filters.start+" end: "+filters.end);
     const [needToR, setNeedToR] = useState(false);
     return (
         <Form

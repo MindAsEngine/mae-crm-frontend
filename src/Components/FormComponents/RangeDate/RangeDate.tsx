@@ -33,7 +33,7 @@ const DateRange = ({
 	needToReset=false,
 	range, setRange,
 	isTouchedDefault=false,
-
+	disabled=false,
 					   id="",
 	setNeedToReset
 					   // endDate, setStartDate, setEndDate
@@ -47,6 +47,7 @@ const DateRange = ({
 	const [startTime, setStartTime] = useState({ hour: "00", minute: "00" });
 	const [endTime, setEndTime] = useState({ hour: "00", minute: "00" });
 	// const [rawValue, setRawValue] = useState(""); // Значение без маски
+	// alert("DateRange"+disabled);
 	const [maskedValue, setMaskedValue] = useState(""); // Значение с маской
 	useEffect(() => {
 		if (needToReset){
@@ -68,7 +69,7 @@ const DateRange = ({
 	const handleClickOut = (e: MouseEvent) => {
 		const dialog = document.getElementById("calendarDropdown"+id);
 		if (dialog && !dialog.contains(e.target as Node)&&isOpen) {
-			setNeedToReset(true);
+			// setNeedToReset(true);
 			setIsOpen(false);
 		}
 	};
@@ -100,25 +101,20 @@ const DateRange = ({
 
 	const applySelection = (e) => {
 		e.preventDefault();
-		// const count = intervalToDuration({
-		// 	start: chosenRange.start,
-		// 	end: chosenRange.end
-		// });
+
 		if (isValid(chosenRange.start) && isValid(chosenRange.end) && intervalToDuration({
 			start: chosenRange.start,
 			end: chosenRange.end
 		})?.years < 1) {
 			setRange({end: chosenRange.end, start: chosenRange.start})
-			// setEndDate(chosenRange.end);
 			setIsOpen(false);
 		} else if (isValid(chosenRange.start) && !chosenRange.end) {
 			setRange({end: null, start: chosenRange.start})
-			// setEndDate(chosenRange.start);
 			setIsOpen(false);
 
 		}
 	};
-	// const isRangeValid = (start, )
+
 
 	const handleInputChange = (val) => {
 		const value = val.replace(/\D/g, ""); // Убираем всё, кроме цифр
@@ -152,7 +148,7 @@ const DateRange = ({
 			const startDate = parse(formattedValue, "dd.MM.yyyy", new Date());
 			if (isValid(startDate)) {
 				setChosenRange({ start: startDate, end: startDate });
-				// todo null
+
 				setIsValidInput(true);
 			} else {
 				setIsValidInput(false);
@@ -160,9 +156,11 @@ const DateRange = ({
 		}
 	};
 	useEffect(() => {
-		if (range.start && range.end){
+		if (range.start && range.end) {
 			handleInputChange(format(range.start, "dd.MM.yyyy") + " - "
 				+format(range.end, " - dd.MM.yyyy"));
+		} else if (range.start) {
+			handleInputChange(format(range.start, "dd.MM.yyyy"));
 		}
 	}, []);
 
@@ -171,11 +169,13 @@ const DateRange = ({
 		<div className={styles.container} id={"calendarDropdown"+id}
 		onClick={event => event.stopPropagation()}
 		>
-			<div className={styles.input} onClick={toggleCalendar}>
+			<div className={styles.input} onClick={() => !disabled && toggleCalendar()}>
 				<Input
+					readOnly={disabled}
 					before={<span className={
 						clsx(styles.imgCalendar , maskedValue.length > 0 && styles.active,
 							isFocused && styles.active,
+							disabled && styles.disabled
 						)
 					}></span>}
 					type="text"

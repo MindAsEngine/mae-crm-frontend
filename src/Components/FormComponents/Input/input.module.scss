@@ -30,7 +30,7 @@
   box-shadow: var(--effect-red-shadow);
 }
 
-.focused{
+.focused:not(.readOnly){
     border: var(--border-grey-300-regular);
     box-shadow: var(--effect-grey-shadow);
 }
@@ -71,5 +71,11 @@ textarea.input{
 .input:focus::placeholder{
   box-sizing: border-box;
   color: rgb(71 84 103 / 100%);
+}
+
+.readOnly{
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-500);
+  cursor: not-allowed;
 }
 

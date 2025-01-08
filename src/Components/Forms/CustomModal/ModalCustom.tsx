@@ -31,6 +31,7 @@ export default function ModalCustom({
             stylizedAs={'white'}
             className={styles.additional}
             filterButton={true}
+            disabled={!(Array.isArray(customSettings)&&customSettings.length>0)}
             onClick={() => setIsOpen(true)}>Кастом
             {isOpen &&<Modal
                 isOpen={isOpen}
@@ -46,7 +47,8 @@ export default function ModalCustom({
                 isDropDown={true}
                    // isDropDown={false}
             >
-                {customSettings.map((item, index) => (
+
+                {Array.isArray(customSettings)&&customSettings.map((item, index) => (
                     <div key={index} className={styles.label}
                          onClick={() => {onCheckboxChanged(item.name)}}
                     >

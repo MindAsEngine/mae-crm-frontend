@@ -36,6 +36,7 @@ export default function Input({
                               }: InputProps) {
     const [isFocused, setIsFocused] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState(isTouchedDefault);
+    // console.log(readOnly, "readOnly");
     return (
 
         <div
@@ -43,7 +44,7 @@ export default function Input({
             className={clsx(styles.container, isFocused && styles.focused,
             Component==="input" && styles.inputContainer,
             Component==="textarea" && styles.textareaContainer,
-
+            readOnly && styles.readOnly,
             // isValid && styles.valid,
                 (isTouched||isTouchedDefault) && isValid === false && styles.invalid,
             className)}>
@@ -53,7 +54,7 @@ export default function Input({
                 type={type || "text"}
                 placeholder={placeholder}
                 className={clsx(styles.input)}
-                onChange={onChange}
+                onChange={(e) => !readOnly && onChange(e)}
                 value={value}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}

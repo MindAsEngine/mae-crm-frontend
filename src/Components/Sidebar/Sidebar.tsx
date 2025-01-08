@@ -8,7 +8,7 @@ import clsx from 'clsx'
 const userImage = '/images/user.png'
 export default function Sidebar() {
 	const [isOpened, setIsOpened] = React.useState<boolean>(true);
-	const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
+	const [isAdmin, setIsAdmin] = React.useState<boolean>(true);
 	const navigate = useNavigate();
 	const handleLogout = () => {
 		navigate('/login')
