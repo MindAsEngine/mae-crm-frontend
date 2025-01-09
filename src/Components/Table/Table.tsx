@@ -8,6 +8,7 @@ import clsx from "clsx";
 import {useLocation} from "react-router-dom";
 import Loading from "../Loading/Loading.tsx";
 import ErrorComponent from "../Error/ErrorComponent.tsx";
+import {is} from "date-fns/locale";
 
 type TableProps = {
 	data: Array<object>
@@ -19,6 +20,9 @@ type TableProps = {
 	isLoading?: boolean
 	onHeaderClick?: (columnPos: string) => void
 	onScrollEnd?: () => void
+
+	isAllChecked?: boolean
+	setAllChecked?: (prev: boolean) => void
 }
 
 export default function Table({
@@ -29,13 +33,15 @@ export default function Table({
 								  checkedRows,
 								  setCheckedRows,
 								  isLoading,
+	isAllChecked,
+	setAllChecked,
 	onScrollEnd,
 
 	onHeaderClick
 							  }: TableProps) {
 	const url = useLocation();
 
-	const [isAllChecked, setAllChecked] = useState<boolean>(false);
+	const [isAllCheckedLocal, setAllCheckedLocal] = useState<boolean>(false);
 	const [isAllUnchecked, setAllUnchecked] = useState<boolean>(true);
 	const [hasScrollHorizontal, setHasScrollHorizontal] = useState<boolean>(false);
 	const [hasScrollVertical, setHasScrollVertical] = useState<boolean>(false);
@@ -61,7 +67,11 @@ export default function Table({
 	// }, [checkedRows, data?.length]);  // Depend on checkedRows and data.lengthff
 	useEffect(() => {
 		setAllUnchecked(checkedRows?.length === 0);
-		setAllChecked(data?.length > 0 && checkedRows?.length === data.length );
+		if (typeof setAllChecked === 'function') {
+			setAllChecked(data?.length > 0 && checkedRows?.length === data.length );
+		} else {
+			setAllCheckedLocal(data?.length > 0 && checkedRows?.length === data.length );
+		}
 	}, [checkedRows, data]);
 
 	useEffect(() => {
@@ -121,7 +131,8 @@ export default function Table({
 				<TableHeader
 					isAllUnchecked={isAllUnchecked}
 					row={header}
-					isAllChecked={isAllChecked}
+					isAllChecked={typeof setAllChecked === 'function' ? isAllChecked : isAllCheckedLocal}
+
 					handleAllChecked={handleCheckAll}
 					onClickHeaderCell={onHeaderClick}
 				/>

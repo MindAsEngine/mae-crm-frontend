@@ -19,10 +19,15 @@ type ReportProps = {
     onHeaderClick?: (columnPos: string) => void
     onScrollEnd?: (e: any) => void
 
+    isAllChecked?: boolean
+    setAllChecked?: (prev: boolean) => void
+
 }
 
 export default function Report({data, isLoading,
                                     onHeaderClick,
+    isAllChecked,
+    setAllChecked,
     onScrollEnd,
                                    footer,noDataRange, onClickCell, header, children, filters, setFilters, chosenData, setChosenData}: ReportProps) {
 
@@ -47,6 +52,8 @@ export default function Report({data, isLoading,
                 onClickCell={onClickCell}
                 onHeaderClick={onHeaderClick}
                 onScrollEnd={onScrollEnd}
+                isAllChecked={isAllChecked}
+                setAllChecked={setAllChecked}
             />
 
 		</main>

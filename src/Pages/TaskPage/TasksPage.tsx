@@ -54,7 +54,7 @@ export default function TasksPage() {
 			start: params.get('start_date') ? new Date(params.get('start_date')) : null,
 			end: params.get('end_date') ? new Date(params.get('end_date')) : null,
 			selects: [
-				// createFilter('regions', params.get('region')),
+				createFilter('regions', params.get('region')),
 				createFilter('status_names', params.get('status')),
 				createFilter('property_types', params.get('property_type'), 'property_type'),
 				createFilter('project_names', params.get('project_name')),
@@ -62,6 +62,7 @@ export default function TasksPage() {
 			],
 			sortField: params.get('order_field') || '',
 			sortOrder: params.get('order_direction') || '',
+			daysInStatus: params.get('days_in_status') || null,
 		};
 	}
 
@@ -107,6 +108,10 @@ export default function TasksPage() {
 	const fetchData = useCallback(async () => {
 
 		setLoading(true);
+		setAllChecked(false);
+		setChosenData([]);
+		if (page === 1)
+			setData([]);
 		try {
 			const params = getParamsForRequest();
 			const response = await fetch(`${apiUrl}/applications?${params}`);
@@ -170,6 +175,7 @@ export default function TasksPage() {
 			const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
 			return `${year}-${month}-${day}T00:00:00Z`;
 		}
+		if (filters.daysInStatus) params.append('days_in_status', filters.daysInStatus);
 		if (filters.start) params.append('start_date', handleDateFormat(filters.start));
 		if (filters.end) params.append('end_date', handleDateFormat(filters.end));
 		filters.selects.forEach((select) => {
@@ -201,8 +207,9 @@ export default function TasksPage() {
 	};
 
 	const countBadge = () =>
-		filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0) + (filters.start && filters.end ||  filters.start
-			? 1 : 0);
+		filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0)
+		+ (filters.start && filters.end ||  filters.start ? 1 : 0) +
+		(filters.daysInStatus ? 1 : 0);
 	const onScrollEnd = () => {
 		console.log('scroll end');
 		if (page < totalResults) {
@@ -247,6 +254,9 @@ export default function TasksPage() {
 		}
 
 	}
+
+	const [isAllChecked, setAllChecked] = useState(false);
+	console.log(chosenData)
 	// console.log('filters', filters);
 	return (
 		<>
@@ -258,6 +268,9 @@ export default function TasksPage() {
 				isLoading={loading}
 				onScrollEnd={onScrollEnd}
 				onHeaderClick={onClickCell}
+
+				isAllChecked={isAllChecked}
+				setAllChecked={setAllChecked}
 			>
 				<div className={styles.custom}>
 					<Button
@@ -282,6 +295,7 @@ export default function TasksPage() {
 					</Button>
 					{isOpenFilters && (
 						<FilterTask
+							withDaysInStatus={true}
 							setInitToReload={setIsFiltred}
 							isOpenModal={isOpenFilters}
 							filters={filters}
@@ -317,6 +331,8 @@ export default function TasksPage() {
 							isOpenCreateTask={isOpenCreateTask}
 							setIsOpenCreateTask={setIsOpenCreateTask}
 							chosenApplications={chosenData}
+							isCheckedAll={isAllChecked}
+							filter={filters}
 						/>
 					)}
 				</div>

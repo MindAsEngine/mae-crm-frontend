@@ -8,6 +8,7 @@ import DateRange from "../../FormComponents/RangeDate/RangeDate.tsx";
 import {useState} from "react";
 import Form from "../Form.tsx";
 import Loading from "../../Loading/Loading.tsx";
+import Input from "../../FormComponents/Input/Input.tsx";
 
 
 
@@ -18,10 +19,11 @@ type FilterProps = {
     isOpenModal: boolean;
     setInitToReload?: any;
     isLoading?: boolean;
+    withDaysInStatus?: boolean;
 }
 
-export default function FilterTask({filters, setFilters, isLoading, setIsOpenModal, isOpenModal, setInitToReload}: FilterProps) {
-
+export default function FilterTask({filters, setFilters, isLoading, setIsOpenModal, isOpenModal, setInitToReload, withDaysInStatus}: FilterProps) {
+    const [error, setError] = useState("");
     const handleResetClick = (e) => {
         e.preventDefault();
 
@@ -39,6 +41,15 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
     }
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (filters.start && filters.end && filters.start > filters.end) {
+            setError("Дата начала не может быть больше даты окончания");
+            return;
+        }
+        if (filters.daysInStatus && filters.daysInStatus < 1) {
+            setError("Количество дней должно быть больше 0");
+            return;
+        }
+        setError("");
         // setFilters({...filters, page: 1});
         setIsOpenModal(false);
         setInitToReload(true);
@@ -64,7 +75,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                                       setIsOpenModal(false);
                                   }}
                                   classNameContent={styles.form}
-
+                                    errMessage={error}
                                   isDropDown={false}
                                   footer={
                                       <>
@@ -81,6 +92,7 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
 
                                       </>
                                   }>
+
 
                 {!isLoading && filters.selects && Array.isArray(filters.selects)
                     ? filters.selects.map((item, index) => (<>
@@ -125,6 +137,25 @@ export default function FilterTask({filters, setFilters, isLoading, setIsOpenMod
                     )) :
                     <Loading/>
                 }
+            {withDaysInStatus &&
+                <label className={styles.label}>
+                    <span className={clsx(styles.span)}>Дней в статусе</span>
+
+                    <Input
+                        maxLength={3}
+
+                        min={1}
+                        placeholder={"Количество дней"}
+                        className={styles.input}
+                        type="number"
+                        value={filters.daysInStatus}
+                        onChange={(e) =>
+                            setFilters({...filters, daysInStatus: e.target.value})}
+                        isValid={filters.daysInStatus >= 1}
+                    />
+                </label>
+
+            }
 
             </Form>
 

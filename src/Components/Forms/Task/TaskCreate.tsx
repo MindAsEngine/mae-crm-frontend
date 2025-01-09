@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Input from "../../FormComponents/Input/Input.tsx";
 import styles from "../form.module.scss";
 import Select from "../../FormComponents/Select/Select.tsx";
@@ -23,15 +23,19 @@ class Task {
     start: Date | null;
     end: Date | null;
     applications: [];
+    checkedAll: boolean;
+    filter: object | null;
 }
 type TaskCreateProps = {
     isOpenCreateTask: boolean;
     setIsOpenCreateTask: any;
     chosenApplications: [];
+    isCheckedAll: boolean;
+    filter: object | null;
 }
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}: TaskCreateProps) => {
+const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, isCheckedAll, filter}: TaskCreateProps) => {
     const [task, setTask] = useState<Task>({
         id: 0,
         title: "",
@@ -40,6 +44,8 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
         start: null,
         end: null,
         applications: chosenApplications,
+        checkedAll: isCheckedAll,
+        filter: filter,
     });
 
     const [isTouched, setIsTouched] = useState(false);
@@ -56,28 +62,76 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
             start: null,
             end: null,
             applications: chosenApplications,
+            checkedAll: isCheckedAll,
+            filter: filter,
         });
 
     };
     const handleDateFormat = (date) =>{
+        console.log(date, "date")
         const userInputDate = format(date, "yyyy-MM-dd")
+
         const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
         return `${year}-${month}-${day}T00:00:00Z`;
     }
     const postTasks =  async (title, description, type, start, end, applications) => {
 
+        const taskForPost = {
+            title: title,
+            description: description,
+            type: type,
+            start: handleDateFormat(start),
+            end: handleDateFormat(end),
+            is_checked_all: isCheckedAll
 
 
-        fetch(apiUrl+`/task`, {
+        }
+        if (isCheckedAll && filter) {
+            taskForPost.filter = {}
+            if (filter.start)
+                taskForPost.filter["start_date"] = handleDateFormat(filter.start);
+            if (filter.end)
+                taskForPost.filter["end_date"] = handleDateFormat(filter.end);
+            if (filter.daysInStatus)
+                taskForPost.filter["days_in_status"] = filter.daysInStatus;
+            if (filter.selects)
+                filter.selects.forEach((select) => {
+                    if (select.selectedOptions.length > 0) {
+                        if (select.name === "status_names") {
+                            taskForPost.filter["status"] = select.selectedOptions[0].name;
+                        }
+                        if (select.name === 'property_types') {
+                            taskForPost.filter["property_type"] = select.selectedOptions[0].name;
+                        }
+                        if (select.name === 'regions') {
+                            taskForPost.filter["region"] = select.selectedOptions[0].name;
+                        }
+                        if (select.name === 'project_names') {
+                            taskForPost.filter["project_name"] = select.selectedOptions[0].name;
+                        }
+                        if (select.name === 'audience_names') {
+                            taskForPost.filter["audience_name"] = select.selectedOptions[0].name;
+                        }
+                    }
+                })
+            if (Object.keys(taskForPost.filter).length < 1) {
+                setIsTouched(true);
+                setErrMessage("Выберите хотя бы один фильтр");
+                return;
+            }
+        } else if (applications.length > 0) {
+            taskForPost.applications = applications;
+
+        } else {
+            setIsTouched(true);
+            setErrMessage("Выберите хотя бы одно заявление");
+            return;
+        }
+
+
+        fetch(apiUrl+`/tasks`, {
             method: 'POST',
-            body: JSON.stringify({
-                title: title,
-                description: description,
-                type: type,
-                start: handleDateFormat(start),
-                end: handleDateFormat(end),
-                applications: applications
-            })
+            body: JSON.stringify(taskForPost),
         }).then((res) => {
                 if (res.ok) {
                     resetTask();
@@ -87,7 +141,7 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
             }).then(err => {throw new Error(err.error)})
             .catch((err) => {
                 console.log(err);
-                // setErrMessage(err.message);
+                setErrMessage("Ошибка при создании задачи");
             })
 
     }
@@ -97,13 +151,12 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
         if (Array.isArray(task.type) && task.type.length > 0) {
             status = task.type[0].name;
         }
-        if (task.title && (task.start && task.end) && task.applications.length > 0 && status != "" && task.description) {
+        if (task.title && (task.start && task.end) && status != "" && task.description) {
             postTasks(task.title, task.description, status, task.start, task.end, task.applications);
 
         } else{
             setIsTouched(true);
             setErrMessage("Заполните все обязательные поля");
-
         }
     };
     const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +170,11 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
             [e.target.name]: e.target.value,
         }));
     }
+    useEffect(() => {
+        if (!isCheckedAll && chosenApplications?.length === 0) {
+            setErrMessage("Выберите хотя бы одно заявление");
+        }
+    }, []);
     return (
 
         <Form
@@ -157,12 +215,11 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications}:
                 onChange={(selected) =>
                     setTask(prevState => ({ ...prevState, type: selected }))}
                 selected={task.type}
-
-                title="Статус заявки"
+                title="Тип задачи"
                 required={true}
                 multiple={false}
                 name="type"
-                placeholder={"статус"}
+                placeholder={"тип задачи"}
 
 
                 isTouchedDefault={isTouched}
