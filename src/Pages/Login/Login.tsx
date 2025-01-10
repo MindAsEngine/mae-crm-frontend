@@ -4,6 +4,7 @@ import Input from "../../Components/FormComponents/Input/Input.tsx";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import {useNavigate} from "react-router-dom";
+import {setAuth, setUser} from "./logout.ts";
 
 export default function LoginPage(){
     const navigate = useNavigate();
@@ -13,10 +14,14 @@ export default function LoginPage(){
     });
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-
-
-        // console.log(login);
+        // todo send request to server
+        let user = {
+            name: "name",
+            surname: "surname",
+            role: "admin"
+        }
+        setUser(user);
+        setAuth('token');
         navigate('/');
     }
 

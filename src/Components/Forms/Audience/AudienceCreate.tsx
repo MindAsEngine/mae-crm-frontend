@@ -7,6 +7,7 @@ import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import { format } from "date-fns";
+import {getAuth} from "../../../Pages/Login/logout.ts";
 
 class Audience {
     id: number;
@@ -127,10 +128,11 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             filter.creation_date_to = handleDateFormat(creation_date_to);
             // console.log(creation_date_to, creation_date_from)
         }
+
         fetch(apiUrl+`/audiences`, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json'
+                Authorization: `Bearer ${getAuth()}`,
             },
             body: JSON.stringify({
                 name: name,
@@ -156,6 +158,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     }
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            setErrMessage(null);
             if (audience.title && (audience.start) ) {
                 // console.log("Audience data:", audience);
                 postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,

@@ -84,7 +84,14 @@ export default function RegionsReport() {
 		const fetchFilters = async () => {
 			setIsFiltersLoading(true);
 			try {
-				const res = await fetch(`${apiUrl}/applications/filters`);
+				const res = await fetch(`${apiUrl}/applications/filters`,
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+						},
+					}
+					);
 				if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 				const result = await res.json();
 				const updatedFilters = filters.selects.map((filter) => {
@@ -109,7 +116,14 @@ export default function RegionsReport() {
 			if (!initToReload || isFiltersLoading) return;
 			setLoading(true);
 			try {
-				const res = await fetch(`${apiUrl}/regions?${getParamsForRequest()}`);
+				const res = await fetch(`${apiUrl}/regions?${getParamsForRequest()}`,
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+						},
+					}
+					);
 				if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 				const data = await res.json();
 				setData(data?.data );

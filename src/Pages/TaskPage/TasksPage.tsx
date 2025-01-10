@@ -76,11 +76,16 @@ export default function TasksPage() {
 		};
 	}
 
-	// Fetch filters
 	const fetchFilters = useCallback(async () => {
 		setIsFilterLoading(true);
 		try {
-			const response = await fetch(`${apiUrl}/applications/filters`);
+			const response = await fetch(`${apiUrl}/applications/filters`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					}
+				});
 			if (!response.ok) throw new Error(`Failed to fetch filters: ${response.status}`);
 			const result = await response.json();
 
@@ -114,7 +119,14 @@ export default function TasksPage() {
 			setData([]);
 		try {
 			const params = getParamsForRequest();
-			const response = await fetch(`${apiUrl}/applications?${params}`);
+			const response = await fetch(`${apiUrl}/applications?${params}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+				);
 			if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
 			const result = await response.json();
 
@@ -146,7 +158,13 @@ export default function TasksPage() {
 		const handleExport = async () => {
 			try {
 				const params = getParamsForRequest();
-				const response = await fetch(`${apiUrl}/applications/export?${params}`);
+				const response = await fetch(`${apiUrl}/applications/export?${params}`,
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
+						},
+					});
 				if (!response.ok) throw new Error('Failed to export data');
 
 				const blob = await response.blob();
@@ -211,7 +229,7 @@ export default function TasksPage() {
 		+ (filters.start && filters.end ||  filters.start ? 1 : 0) +
 		(filters.daysInStatus ? 1 : 0);
 	const onScrollEnd = () => {
-		console.log('scroll end');
+		// console.log('scroll end');
 		if (page < totalResults) {
 			setPage((prev) => prev + 1);
 		}
@@ -256,7 +274,7 @@ export default function TasksPage() {
 	}
 
 	const [isAllChecked, setAllChecked] = useState(false);
-	console.log(chosenData)
+	// console.log(chosenData)
 	// console.log('filters', filters);
 	return (
 		<>

@@ -60,7 +60,7 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
         fetch(apiUrl+`/audiences/${id}`, {
             method: 'DELETE',
             headers: {
-                // 'Content-Type': 'application/json'
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             }
         ).then((res) => {
@@ -82,7 +82,7 @@ const handleDisconnect = () => {
     fetch(apiUrl+`/audiences/${id}/disconnect`,{
         method: 'DELETE',
         headers: {
-            // 'Content-Type': 'application/json'
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
     }).then((res) => {
         if (res.ok) {
@@ -106,6 +106,9 @@ const handleDisconnect = () => {
         const handleExport = async () => {
             await fetch(apiUrl+`/audiences/${id}/export`, {
                 method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
 
             }).then(res => {
                 // console.log(res);

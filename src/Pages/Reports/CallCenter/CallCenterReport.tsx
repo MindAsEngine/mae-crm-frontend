@@ -53,6 +53,9 @@ export default function CallCenterReport() {
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center?${params.toString()}`, {
 				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
 			})
 				.then((res) => {
 					if (!res.ok) {
@@ -94,6 +97,9 @@ export default function CallCenterReport() {
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center/export?`+ params, {
 				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
 
 			}).then(res => {
 				// console.log(res);

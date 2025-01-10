@@ -22,11 +22,9 @@ export default function AudiencePage() {
             setStatus("loading");
             await fetch(apiUrl+`/audiences?`, {
                 method: 'GET',
-                // mode: "no-cors",
                 headers: {
-                    // 'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-                    // 'Content-Type': 'application/json',
-                }})
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },})
                 .then((res) => {
                     // console.log(res);
                     if (!res.ok) {

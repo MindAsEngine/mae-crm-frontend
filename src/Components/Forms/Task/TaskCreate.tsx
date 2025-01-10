@@ -131,6 +131,9 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
 
         fetch(apiUrl+`/tasks`, {
             method: 'POST',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
             body: JSON.stringify(taskForPost),
         }).then((res) => {
                 if (res.ok) {
@@ -147,6 +150,7 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
     }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setErrMessage(null);
         let status = "";
         if (Array.isArray(task.type) && task.type.length > 0) {
             status = task.type[0].name;
@@ -162,7 +166,7 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
     const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         resetTask();
-        setIsOpenCreateTask(false);
+        // setIsOpenCreateTask(false);
     };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTask(prev => ({
@@ -185,6 +189,7 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
             title="Создать массовую задачу"
             classNameContent={styles.form}
             needScroll={false}
+
             footer={<>
                 <Button stylizedAs="white" onClick={handleResetClick}>
                     Отменить

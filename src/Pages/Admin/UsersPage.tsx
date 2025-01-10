@@ -31,8 +31,8 @@ export default function UsersPage() {
 			await fetch(apiUrl + `/users?${params.toString()}`, {
 				method: 'GET',
 				headers: {
-					'Accept': 'application/json',
-				}
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
 			})
 				.then((res) => {
 					if (!res.ok) {
@@ -62,7 +62,7 @@ export default function UsersPage() {
 		setLoading(false);
 
 	}, [filters])
-	console.log("filterParams", filters)
+	// console.log("filterParams", filters)
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
 		// console.log("rowPos", rowPos, dataUsers);
 		setUserInUpdate(dataUsers.find((user) => user.id === rowPos));
@@ -81,17 +81,16 @@ export default function UsersPage() {
 				onClickCell={onClickCell}
 		>
 			<div>
-
-					<UserCreateOrUpdate onClose={
-						() => {
-							// setIsUpdateUserOpened(false);
-							setUserInUpdate(null);
+				{isUpdateUserOpened &&
+					<UserCreateOrUpdate
+						onClose={() => {
+							setIsUpdateUserOpened(false);}
 						}
-					} isOpenCreateUser={isUpdateUserOpened}
+					 isOpenCreateUser={isUpdateUserOpened}
 										setIsOpenCreateUser={setIsUpdateUserOpened}
 										userBeforeUpdate={userInUpdate}
 										isUpdate={userInUpdate !== null}
-					/>
+					/>}
 
 				{/*<UserCreateOrUpdate*/}
 

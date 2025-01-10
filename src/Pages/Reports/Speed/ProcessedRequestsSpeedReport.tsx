@@ -83,7 +83,11 @@ export default function ProcessedRequestsSpeedReport(){
 
 
 			await fetch(apiUrl+`/speed?${getParamsForRequest()}`, {
-				method: 'GET',})
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			})
 				.then((res) => {
 					if (!res.ok) {
 						throw new Error(`HTTP error! status: ${res.status}`);
@@ -158,6 +162,9 @@ export default function ProcessedRequestsSpeedReport(){
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/speed/export?`+ params, {
 				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
 
 			}).then(res => {
 				// console.log(res);
