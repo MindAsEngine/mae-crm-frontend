@@ -10,6 +10,7 @@ import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.ts
 
 import {format} from "date-fns";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {getAuthHeader, logout} from "../../Login/logout.ts";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -79,17 +80,16 @@ export default function ProcessedRequestsSpeedReport(){
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
 			setData([]);
-
-
-
 			await fetch(apiUrl+`/speed?${getParamsForRequest()}`, {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
+				headers: getAuthHeader(),
 			})
 				.then((res) => {
 					if (!res.ok) {
+						if (res.status === 401) {
+							logout();
+							navigate('/login');
+						}
 						throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
@@ -102,14 +102,7 @@ export default function ProcessedRequestsSpeedReport(){
 				})
 				.catch((err) => {
 					console.error(err);
-					// alert("Ошибка загрузки данных");
-					setTimeout(() => {
-					}, 1000); // Имитация задержки в 1 секунду
-					// const data = jsonData;
-					// setData(data?.data); // Установка данных
-					// setFooter(data?.footer); // Установка футера
-					// setHeaderBefore(data?.headers); // Установка заголовков
-					// setDefaultCustomSettings(data?.headers);
+
 				});
 		};
 		if (initToReload) {
@@ -118,9 +111,7 @@ export default function ProcessedRequestsSpeedReport(){
 			})
 			setInitToReload(false);
 		}
-		// fetchData().then(() => {
-		// 	navigate('?'+getParamsForRequest());
-		// })
+
 	}, [initToReload]);
 
 	useEffect(() => {
@@ -162,14 +153,17 @@ export default function ProcessedRequestsSpeedReport(){
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/speed/export?`+ params, {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
+				headers: getAuthHeader(),
 
 			}).then(res => {
 				// console.log(res);
 				if (!res.ok) {
-					throw new Error('Ошибка при получении файла');
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					} else {
+						throw new Error('Ошибка при получении файла');
+					}
 				}
 				return res.blob();
 			}).then((blob) => {

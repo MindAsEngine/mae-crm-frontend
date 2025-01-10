@@ -8,6 +8,7 @@ import {format} from "date-fns";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
+import {getAuthHeader, logout} from "../../../Pages/Login/logout.ts";
 
 
 const task_options = [
@@ -47,7 +48,7 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
         checkedAll: isCheckedAll,
         filter: filter,
     });
-
+    const navigate = useNavigate();
     const [isTouched, setIsTouched] = useState(false);
     const [needToR, setNeedToR] = useState(false);
     const [errMessage, setErrMessage] = useState(null);
@@ -131,14 +132,19 @@ const TaskCreate = ({isOpenCreateTask, setIsOpenCreateTask, chosenApplications, 
 
         fetch(apiUrl+`/tasks`, {
             method: 'POST',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+            headers: getAuthHeader(),
             body: JSON.stringify(taskForPost),
         }).then((res) => {
                 if (res.ok) {
                     resetTask();
                     setIsOpenCreateTask(false);
+                } else {
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login');
+                    } else {
+                        throw new Error(`Ошибка: ${res.status}`);
+                    }
                 }
                 return res.json();
             }).then(err => {throw new Error(err.error)})

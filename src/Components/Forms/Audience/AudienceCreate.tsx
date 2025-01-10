@@ -7,7 +7,8 @@ import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import { format } from "date-fns";
-import {getAuth} from "../../../Pages/Login/logout.ts";
+import {getAuth, getAuthHeader, logout} from "../../../Pages/Login/logout.ts";
+import {useNavigate} from "react-router-dom";
 
 class Audience {
     id: number;
@@ -88,7 +89,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     const [isTouched, setIsTouched] = useState(false);
     const [needToR, setNeedToR] = useState(false);
     const [errMessage, setErrMessage] = useState(null);
-
+    const navigate = useNavigate();
         const resetAudience = () => {
             setNeedToR(true);
             setAudience({
@@ -131,9 +132,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
 
         fetch(apiUrl+`/audiences`, {
             method: 'POST',
-            headers: {
-                Authorization: `Bearer ${getAuth()}`,
-            },
+            headers: getAuthHeader(),
             body: JSON.stringify({
                 name: name,
                 filter: filter
@@ -146,6 +145,12 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                     if (typeof setInitToReload === "function")
                         setInitToReload(true);
                     return;
+                } else {
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login');
+                        throw new Error('Ошибка авторизации');
+                    }
                 }
                 return res.json();
             }).then(err => {throw new Error(err.error)})

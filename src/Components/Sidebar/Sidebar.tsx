@@ -10,16 +10,20 @@ import {getUser, isAdministrator, isAuth, logout} from "../../Pages/Login/logout
 const userImage = '/images/user.png'
 export default function Sidebar() {
 	const [isOpened, setIsOpened] = React.useState<boolean>(true);
-	const [isAdmin, setIsAdmin] = React.useState<boolean>(isAdministrator());
-	const [user, setUser] = React.useState<any>(getUser());
 	const navigate = useNavigate();
+	const [user, setUser] = React.useState<any>();
+	const isAdmin = isAdministrator();
 	const handleLogout = () => {
 		logout();
-		navigate('/login')
+		navigate('/login');
 	};
 	useEffect(() => {
-		if (!isAuth()){
-			navigate('/login');
+		if (!isAuth() || !getUser()) {
+			handleLogout();
+		} else {
+
+			setUser(getUser());
+
 		}
 	}, []);
 	const listItemClassName = (isActive: boolean) =>
@@ -27,7 +31,6 @@ export default function Sidebar() {
 			? clsx(styles.list__item, styles.list__item_active)
 			: styles.list__item
 
-	// console.log(isOpened)
 	return (
 		<aside className={styles.sidebar}>
 			<nav className={styles.navigation}>
@@ -133,6 +136,7 @@ export default function Sidebar() {
 					</div>
 					<div className={styles.profile__text}>
 						<span className={styles.profile__name}>
+
 							{user?.name} {user?.surname}
 						</span>
 						<span className={styles.profile__role}>

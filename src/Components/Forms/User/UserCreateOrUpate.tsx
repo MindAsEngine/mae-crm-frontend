@@ -5,6 +5,8 @@ import Input from "../../FormComponents/Input/Input.tsx";
 import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
+import {getAuthHeader, isAdministrator, logout} from "../../../Pages/Login/logout.ts";
+import {useNavigate} from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 class User{
     id: number | null;
@@ -28,7 +30,7 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
         const [password, setPassword] = useState<string>("");
         const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
         const [isTouched, setIsTouched] = useState(false);
-
+        const navigate = useNavigate();
         const [err, setErr] = useState<string | null>(null);
         const [isSubmitStatusSuccess, setIsSubmitStatusSuccess] = useState<boolean| null>(null);
         const resetForm = () => {
@@ -68,14 +70,18 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
                 resetForm();
             }
         }, [isUpdate]);
+    useEffect(() => {
+        if (!isAdministrator()) {
+            navigate('/');
+        }
+    }, []);
+
         useEffect(() => {
              const postUser = async () => {
 
                  const response = await fetch( apiUrl + '/users', {
                     method: 'POST',
-                     headers: {
-                         Authorization: `Bearer ${localStorage.getItem('token')}`,
-                     },
+                     headers: getAuthHeader(),
                     body: JSON.stringify({
                         surname: user.surname,
                         name: user.name,
@@ -87,6 +93,16 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
 
                 }).then((res) => {
                     if (!res.ok) {
+                        if (res.status === 401) {
+                            setErr("Ошибка авторизации");
+                            logout();
+                            navigate('/login');
+                        }
+                        else if(res.status === 403) {
+                            setErr("У вас нет прав на создание пользователя");
+                            navigate('/');
+                        } else
+                            setErr("Ошибка при создании пользователя");
                         throw new Error(`HTTP error! status: ${res.status}`);
                     }
                     return res.json();
@@ -105,9 +121,7 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
 
                  const response = await fetch( apiUrl + '/users/' + user.id, {
                         method: 'PUT',
-                     headers: {
-                         Authorization: `Bearer ${localStorage.getItem('token')}`,
-                     },
+                        headers: getAuthHeader(),
                         body: JSON.stringify({
                             surname: user.surname,
                             name: user.name,
@@ -117,7 +131,17 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
                         })
                     }).then((res) => {
                         if (!res.ok) {
-                            throw new Error(`HTTP error! status: ${res.status}`);
+                            if (res.status === 403) {
+                                setErr("У вас нет прав на редактирование пользователя");
+                                navigate('/');
+                            } else if (res.status === 404) {
+                                setErr("Пользователь не найден");
+                            } else if (res.status === 401) {
+                                setErr("Ошибка авторизации");
+                                logout();
+                            } else {
+                                throw new Error(`HTTP error! status: ${res.status}`);
+                            }
                         }
                         return res.json();
                     }).then((data) => {

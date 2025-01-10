@@ -7,6 +7,7 @@ import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.ts
 
 import {format} from "date-fns";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {getAuthHeader, logout} from "../../Login/logout.ts";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -53,13 +54,16 @@ export default function CallCenterReport() {
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center?${params.toString()}`, {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
+				headers: getAuthHeader()
 			})
 				.then((res) => {
 					if (!res.ok) {
-						throw new Error(`HTTP error! status: ${res.status}`);
+						if (res.status === 401) {
+							logout();
+							navigate('/login');
+						}
+						else
+							throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
@@ -97,13 +101,15 @@ export default function CallCenterReport() {
 			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center/export?`+ params, {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-
+				headers: getAuthHeader(),
 			}).then(res => {
 				// console.log(res);
 				if (!res.ok) {
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					}
+					else
 					throw new Error('Ошибка при получении файла');
 				}
 				return res.blob();
@@ -131,11 +137,6 @@ export default function CallCenterReport() {
 	const onHeaderClick = (columnPos: string) => {
 		let direction = '';
 		let field = '';
-		// if (columnPos === "name") {
-		// 	field = "client_name";
-		// } else {
-		// 	field = columnPos;
-		// }
 		if (countOfClickOnHeader === 0) {
 			setCountOfClickOnHeader(prevState => prevState+1);
 			direction = 'ASC';
@@ -182,8 +183,7 @@ export default function CallCenterReport() {
 					range={{start: filters.start, end: filters.end}}
 					setRange={range =>{
 						setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
-						// setInitToReload(true);
-						{/*todo allow set only one start*/}
+
 
 					}}/>
 				<Button

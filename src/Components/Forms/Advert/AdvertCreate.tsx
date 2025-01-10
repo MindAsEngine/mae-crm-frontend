@@ -4,6 +4,7 @@ import Select from "../../FormComponents/Select/Select.tsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import Loading from "../../Loading/Loading.tsx";
+import {getAuthHeader} from "../../../Pages/Login/logout.ts";
 
 class Cabinets {
     static Facebook = "facebook";
@@ -34,24 +35,16 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
 
     const [advert, setAdvert] = useState<Advert>({
             cabinet: null,
-            // audiences: chosenAudiences,
-            // start: null,
-            // end: null,
         });
-    // const [needToR, setNeedToR] = useState(false);
-
 
         const resetAdvert = () => {
             setAdvert({
                 cabinet: null,
-                // audiences:[],
-                // start: null,
-                // end: null,
             });
             setChosenAudiences([]);
-            // setNeedToR(true);
+
         };
-        // console.log(advert);
+
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             setErrMessage(null);
@@ -74,31 +67,19 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
     const postIntegration = (cabinet, audiences,) => {
         fetch(apiUrl+`/audiences/integrations`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeader(),
             body: JSON.stringify({
                 cabinet_name: cabinet.name,
                 audience_ids: audiences.filter(id => {
-            // Найти аудиторию в audiencesFromDB по id
-            const audience = audiencesFromDB.find(one => one.id === id);
-
-            // Если аудитория не найдена, оставить id
-            if (!audience) return true;
-
-            // Проверить, есть ли интеграции и совпадает ли cabinet.name
-            const hasIntegration = Array.isArray(audience.integrations) &&
-                audience.integrations.includes(cabinet.name);
-
-            // Возвращаем true, если интеграции нет (т.е. id останется в массиве)
-            return !hasIntegration;
+                    const audience = audiencesFromDB.find(one => one.id === id);
+                    if (!audience) return true;
+                    const hasIntegration = Array.isArray(audience.integrations) && audience.integrations.includes(cabinet.name);
+                    return !hasIntegration;
                     })
                 }),
-
-        })
+            })
             .then((res) => {
                 if (res.ok) {
-                    // return res.json();
                     resetAdvert();
                     setIsOpenCreateAdvert(false); // Закрыть модалку после отправки
                     setInitToReload(true);
@@ -122,7 +103,6 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                 }}
                 title="Подключить рекламу"
                 classNameContent={styles.form}
-                // onClose={resetAdvert}
                 needScroll={false}
                 footer={<>
                     <Button stylizedAs="white" onClick={handleResetClick}>
@@ -164,28 +144,6 @@ const AdvertCreate = ({ isOpenCreateAdvert, setIsOpenCreateAdvert,
                             isValid={chosenAudiences?.length !== 0}
                             isTouchedDefault={isTouched}
                         />
-{/*                        <label className={styles.labelDate}>*/}
-{/*                                       <span className={clsx(styles.span, styles.required)}>*/}
-{/*Срок исполнения задачи</span>*/}
-
-{/*                            <DateRange*/}
-{/*                                needToReset={needToR}*/}
-{/*                                setNeedToReset={setNeedToR}*/}
-{/*                                inputStyle={styles.inputDate_}*/}
-{/*                                isTouchedDefault={isTouched}*/}
-{/*                                // startDate={Advert.start}*/}
-{/*                                // endDate={Advert.end}*/}
-{/*                                isValidStyle={advert.start !== null && advert.end !== null}*/}
-{/*                                // setStartDate={(date) => setAdvert({ ...Advert, start: date })}*/}
-{/*                                // setEndDate={(date) => setAdvert({ ...Advert, end: date })}*/}
-{/*                                range={{start: advert.start, end: advert.end}}*/}
-{/*                                setRange={(date) => setAdvert({...advert, start: date.start, end: date.end})}*/}
-{/*                                iconPosition={"right"}*/}
-{/*                                oneCalendar={true}*/}
-{/*                                withTime={false}*/}
-{/*                            />*/}
-{/*                        </label>*/}
-
                     </> : <Loading/>
                 }
 

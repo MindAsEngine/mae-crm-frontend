@@ -8,14 +8,13 @@ import { format } from "date-fns";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FilterTask from "../../../Components/Forms/FilterTask/FilterTask.tsx";
 import {switchEnum} from "../../../Components/Table/switchEnum.tsx";
+import {getAuthHeader, logout} from "../../Login/logout.ts";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function RegionsReport() {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
-
-	// States
 	const [data, setData] = useState([]);
 	const [header, setHeader] = useState([]);
 	const [headerBefore, setHeaderBefore] = useState([]);
@@ -74,7 +73,6 @@ export default function RegionsReport() {
 	};
 
 	const countBadge = () => {
-		// console.log(filters.selects)
 		return filters.selects.reduce((acc, select) => acc + select.selectedOptions.length, 0) + (filters.start && filters.end ||  filters.start
 			? 1 : 0);
 	}
@@ -87,12 +85,16 @@ export default function RegionsReport() {
 				const res = await fetch(`${apiUrl}/applications/filters`,
 					{
 						method: 'GET',
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
-						},
+						headers: getAuthHeader()
+					});
+				if (!res.ok) {
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					} else {
+						throw new Error(`HTTP error! status: ${res.status}`);
 					}
-					);
-				if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+				}
 				const result = await res.json();
 				const updatedFilters = filters.selects.map((filter) => {
 					const options = result[filter.name]?.map((item) => ({
@@ -119,12 +121,17 @@ export default function RegionsReport() {
 				const res = await fetch(`${apiUrl}/regions?${getParamsForRequest()}`,
 					{
 						method: 'GET',
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
-						},
+						headers: getAuthHeader()
 					}
 					);
-				if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+				if (!res.ok) {
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					} else {
+						throw new Error(`HTTP error! status: ${res.status}`);
+					}
+				}
 				const data = await res.json();
 				setData(data?.data );
 				setFooter(data?.footer );

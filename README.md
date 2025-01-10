@@ -12,16 +12,6 @@ npm install -g @stoplight/prism-cli
 prism mock api.yaml
 ```
 
-[//]: # (todo create forms user, login, task) 
-
-[//]: # (todo filters + onckick)
-
-[//]: # (todo select time, )
-
-[//]: # (todo sorting)
-
-[//]: # (todo docs api audience, task)
-
 ### Описание
 *Структура ответа для страниц-table:*
 1. headers - массив описаний одной ячейки для заголовка таблицы, который указывает на свойсва столбца.

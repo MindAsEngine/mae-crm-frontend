@@ -6,6 +6,7 @@ import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
 import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
 import { Link } from "react-router-dom";
+import {getAuthHeader, logout} from "../../Pages/Login/logout.ts";
 
 type AudienceCardProps = {
     id: number;
@@ -59,14 +60,20 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
     const handleDelete = () => {
         fetch(apiUrl+`/audiences/${id}`, {
             method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+            headers: getAuthHeader()
             }
         ).then((res) => {
             if (res.ok) {
                 setInitToReload(true);
                 setIsConfirmDeleteOpen(false);
+            } else {
+                if (res.status === 401) {
+                    logout();
+                    navigate('/login');
+                    throw new Error('Ошибка доступа при удалении аудитории');
+                }
+                else
+                    throw new Error('Ошибка при удалении аудитории');
             }
 
             }
@@ -81,18 +88,25 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
 const handleDisconnect = () => {
     fetch(apiUrl+`/audiences/${id}/disconnect`,{
         method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: getAuthHeader()
     }).then((res) => {
         if (res.ok) {
             setInitToReload(true);
             setIsConfirmDisconnectOpen(false);
         }
+        else {
+            if (res.status === 401) {
+                logout();
+                navigate('/login');
+                throw new Error('Ошибка  доступа при отключении рекламы');
+            }
+            else
+                throw new Error('Ошибка при отключении рекламы');
+        }
     }).
         catch((err) => {
             console.log(err);
-        setIsConfirmDeleteOpen(false);
+            setIsConfirmDeleteOpen(false);
             })
         }
     const [exportClicked, setExportClicked] = useState(false);
@@ -106,14 +120,17 @@ const handleDisconnect = () => {
         const handleExport = async () => {
             await fetch(apiUrl+`/audiences/${id}/export`, {
                 method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-
+                headers: getAuthHeader(),
             }).then(res => {
                 // console.log(res);
                 if (!res.ok) {
-                    throw new Error('Ошибка при получении файла');
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login');
+                        throw new Error('Ошибка доступа при получении файла');
+                    }
+                    else
+                        throw new Error('Ошибка при получении файла');
                 }
                 return res.blob();
             }).then((blob) => {
@@ -162,13 +179,14 @@ const handleDisconnect = () => {
                            isOpen={isConfirmDeleteOpen}
                            onConfirm={() => handleDelete() }
                            setIsOpen={setIsConfirmDeleteOpen}
-                           title={"Удалить"}/>
+                           title={"Удалить"}
+                />
                 <Confirmed description={"Вы уверены, что хотите отключить рекламу?"}
                            isOpen={isConfirmDisconnectOpen}
                            onConfirm={() => handleDisconnect()}
                            setIsOpen={setIsConfirmDisconnectOpen}
-                           title={"Отключить рекламу"}/>
-
+                           title={"Отключить рекламу"}
+                />
                 <Button
                     as={'div'}
                     className={clsx(styles.settingButton, isOptionsOpen && styles.opened)}

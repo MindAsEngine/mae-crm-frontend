@@ -9,6 +9,7 @@ import AudienceCreate from '../../Components/Forms/Audience/AudienceCreate.tsx';
 import TaskCreate from '../../Components/Forms/Task/TaskCreate.tsx';
 import { switchEnum } from '../../Components/Table/switchEnum.tsx';
 import styles from './task-page.module.scss';
+import {getAuthHeader, logout} from "../Login/logout.ts";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -79,14 +80,21 @@ export default function TasksPage() {
 	const fetchFilters = useCallback(async () => {
 		setIsFilterLoading(true);
 		try {
+			// console.log('fetchFilters', getAuthHeader());
 			const response = await fetch(`${apiUrl}/applications/filters`,
 				{
 					method: 'GET',
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					}
+					headers: getAuthHeader()
 				});
-			if (!response.ok) throw new Error(`Failed to fetch filters: ${response.status}`);
+			if (!response.ok) {
+				if (response.status === 401) {
+					console.log('Unauthorized in fetchFilters');
+					logout();
+					navigate('/login');
+					throw new Error('Unauthorized');
+				}
+				throw new Error('Failed to fetch filters');
+			}
 			const result = await response.json();
 
 			const updatedFilters = filters.selects.map((filter) => {
@@ -122,12 +130,19 @@ export default function TasksPage() {
 			const response = await fetch(`${apiUrl}/applications?${params}`,
 				{
 					method: 'GET',
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: getAuthHeader(),
 				},
 				);
-			if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
+			if (!response.ok) {
+				if (response.status === 401) {
+					console.log('Unauthorized in fetchData');
+					logout();
+
+					throw new Error('Unauthorized');
+				}
+				throw new Error('Failed to fetch data');
+			}
+
 			const result = await response.json();
 
 			setData((prev) => (page === 1 ? result.items : [...prev, ...(result.items || [])]));
@@ -161,11 +176,17 @@ export default function TasksPage() {
 				const response = await fetch(`${apiUrl}/applications/export?${params}`,
 					{
 						method: 'GET',
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
-						},
+						headers: getAuthHeader(),
 					});
-				if (!response.ok) throw new Error('Failed to export data');
+				if (!response.ok) {
+					if (response.status === 401) {
+						console.log('Unauthorized in handleExport');
+						logout();
+
+						throw new Error('Unauthorized');
+					}
+					throw new Error('Failed to export data');
+				}
 
 				const blob = await response.blob();
 				const url = window.URL.createObjectURL(blob);

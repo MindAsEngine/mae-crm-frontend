@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import {createBrowserRouter, Navigate, Outlet} from 'react-router-dom'
 import TasksPage from './Pages/TaskPage/TasksPage.tsx'
 import CallCenterReport from './Pages/Reports/CallCenter/CallCenterReport.tsx'
 import Layout from './Components/Layout/Layout.tsx'
@@ -8,6 +8,7 @@ import * as React from 'react'
 import UsersPage from "./Pages/Admin/UsersPage.tsx";
 import AudiencePage from "./Pages/AudiencePage/AudiencePage.tsx";
 import LoginPage from "./Pages/Login/Login.tsx";
+import {isAdministrator, isAuth} from "./Pages/Login/logout.ts";
 export const routerNames: { [key: string]: string } = {
 	'/': 'Главная',
 	'/tasks': 'Заявки',
@@ -26,7 +27,6 @@ export const router = createBrowserRouter(
 		{
 			path: '*',
 			element: <Navigate to={'/tasks'}/>
-			// element: <NotFoundPage />,
 		},
 		{
 			path: '/',
@@ -68,6 +68,7 @@ export const router = createBrowserRouter(
 				},
 				{
 					path: '/admin',
+
 					children: [
 						{
 							index: true,
@@ -83,8 +84,8 @@ export const router = createBrowserRouter(
 		},
 		{
 			path: '/login',
-			element: <LoginPage/>,
-		}
+			element: <LoginPage />,
+		},
 	],
 	{
 		future: {
