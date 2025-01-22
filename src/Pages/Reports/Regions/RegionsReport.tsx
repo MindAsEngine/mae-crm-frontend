@@ -206,6 +206,15 @@ export default function RegionsReport() {
 		});
 		navigate(`/tasks?${params.toString()}`);
 	};
+
+	const onCheckboxChanged = (name) => {
+		// @ts-ignore
+		setCustomSettings(prevSettings =>
+			prevSettings.map(cell =>
+				cell.name === name ? { ...cell, applied_visible: !cell.applied_visible } : cell
+			)
+		);
+	};
 	// console.log(data?.length, loading);
 	return (
 		<Report
@@ -225,18 +234,16 @@ export default function RegionsReport() {
 					header={header}
 					setDefaultCustomSettings={setDefaultCustomSettings}
 					onCustomSettingApplied={() => {
-						setHeader(prev => prev.map(cell => ({
-							...cell,
-							is_hidden_by_user: !customSettings.find(s => s.name === cell.name)?.applied_visible,
-						})));
+						setHeader(prevHeader =>
+							prevHeader.map(cell => {
+								const setting = customSettings.find(s => s.name === cell.name);
+								return setting ? { ...cell, is_hidden_by_user: !setting.applied_visible,
+									is_visible: setting.applied_visible
+								} : cell;
+							})
+						);
 					}}
-					onCheckboxChanged={(name) => {
-						setCustomSettings(prev =>
-							prev.map(cell => cell.name === name ? {
-								...cell,
-								applied_visible: !cell.applied_visible
-							} : cell));
-					}}
+					onCheckboxChanged={onCheckboxChanged}
 				/>
 				<Button
 					as="div"
