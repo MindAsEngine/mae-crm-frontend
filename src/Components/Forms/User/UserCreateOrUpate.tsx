@@ -28,11 +28,11 @@ type UserCreateOrUpateProps = {
 
 const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, userBeforeUpdate={} ,isUpdate=false}: UserCreateOrUpateProps, ref) => {
         const [password, setPassword] = useState<string>("");
-        const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+        // const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
         const [isTouched, setIsTouched] = useState(false);
         const navigate = useNavigate();
         const [err, setErr] = useState<string | null>(null);
-        const [isSubmitStatusSuccess, setIsSubmitStatusSuccess] = useState<boolean| null>(null);
+        // const [isSubmitStatusSuccess, setIsSubmitStatusSuccess] = useState<boolean| null>(null);
         const resetForm = () => {
             setUser({
                 id: 0,
@@ -76,12 +76,39 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
         }
     }, []);
 
-        useEffect(() => {
-             const postUser = async () => {
+        // useEffect(() => {
+        //
+        //
+        // }, [isFormSubmitted]);
 
-                 const response = await fetch( apiUrl + '/users', {
+
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setUser({
+                ...user,
+                [e.target.name]: e.target.value,
+            });
+        };
+
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            if (!user.surname || !user.name || !user.login || !user.password || !password) {
+                setErr("Заполните все обязательные поля");
+                setIsTouched(true);
+                return;
+            }
+            if ( password !== user.password) {
+                setErr("Пароли не совпадают");
+                setIsTouched(true);
+                return;
+            }
+            setErr('');
+            // setIsFormSubmitted(true);
+            const postUser = async () => {
+
+                const response = await fetch( apiUrl + '/auth/register', {
                     method: 'POST',
-                     headers: getAuthHeader(),
+                    headers: getAuthHeader(),
                     body: JSON.stringify({
                         surname: user.surname,
                         name: user.name,
@@ -107,94 +134,64 @@ const UserCreateOrUpdate = ({ isOpenCreateUser, setIsOpenCreateUser, onClose, us
                     }
                     return res.json();
                 }).then((data) => {
+                    resetForm();
+                    setIsOpenCreateUser(false);
+
                     // console.log("Data:", data);
-                    setIsSubmitStatusSuccess(true);
+                    // setIsSubmitStatusSuccess(true);
                 }).catch((error) => {
                     // console.error('Ошибка:', error);
                     setErr("Ошибка при создании пользователя");
-                    setIsSubmitStatusSuccess(false);
-                    setIsFormSubmitted(false);
+                    // setIsSubmitStatusSuccess(false);
+                    // setIsFormSubmitted(false);
                 });
-             }
+            }
 
-             const putUser = async () => {
-
-                 const response = await fetch( apiUrl + '/users/' + user.id, {
-                        method: 'PUT',
-                        headers: getAuthHeader(),
-                        body: JSON.stringify({
-                            surname: user.surname,
-                            name: user.name,
-                            patronymic: user.patronymic,
-                            login: user.login,
-                            password: user.password,
-                        })
-                    }).then((res) => {
-                        if (!res.ok) {
-                            if (res.status === 403) {
-                                setErr("У вас нет прав на редактирование пользователя");
-                                navigate('/');
-                            } else if (res.status === 404) {
-                                setErr("Пользователь не найден");
-                            } else if (res.status === 401) {
-                                setErr("Ошибка авторизации");
-                                logout();
-                            } else {
-                                throw new Error(`HTTP error! status: ${res.status}`);
-                            }
+            const putUser = async () => {
+                const response = await fetch( apiUrl + '/users/' + user.id, {
+                    method: 'PUT',
+                    headers: getAuthHeader(),
+                    body: JSON.stringify({
+                        surname: user.surname,
+                        name: user.name,
+                        patronymic: user.patronymic,
+                        login: user.login,
+                        password: user.password,
+                    })
+                }).then((res) => {
+                    if (!res.ok) {
+                        if (res.status === 403) {
+                            setErr("У вас нет прав на редактирование пользователя");
+                            navigate('/');
+                        } else if (res.status === 404) {
+                            setErr("Пользователь не найден");
+                        } else if (res.status === 401) {
+                            setErr("Ошибка авторизации");
+                            logout();
+                        } else {
+                            throw new Error(`HTTP error! status: ${res.status}`);
                         }
-                        return res.json();
-                    }).then((data) => {
-                        // console.log("Data:", data);
-                        setIsSubmitStatusSuccess(true);
-                    }).catch((error) => {
-                        setErr("Ошибка при обновлении данных пользователя");
-                        setIsSubmitStatusSuccess(false);
-                     setIsFormSubmitted(false);
+                    }
+                    return res.json();
+                }).then((data) => {
+                    resetForm();
+                    setIsOpenCreateUser(false);
 
-                 });
-             }
-            if (isFormSubmitted && !isUpdate) {
+                    // console.log("Data:", data);
+                    // setIsSubmitStatusSuccess(true);
+                }).catch((error) => {
+                    setErr("Ошибка при обновлении данных пользователя");
+                    // setIsSubmitStatusSuccess(false);
+                    // setIsFormSubmitted(false);
 
-                postUser();
-            } else if (isFormSubmitted && isUpdate) {
-
-                putUser();
+                });
+            }
+            if (!isUpdate) {
+                await postUser();
+            } else  {
+                await putUser();
             }
 
-        }, [isFormSubmitted]);
-
-
-
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setUser({
-                ...user,
-                [e.target.name]: e.target.value,
-            });
-        };
-
-        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            if (!user.surname || !user.name || !user.login || !user.password || !password) {
-                setErr("Заполните все обязательные поля");
-                setIsTouched(true);
-                return;
-            }
-            if ( password !== user.password) {
-                setErr("Пароли не совпадают");
-                setIsTouched(true);
-                return;
-            }
-
-            setErr('');
-
-            setIsFormSubmitted(true);
-
-
-            if (!isFormSubmitted && isSubmitStatusSuccess) {
-                resetForm();
-                // setIsOpenCreateUser(false); // Закрыть модалку после отправки
-            }
         };
         const handleResetClick = (e: React.ChangeEvent<HTMLInputElement>) => {
             e.preventDefault();

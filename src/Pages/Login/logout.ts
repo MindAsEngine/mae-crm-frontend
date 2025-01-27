@@ -24,7 +24,8 @@ export function getRefreshToken(){
 }
 export function getAuthHeader(){
     return {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json' // Указывает, что тело запроса в формате JSON
     }
 }
 

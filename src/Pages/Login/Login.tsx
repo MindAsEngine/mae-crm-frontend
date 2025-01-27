@@ -12,8 +12,8 @@ export default function LoginPage(){
     const [error, setError] = React.useState(null);
     const [touched, setTouched] = React.useState(false);
     const [login, setLogin] = React.useState({
-        login: "",
-        password: ""
+        login: "user",
+        password: "password"
     });
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,7 +29,10 @@ export default function LoginPage(){
     const fetchLogin = async () => {
         fetch(apiUrl+'/auth/login', {
             method: 'POST',
-            body: JSON.stringify(login)
+            headers: {
+                'Content-Type': 'application/json', // Указывает, что тело запроса в формате JSON
+            },
+            body: JSON.stringify(login),
         }).then(res => {
             if (!res.ok) {
                 throw new Error('Ошибка при входе');
@@ -42,27 +45,6 @@ export default function LoginPage(){
         }).catch((err) => {
             console.error(err);
             setError('Ошибка при входе');
-
-            // todo remove this
-            setTimeout(() => {
-                let user = {}
-                if(login.login === "admin"){
-                    user = {
-                        name: "adminName",
-                        surname: "adminSur",
-                        role: "admin"
-                    }
-                } else {
-                    user = {
-                        name: "userName",
-                        surname: "userSur",
-                        role: "user"
-                    }
-                }
-                setUser(user);
-                setAuth('token', 'refreshToken');
-                navigate('/');
-            }, 5000);
         })
     }
     if (isAuth()){
