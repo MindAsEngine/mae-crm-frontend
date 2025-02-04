@@ -3,18 +3,52 @@ import styles from "./login.module.scss";
 import Input from "../../Components/FormComponents/Input/Input.tsx";
 import {Button} from "../../Components/FormComponents/Button/Button.tsx";
 import clsx from "clsx";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
+import {isAuth, setAuth, setUser} from "./logout.ts";
 
+const apiUrl = import.meta.env.VITE_API_URL;
 export default function LoginPage(){
     const navigate = useNavigate();
+    const [error, setError] = React.useState(null);
+    const [touched, setTouched] = React.useState(false);
     const [login, setLogin] = React.useState({
         login: "",
         password: ""
     });
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(login);
-        // navigate('/');
+        setError(null);
+        if (login.login === "" || login.password === "") {
+            setError('Заполните все поля');
+            setTouched(true);
+            return;
+        } else {
+            fetchLogin();
+        }
+    }
+    const fetchLogin = async () => {
+        fetch(apiUrl+'/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Указывает, что тело запроса в формате JSON
+            },
+            body: JSON.stringify(login),
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Ошибка при входе');
+            }
+            return res.json();
+        }).then((data) => {
+            setUser(data.user);
+            setAuth(data.access_token, data.refresh_token);
+            navigate('/');
+        }).catch((err) => {
+            console.error(err);
+            setError('Ошибка при входе');
+        })
+    }
+    if (isAuth()){
+        return <Navigate to={'/' } replace={true}/>
     }
 
     return (
@@ -35,6 +69,8 @@ export default function LoginPage(){
                     <label className={styles.label}>
                         <span className={styles.text}>Логин</span>
                         <Input
+                            isValid={login.login !== ""}
+                            isTouchedDefault={touched}
                             before={
                             <span className={clsx(styles.icon, styles.user)}/>
                             }
@@ -50,9 +86,17 @@ export default function LoginPage(){
                             }
                             onChange={
                             (e) => setLogin({...login, password: e.target.value})
-                        } value={login.password} className={styles.input} placeholder="Введите ваш пароль" type="password"/>
+                        } value={login.password} className={styles.input}
+                            placeholder="Введите ваш пароль" type="password"
+                            isValid={login.password !== ""}
+                            isTouchedDefault={touched}
+
+                        />
                     </label>
-                    <Button className={styles.button} children={"Вход"} stylizedAs={'blue-dark'}/>
+                    {error && <div className={styles.error}>{error}</div>}
+                    <Button
+                        disabled={login.login === "" || login.password === ""}
+                        className={styles.button} children={"Вход"} stylizedAs={'blue-dark'}/>
                 </form>
             </div>
         </main>

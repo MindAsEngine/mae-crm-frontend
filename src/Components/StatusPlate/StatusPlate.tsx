@@ -11,7 +11,7 @@ type StatusPlateProps = {
     color?: 'red' | 'green' | 'grey' | 'yellow'
 }
 export default function StatusPlate({name, inEdit=false, color=undefined, onClick=()=>{}}: StatusPlateProps) {
-    const statusInfo = statusEnum.find(stInfo => stInfo.name === name);
+    const statusInfo = statusEnum.find(stInfo => stInfo.title === name);
     // const statusDefault = statusEnum.find(stInfo => stInfo.name === 'default');
 
     return (

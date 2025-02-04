@@ -69,6 +69,11 @@
         text-wrap: nowrap;
     }
   }
+  .error{
+    color: var(--color-red-600);
+    font: var(--font-m-medium);
+    text-wrap: nowrap;
+  }
 
   .input{
     width: unset;

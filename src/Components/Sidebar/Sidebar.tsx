@@ -4,21 +4,33 @@ import { Button } from '../FormComponents/Button/Button.tsx'
 import * as React from 'react'
 import styles from './sidebar.module.scss'
 import clsx from 'clsx'
+import {useEffect} from "react";
+import {getUser, isAdministrator, isAuth, logout} from "../../Pages/Login/logout.ts";
 
 const userImage = '/images/user.png'
 export default function Sidebar() {
 	const [isOpened, setIsOpened] = React.useState<boolean>(true);
-	const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
 	const navigate = useNavigate();
+	const [user, setUser] = React.useState<any>();
+	const isAdmin = isAdministrator();
 	const handleLogout = () => {
-		navigate('/login')
+		logout();
+		navigate('/login');
 	};
+	useEffect(() => {
+		if (!isAuth() || !getUser()) {
+			handleLogout();
+		} else {
+
+			setUser(getUser());
+
+		}
+	}, []);
 	const listItemClassName = (isActive: boolean) =>
 		isActive
 			? clsx(styles.list__item, styles.list__item_active)
 			: styles.list__item
 
-	// console.log(isOpened)
 	return (
 		<aside className={styles.sidebar}>
 			<nav className={styles.navigation}>
@@ -41,18 +53,7 @@ export default function Sidebar() {
 							}
 						/>
 					</li>
-					{/*<li>*/}
-					{/*	<NavLink*/}
-					{/*		to={'/advertisement'}*/}
-					{/*		children={routerNames['/advertisement']}*/}
-					{/*		className={({ isActive }) =>*/}
-					{/*			clsx(*/}
-					{/*				listItemClassName(isActive),*/}
-					{/*				styles.list__item_advertisement*/}
-					{/*			)*/}
-					{/*		}*/}
-					{/*	/>*/}
-					{/*</li>*/}
+
 					<li
 						onClick={(e) =>
 							e.target.tagName === 'SPAN' && setIsOpened(!isOpened)
@@ -134,8 +135,13 @@ export default function Sidebar() {
 						<img alt={'Avatar'} src={userImage}/>
 					</div>
 					<div className={styles.profile__text}>
-						<span className={styles.profile__name}>Неизвестный менеджер</span>
-						<span className={styles.profile__role}>менеджер</span>
+						<span className={styles.profile__name}>
+
+							{user?.name} {user?.surname}
+						</span>
+						<span className={styles.profile__role}>
+							{user?.role === 'admin' ? 'Администратор' : 'Менеджер'}
+						</span>
 					</div>
 				</div>
 				<div className={styles.profile__settings}>

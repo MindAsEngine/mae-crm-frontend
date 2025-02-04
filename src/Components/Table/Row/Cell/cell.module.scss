@@ -1,7 +1,8 @@
 .tableCell{
   box-sizing: border-box;
   background-color: inherit;
-  //height: max-content;
+  vertical-align: middle;
+
 }
 
 .tableCell.arrayInRow{
@@ -31,6 +32,7 @@
   color: var(--color-grey-700);
   font: var(--font-s-regular);
   text-wrap: nowrap;
+  height: 100%;
 }
 .tableCell{
   border-right: var(--border-grey-200-regular);

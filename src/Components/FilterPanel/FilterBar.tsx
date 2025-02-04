@@ -34,21 +34,21 @@ export default function FilterBar({
 		return (
 		<section className={styles.section}>
 			<div className={styles.common_filters}>
-				<Input
-					type='search'
-					placeholder='Поиск'
-					onChange={handleSearch}
-					value={filters.search}
-					className={styles.search}
-					before={(<span className={styles.search_icon}></span>)}
-					after={(<span className={styles.close_icon}
-								  onClick={()=>{
-									  setFilters((prevFilters: any) => ({
-										  ...prevFilters,
-										  search: '',
-									  }))}}
-					></span>)}
-				/>
+				{/*<Input*/}
+				{/*	type='search'*/}
+				{/*	placeholder='Поиск'*/}
+				{/*	onChange={handleSearch}*/}
+				{/*	value={filters.search}*/}
+				{/*	className={styles.search}*/}
+				{/*	before={(<span className={styles.search_icon}></span>)}*/}
+				{/*	after={(<span className={styles.close_icon}*/}
+				{/*				  onClick={()=>{*/}
+				{/*					  setFilters((prevFilters: any) => ({*/}
+				{/*						  ...prevFilters,*/}
+				{/*						  search: '',*/}
+				{/*					  }))}}*/}
+				{/*	></span>)}*/}
+				{/*/>*/}
 
 			</div>
 			{children}

@@ -97,7 +97,7 @@
         background-color: var(--color-grey-100);
       }
 
-      .options, .options:hover, .options:active {
+      .options, .options:hover, .options:active, .disabled, .disabled:hover, .disabled:active {
         color: var(--color-grey-400);
         background-color: var(--color-white);
         cursor: default;

@@ -6,6 +6,8 @@ import Loading from "../../Components/Loading/Loading.tsx";
 import ErrorComponent from "../../Components/Error/ErrorComponent.tsx"
 import AudienceCreate from "../../Components/Forms/Audience/AudienceCreate.tsx";
 import AdvertCreate from "../../Components/Forms/Advert/AdvertCreate.tsx";
+import {getAuthHeader, logout} from "../Login/logout.ts";
+import {useNavigate} from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,23 +18,25 @@ export default function AudiencePage() {
     const [isOpenCreateAudience, setIsOpenCreateAudience] = React.useState(false);
     const [isOpenCreateAdvert, setIsOpenCreateAdvert] = React.useState(false);
     const [initToReload, setInitToReload] = React.useState(true);
-
+    const navigate = useNavigate();
     React.useEffect(() => {
         const fetchData = async () => {
             setStatus("loading");
             await fetch(apiUrl+`/audiences?`, {
                 method: 'GET',
-                // mode: "no-cors",
-                headers: {
-                    // 'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-                    // 'Content-Type': 'application/json',
-                }})
+                headers: getAuthHeader()
+            })
                 .then((res) => {
-                    // console.log(res);
                     if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
+                        if (res.status === 401) {
+                            logout();
+                            navigate('/login');
+                            throw new Error(`Ошибка: ${res.status}. Недостаточно прав`);
+                        }
+                        else
+                            throw new Error(`Ошибка: ${res.status}`);
                     }
-                    return res.json(); // Парсим JSON только при успешном статусе
+                    return res.json();
                 })
                 .then((data) => {
                     setAudiences(data);
@@ -49,12 +53,7 @@ export default function AudiencePage() {
         fetchData();
         setInitToReload(false);
     }
-        // setStatus("loading")
-        // setInterval(() => {
-            // setAudiences(audienceData.audiences);
-            // console.log(audienceData.audiences)
-            // setStatus("success");
-        // }, 2000)
+
 
         }, [initToReload]);
 

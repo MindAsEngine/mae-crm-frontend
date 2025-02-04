@@ -7,7 +7,11 @@ import Report from "../../../Components/Report/Report.tsx";
 
 import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import jsonData from "./speed.json"; // Локальные данные для теста
+
+import {format} from "date-fns";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {getAuthHeader, logout} from "../../Login/logout.ts";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function ProcessedRequestsSpeedReport(){
@@ -15,14 +19,34 @@ export default function ProcessedRequestsSpeedReport(){
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
 	const [footer, setFooter] = useState([]); // Футер таблицы
+
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+
 	const [loading, setLoading] = useState(true); // Состояние загрузки
 	const [filters, setFilters] = useState({
-		search: "", // Поиск по ФИО
-		startDate: new Date(0),
-		endDate: new Date(),
-		sortField: "", // Поле для сортировки
-		sortOrder: "asc", // Порядок сортировки: asc или desc
+
+		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
+		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
+
+
 	});
+	const getParamsForRequest = () => {
+		const {start, end, } = filters;
+		const params = new URLSearchParams();
+		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
+		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
+
+		return params.toString();
+	}
+	const handleDateFormat = (date) =>{
+		const userInputDate = format(date, "yyyy-MM-dd")
+		const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+		return `${year}-${month}-${day}T00:00:00Z`;
+	}
+
+	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
+	const [initToReload, setInitToReload] = useState(true);
 
 	const [customSettings, setCustomSettings] = useState([]);
 	const [exportClicked, setExportClicked] = useState(false);
@@ -38,14 +62,7 @@ export default function ProcessedRequestsSpeedReport(){
 		);
 	}
 
-	const formatDate = (date) => {
-		const d = new Date(date);
-		const day = String(d.getDate()).padStart(2, '0'); // Добавляем ведущий ноль
-		const month = String(d.getMonth() + 1).padStart(2, '0'); // Добавляем ведущий ноль
-		const year = d.getFullYear();
 
-		return `${day}-${month}-${year}`;
-	};
 
 	const onCustomSettingApplied = () => {
 		// @ts-ignore
@@ -62,25 +79,17 @@ export default function ProcessedRequestsSpeedReport(){
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
-
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			// Формирование параметров для запроса
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start_date", formatDate(startDate)); // Начальная дата в формате ISO
-			if (endDate) params.append("end_date", formatDate(endDate)); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			await fetch(apiUrl+`/reports/speed?${params.toString()}`, {
+			setData([]);
+			await fetch(apiUrl+`/speed?${getParamsForRequest()}`, {
 				method: 'GET',
-				mode: 'no-cors',
-				credentials: 'include',
-				headers: {
-					'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-					'Content-Type': 'application/json',
-				}})
+				headers: getAuthHeader(),
+			})
 				.then((res) => {
 					if (!res.ok) {
+						if (res.status === 401) {
+							logout();
+							navigate('/login');
+						}
 						throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
@@ -93,18 +102,17 @@ export default function ProcessedRequestsSpeedReport(){
 				})
 				.catch((err) => {
 					console.error(err);
-					// alert("Ошибка загрузки данных");
-					setTimeout(() => {
-					}, 1000); // Имитация задержки в 1 секунду
-					// const data = jsonData;
-					// setData(data?.data); // Установка данных
-					// setFooter(data?.footer); // Установка футера
-					// setHeaderBefore(data?.headers); // Установка заголовков
-					// setDefaultCustomSettings(data?.headers);
+
 				});
 		};
-		fetchData();
-	}, [filters]);
+		if (initToReload) {
+			fetchData().then(() => {
+				navigate('?'+getParamsForRequest());
+			})
+			setInitToReload(false);
+		}
+
+	}, [initToReload]);
 
 	useEffect(() => {
 		// @ts-ignore
@@ -124,50 +132,61 @@ export default function ProcessedRequestsSpeedReport(){
 	};
 
 	const onClickCell = (rowPos: string | number, columnPos: string, cellData: string) => {
-		console.log(rowPos, columnPos, cellData);
-		// setIsOpenCurtain(true);
+		const params = new URLSearchParams();
+		// alert(`Строка: ${rowPos}, Столбец: ${columnPos}, Данные: ${cellData}`);
+		if(rowPos.toString() === '1')
+			params.append("status", columnPos.toString());
+		if (searchParams.get('start_date')) {
+			params.append("start_date", searchParams.get('start_date'));
+		}
+		if (searchParams.get('end_date')) {
+			params.append("end_date", searchParams.get('end_date'));
+		}
+		navigate('/tasks?' + params.toString());
 	}
 	const handleExportClick = () => {
 		setExportClicked(true);
 	}
 
 	useEffect(() => {
-		const handleExport = async (api) => {
+		const handleExport = async () => {
+			const params = getParamsForRequest();
+			await fetch(apiUrl+`/speed/export?`+ params, {
+				method: 'GET',
+				headers: getAuthHeader(),
 
+			}).then(res => {
+				// console.log(res);
+				if (!res.ok) {
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					} else {
+						throw new Error('Ошибка при получении файла');
+					}
+				}
+				return res.blob();
+			}).then((blob) => {
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `call-center_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link?.parentNode?.removeChild(link);
+				window.URL.revokeObjectURL(url);
+			}).catch(err => {
+					console.log(err)
+				}
+			).finally(() => {
+				setExportClicked(false);
+			});
 		}
 		if (exportClicked) {
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			handleExport(apiUrl+`/call-center/export?${params.toString()}`)
-				.then(() => {
-					setExportClicked(false);
-				});
+			handleExport();
 		}
 	}, [exportClicked]);
-	const handleStartDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (start date):', updatedFilters);
-			return {
-				...prevFilters,
-				startDate: date,
-			};
-		});
-	};
 
-	const handleEndDateChange = (date) => {
-		setFilters((prevFilters) => {
-			// console.log('Updated Filters (end date):', updatedFilters);
-			return {
-				...prevFilters,
-				endDate: date,
-			};
-		});
-	};
 	return (
 		<>
 
@@ -177,7 +196,7 @@ export default function ProcessedRequestsSpeedReport(){
 					filters={filters}
 					setFilters={setFilters}
 					onClickCell={onClickCell}
-					// isLoading={Loading}
+					isLoading={loading}
 			>
 
 				<div className={styles.custom}>
@@ -190,18 +209,19 @@ export default function ProcessedRequestsSpeedReport(){
 								 onCheckboxChanged={onCheckboxChanged}
 					/>
 					<RangeDate
-						startDate={filters.startDate}
-						endDate={filters.endDate}
-						setStartDate={(date) => {
-							handleStartDateChange(date)
-							// console.log('Set start date IN FILTER BAR', date)
-						}}
-						setEndDate={(date) => {
-							handleEndDateChange(date)
-							// console.log('Set end date IN FILTER BAR', date)
-						}}
-					/>
+						disabled={!(data?.length > 0)}
+						setNeedToReset={setNeedToResetDateTime}
+						needToReset={needToResetDateTime}
+						oneCalendar={false}
+						withTime={false}
+						range={{start: filters.start, end: filters.end}}
+						setRange={range =>{
+							setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
+							setInitToReload(true);
+
+						}}/>
 					<Button
+						disabled={!(data?.length > 0)}
 						stylizedAs={'blue-dark'}
 						exportButton={true}
 						onClick={handleExportClick}

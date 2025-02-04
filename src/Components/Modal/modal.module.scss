@@ -2,7 +2,7 @@
   z-index: 100;
   display: none;
   justify-content: center;
-  align-items: center;
+  //align-items: center;
   box-sizing: border-box;
   border: none;
   visibility: hidden;
@@ -25,6 +25,10 @@
   top: calc(100% - 13px + 8px);
   left: calc(100% - 13px - 408px);
   flex-grow: 2;
+  overflow-y: hidden;
+
+  max-height: 70vh;
+
 }
 
 .modal.windowMode.isOpen{
@@ -50,9 +54,19 @@
   overflow: hidden auto;
   background-color: var(--color-white);
   border-radius: var(--border-radius-m);
-
-
 }
+
+.modal.dropDown.isOpen .forScroll{
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden auto;
+
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-m);
+}
+
+
 
 .forScroll::-webkit-scrollbar{
   width: 16px;
@@ -68,6 +82,10 @@
   border-radius: var(--border-radius-m);
 }
 
+.dropDown .window{
+  position: relative;
+}
+
 .window{
   display: flex;
   flex-grow: 2;
@@ -78,7 +96,6 @@
   border-radius: var(--border-radius-m);
   box-shadow: var(--effect-shadow-l-center);
 }
-
 
 .modal.windowMode.isOpen .window{
   flex-grow: 0;
@@ -141,13 +158,12 @@
   //padding-bottom: 20px;
 }
 
-
 .footer{
   display: flex;
   flex-shrink: 0;
   justify-content: flex-end;
   align-items: center;
-  gap:8px;
+  gap: 8px;
   padding: 20px;
   background-color: var(--color-white);
   border-top: var(--border-grey-100-medium);
@@ -155,19 +171,22 @@
   border-bottom-left-radius: var(--border-radius-m);
 }
 
-.windowMode .header{
+.forScroll .header{
   position: sticky;
-  top: 0;
+  top: -0px;
   z-index: 1;
+
 }
 
-.windowMode .footer{
+.forScroll .footer{
   position: sticky;
-  bottom: 0;
+  bottom: -0px;
   z-index: 1;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+
 }
+
 .error{
   //position: absolute;
   color: var(--color-red-500);

@@ -7,6 +7,8 @@ import clsx from "clsx";
 import Form from "../Form.tsx";
 import {Button} from "../../FormComponents/Button/Button.tsx";
 import { format } from "date-fns";
+import {getAuth, getAuthHeader, logout} from "../../../Pages/Login/logout.ts";
+import {useNavigate} from "react-router-dom";
 
 class Audience {
     id: number;
@@ -20,7 +22,7 @@ class Audience {
 type AudienceCreateProps = {
     isOpenCreateAudience: boolean;
     setIsOpenCreateAudience: any;
-    setInitToReload: ()=> {}
+    setInitToReload?: ()=> {}
 
 }
 const non_target_reasons_options = [
@@ -87,7 +89,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     const [isTouched, setIsTouched] = useState(false);
     const [needToR, setNeedToR] = useState(false);
     const [errMessage, setErrMessage] = useState(null);
-
+    const navigate = useNavigate();
         const resetAudience = () => {
             setNeedToR(true);
             setAudience({
@@ -118,16 +120,19 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             filter.rejection_reasons = rejection_reasons.map(reason => reason.name);
         if (Array.isArray(non_target_reasons) && non_target_reasons.length > 0)
             filter.non_target_reasons = non_target_reasons.map(reason => reason.name);
-        if (creation_date_from && creation_date_to){
+        if (creation_date_from) {
             filter.creation_date_from = handleDateFormat(creation_date_from);
+
+            // console.log(creation_date_to, creation_date_from)
+        }
+        if (creation_date_to) {
             filter.creation_date_to = handleDateFormat(creation_date_to);
             // console.log(creation_date_to, creation_date_from)
         }
+
         fetch(apiUrl+`/audiences`, {
             method: 'POST',
-            headers: {
-                // 'Content-Type': 'application/json'
-            },
+            headers: getAuthHeader(),
             body: JSON.stringify({
                 name: name,
                 filter: filter
@@ -137,8 +142,15 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                 if (res.ok) {
                     resetAudience();
                     setIsOpenCreateAudience(false);
-                    setInitToReload(true);
+                    if (typeof setInitToReload === "function")
+                        setInitToReload(true);
                     return;
+                } else {
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login');
+                        throw new Error('Ошибка авторизации');
+                    }
                 }
                 return res.json();
             }).then(err => {throw new Error(err.error)})
@@ -151,7 +163,8 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
     }
         const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (audience.title && (audience.end && audience.start) ) {
+            setErrMessage(null);
+            if (audience.title && (audience.start) ) {
                 // console.log("Audience data:", audience);
                 postAudiences(audience.title, audience.statuses, audience.rejection_reasons, audience.non_target_reasons,
                     audience.start,  audience.end );
@@ -159,7 +172,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                  // Закрыть модалку после отправки
             } else{
                 setIsTouched(true);
-                if (!audience.title || !(audience.end && audience.start)) {
+                if (!audience.title || !( audience.start)) {
                     setErrMessage("Заполните все обязательные поля");
                 }
             }
@@ -178,15 +191,16 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
         return (
 
             <Form
+                key={"createAudience"}
                 isOpen={isOpenCreateAudience}
                 isDropDown={false}
-                onClickWhiteButton={() =>{
+                onClose={() =>{
                     resetAudience();
                     setIsOpenCreateAudience(false);
                 }}
                 title="Создать аудиторию"
                 classNameContent={styles.form}
-                onClose={resetAudience}
+                // onClose={resetAudience}
                 needScroll={false}
                 footer={<>
                     <Button stylizedAs="white" onClick={handleResetClick}>
@@ -201,12 +215,12 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
             >
                 <label className={styles.label}>
                     <span className={clsx(styles.span, styles.required)}>
-                        Заголовок</span>
+                        Название аудитории</span>
                     <Input
                         onChange={handleChange}
                         value={audience?.title || ""}
                         className={styles.input}
-                        placeholder="Наберите заголовок задачи"
+                        placeholder="Наберите название аудитории"
                         type="text"
                         as="input"
                         name="title"
@@ -218,10 +232,10 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                     />
                 </label>
                 <label className={styles.labelDate}>
-                                       <span className={clsx(styles.span, styles.required)}>
-Срок исполнения задачи</span>
+                    <span className={clsx(styles.span, styles.required)}>Период заявок</span>
 
                     <DateRange
+
                         inputStyle={styles.inputDate_}
                         // startDate={audience.start}
                         // endDate={audience.end}
@@ -236,7 +250,7 @@ const AudienceCreate = ({ isOpenCreateAudience, setInitToReload, setIsOpenCreate
                         isTouchedDefault={isTouched}
                         needToReset={needToR}
                         setNeedToReset={setNeedToR}
-                        isValidStyle={audience.start !== null && audience.end !== null}
+                        isValidStyle={audience.start !== null}
                                         />
                 </label>
                 <Select

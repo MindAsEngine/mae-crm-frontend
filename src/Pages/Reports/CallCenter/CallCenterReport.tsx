@@ -4,108 +4,81 @@ import styles from "../reports.module.scss";
 import { Button } from "../../../Components/FormComponents/Button/Button.tsx";
 import Report from "../../../Components/Report/Report.tsx";
 import RangeDate from "../../../Components/FormComponents/RangeDate/RangeDate.tsx";
-import ModalCustom from "../../../Components/Forms/CustomModal/ModalCustom.tsx";
-import jsonData from "./call-center.json";
+
+import {format} from "date-fns";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {getAuthHeader, logout} from "../../Login/logout.ts";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function CallCenterReport() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const [data, setData] = useState([]); // Данные для таблицы
 	const [header, setHeader] = useState([]); // Заголовок таблицы
 	const [headerBefore, setHeaderBefore] = useState([]); // Заголовок таблицы
 	const [footer, setFooter] = useState([]); // Футер таблицы
 	const [loading, setLoading] = useState(true); // Состояние загрузки
+	const [needToResetDateTime, setNeedToResetDateTime] = useState(false);
+	const [countOfClickOnHeader, setCountOfClickOnHeader] = useState(0);
 	const [filters, setFilters] = useState({
-		search: "", // Поиск по ФИО
-		startDate: null, // Начальная дата
-		endDate: null, // Конечная дата
-		sortField: "", // Поле для сортировки
-		sortOrder: "asc", // Порядок сортировки: asc или desc
+		// search: "", // Поиск по ФИО
+		start: searchParams.get('start_date') ? new Date(searchParams.get('start_date')) : null, // Начальная дата
+		end: searchParams.get('end_date') ? new Date(searchParams.get('end_date')) : null, // Конечная дата
+		sortField: searchParams.get('order_field') ? searchParams.get('order_field') : "", // Поле для сортировки
+		sortOrder: searchParams.get('order_direction') ? searchParams.get('order_direction') : "", // Порядок сортировки: asc или desc
 	});
-	const [customSettings, setCustomSettings] = useState([]);
+
 	const [exportClicked, setExportClicked] = useState(false);
-	const setDefaultCustomSettings = (header) => {
-		setCustomSettings(header.filter(cell => cell.is_additional)
-			.map(cell => (
-				{
-					name: cell.name,
-					title: cell.title,
-					applied_visible: cell.is_visible
-					// applied_visible: !cell.is_hidden_by_user if is to prev custom set(before apply)
-				}))
-		);
+	const getParamsForRequest = () => {
+		const {start, end, sortOrder, sortField} = filters;
+		const params = new URLSearchParams();
+		if (start) params.append("start_date", handleDateFormat(start)); // Начальная дата в формате ISO
+		if (end) params.append("end_date", handleDateFormat(end)); // Конечная дата в формате ISO
+		if (sortField !== "") params.append("order_field", sortField); // Поле сортировки
+		if (sortOrder !== "") params.append("order_direction", sortOrder); // Порядок сортировки
+		return params.toString();
 	}
-	 const handleStartDateChange = (date) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			startDate: date,
-		}));
-	};
-
-	 const handleEndDateChange = (date) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			endDate: date,
-		}));
-	};
-
-	 const onCustomSettingApplied = () => {
-		// @ts-ignore
-		setHeader((prevHeader) =>
-			prevHeader.map((cell) => {
-				const setting = customSettings.find((s) => s.name === cell.name);
-				return setting
-					? { ...cell, is_hidden_by_user: !setting.applied_visible }
-					: cell;
-			})
-		);
-	};
-
+	const handleDateFormat = (date) =>{
+		const userInputDate = format(date, "yyyy-MM-dd")
+		const [year, month, day] = userInputDate.split('-'); // Разбиваем строку по '-
+		return `${year}-${month}-${day}T00:00:00Z`;
+	}
 
 	useEffect(() => {
 		// Симуляция загрузки данных с сервера
 		const fetchData = async () => {
 			setLoading(true); // Установка состояния загрузки
-
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			// Формирование параметров для запроса
-			const params = new URLSearchParams();
-			if (search !== "") params.append("search", search); // Добавляем параметр поиска
-			if (startDate) params.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) params.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") params.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
+			setData([]);
+			const params = getParamsForRequest();
 			await fetch(apiUrl+`/call-center?${params.toString()}`, {
-					method: 'GET',
-					credentials: 'include',
-					headers: {
-						'Accept': 'application/json', // Явно указываем, что ожидаем JSON
-						'Content-Type': 'application/json',
-					}})
+				method: 'GET',
+				headers: getAuthHeader()
+			})
 				.then((res) => {
 					if (!res.ok) {
-						throw new Error(`HTTP error! status: ${res.status}`);
+						if (res.status === 401) {
+							logout();
+							navigate('/login');
+						}
+						else
+							throw new Error(`HTTP error! status: ${res.status}`);
 					}
 					return res.json(); // Парсим JSON только при успешном статусе
 				})
 				.then((data) => {
+					// throw new Error("asd");
 					setData(data?.data); // Установка данных
 					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					setHeaderBefore(data?.headers); // Установка заголовка
 				})
 				.catch((err) => {
-					setTimeout(() => {
-					}, 1000); // Имитация задержки в 1 секунду
-					const data = jsonData;
-					setData(data?.data); // Установка данных
-					setFooter(data?.footer); // Установка футера
-					setHeaderBefore(data?.headers); // Установка заголовков
-					setDefaultCustomSettings(data?.headers);
+					console.error(err);
 				})
 				.finally(() =>{
 					setLoading(false);
+					navigate('?'+getParamsForRequest());
 				});
 		};
 		fetchData();
@@ -113,68 +86,80 @@ export default function CallCenterReport() {
 
 	useEffect(() => {
 		// @ts-ignore
-		setHeader( headerBefore.map((cell) => ({ ...cell,
-			is_hidden_by_user: !cell.is_visible })));
+
+			setHeader(headerBefore.map((cell) => ({ ...cell,
+				is_hidden_by_user: !cell.is_visible })));
+
+
 	}, [headerBefore]);
-	const onCheckboxChanged = (name) => {
-		// @ts-ignore
-		setCustomSettings((prevSettings) =>
-			prevSettings.map((cell) =>
-				cell.name === name
-					? { ...cell, applied_visible: !cell.applied_visible }
-					: cell
-			)
-		);
-	};
+
 	const handleExportClick = () => {
 		setExportClicked(true);
 	}
 	useEffect(() => {
-		const handleExport = async (api) => {
-			const { search, startDate, endDate, sortField, sortOrder } = filters;
-			const reqBody :object = {};
-			if (search !== "") reqBody.append("search", search); // Добавляем параметр поиска
-			if (startDate) reqBody.append("start", startDate?.toISOString()); // Начальная дата в формате ISO
-			if (endDate) reqBody.append("end", endDate?.toISOString()); // Конечная дата в формате ISO
-			if (sortField !== "") reqBody.append("sort", sortField + "_" + sortOrder); // Поле сортировки
-
-			const res = await fetch(api, {
-				method: 'POST',
-				credentials: 'include',
-				headers: {
-					'Accept': 'application/vnd.ms-excel',
-					'Content-Type': 'application/vnd.ms-excel',
-
-				},
-				body: JSON.stringify(reqBody),
-			}).then((res) => {
+		const handleExport = async () => {
+			const params = getParamsForRequest();
+			await fetch(apiUrl+`/call-center/export?`+ params, {
+				method: 'GET',
+				headers: getAuthHeader(),
+			}).then(res => {
+				// console.log(res);
 				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
+					if (res.status === 401) {
+						logout();
+						navigate('/login');
+					}
+					else
+					throw new Error('Ошибка при получении файла');
 				}
 				return res.blob();
 			}).then((blob) => {
-				const url = window.URL.createObjectURL(blob);
-				const a = document.createElement ('a');
-				a.href = url;
-				a.download = 'report.xlsx';
-				a.click();
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', `call-center_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link?.parentNode?.removeChild(link);
 				window.URL.revokeObjectURL(url);
-
-			}).catch((err) => console.error(err));
-		}
-		if (exportClicked) {
-
-			handleExport(apiUrl+`/call-center/export`)
-				.then(() => {
+			}).catch(err => {
+					console.log(err)
+				}
+			).finally(() => {
 				setExportClicked(false);
 			});
 		}
+		if (exportClicked) {
+			handleExport();
+		}
 	}, [exportClicked]);
 
+	const onHeaderClick = (columnPos: string) => {
+		let direction = '';
+		let field = '';
+		if (countOfClickOnHeader === 0) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'ASC';
+		} else if (countOfClickOnHeader === 1 && filters.sortField === field) {
+			setCountOfClickOnHeader(prevState => prevState+1);
+			direction = 'DESC';
+		} else {
+			setCountOfClickOnHeader(0);
+			if (filters.sortField === field) {
+				direction = 'ASC';
+			} else {
+				direction = '';
+			}
+		}
+		if (direction == 'ASC' || direction == 'DESC') {
+			setFilters({
+				...filters,
+				sortField: field,
+				sortOrder: direction,
+			})
+		}
+	}
 
-
-	// console.log("filters", filters);
-	//todo sorting
 	return (
 		<Report
 			data={data}
@@ -183,23 +168,26 @@ export default function CallCenterReport() {
 			footer={footer}
 			setFilters={setFilters}
 			isLoading={loading}
+			onHeaderClick={onHeaderClick}
 		>
 			<div className={styles.custom}>
-				<ModalCustom
-					customSettings={customSettings}
-					setCustomSettings={setCustomSettings}
-					header={header}
-					setDefaultCustomSettings={setDefaultCustomSettings}
-					onCustomSettingApplied={onCustomSettingApplied}
-					onCheckboxChanged={onCheckboxChanged}
-				/>
+
+
 				<RangeDate
-					startDate={filters.startDate}
-					endDate={filters.endDate}
-					setStartDate={(date) => handleStartDateChange(date)}
-					setEndDate={(date) => handleEndDateChange(date)}
-				/>
+					disabled={!(data?.length > 0)}
+
+					setNeedToReset={setNeedToResetDateTime}
+					needToReset={needToResetDateTime}
+					oneCalendar={false}
+					withTime={false}
+					range={{start: filters.start, end: filters.end}}
+					setRange={range =>{
+						setFilters(prevFilters => ({...prevFilters, start: range.start, end: range.end}))
+
+
+					}}/>
 				<Button
+					disabled={!(data?.length > 0)}
 					stylizedAs={"blue-dark"}
 					exportButton={"white"}
 					onClick={handleExportClick}

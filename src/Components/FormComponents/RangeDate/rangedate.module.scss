@@ -24,6 +24,9 @@
 .imgCalendar.active{
   background-color: var(--color-grey-700);
 }
+.imgCalendar.disabled{
+  background-color: var(--color-grey-300);
+}
 
 .calendarDropdown{
   position: absolute;

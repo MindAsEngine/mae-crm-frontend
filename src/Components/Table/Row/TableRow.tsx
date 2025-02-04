@@ -15,11 +15,14 @@ type TableRowProps = {
 };
 
 export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
+	// console.log(header);
 	return (
 		<tr className={clsx(style.tableRow, row?.is_anomaly && style.anomaly,
 			isFooter && style.footer,
 			)}>
-			{header.map((headerCell, index) => (
+			{Array.isArray(header) &&
+				header.map((headerCell, index) => (
+
 				  (headerCell.is_hidden_by_user === false || headerCell.is_visible )  &&
 				  (
 							  <Cell
@@ -30,6 +33,7 @@ export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows
 								  onClickCell={onClickCell}
 								  columnName={headerCell.name}
 								  idData={row['id'] as number}
+								 rowName={row[header[0].name] as string}
 								  cellData={row[headerCell.name]}
 								  columnFormat={headerCell.format}
 								  isChecked={isChecked}

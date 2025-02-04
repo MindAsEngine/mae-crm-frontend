@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from "./checkbox.module.scss"
 import clsx from "clsx";
-import {useEffect} from "react";
+
 type CheckboxProps = {
     checked?: boolean;
     disabled?: boolean;
@@ -12,7 +12,7 @@ type CheckboxProps = {
     name?: string;
 }
 export default function Checkbox({checked, name, disabled, onChange, allCheckbox=false, isAllUnchecked=true, isAllChecked}: CheckboxProps){
-    if(allCheckbox) console.log(isAllChecked, isAllUnchecked, "all");
+    // if(allCheckbox) console.log(isAllChecked, isAllUnchecked, "all");
     const [isFocused, setIsFocused] = React.useState(false);
     return (
         <label

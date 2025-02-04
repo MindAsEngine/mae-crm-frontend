@@ -5,6 +5,8 @@ import { Button } from "../FormComponents/Button/Button.tsx";
 import clsx from "clsx";
 import Checkbox from "../FormComponents/Checkbox/Checkbox.tsx";
 import Confirmed from "../Forms/Confirmed/Confirmed.tsx";
+import { Link } from "react-router-dom";
+import {getAuthHeader, logout} from "../../Pages/Login/logout.ts";
 
 type AudienceCardProps = {
     id: number;
@@ -15,6 +17,7 @@ type AudienceCardProps = {
     integrations: {
         cabinet_name: string
     }[];
+    application_count: number;
     chosen?: [];
     setChosen?: (nevers: never[]) => void;
     setInitToReload?: () => void;
@@ -24,7 +27,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
-    const { id, name, updated_at, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
+    const { id, name, updated_at, application_count, created_at, integrations, chosen, setChosen,setInitToReload, setIsModalConnectOpen} = audienceData;
 
     const [created_, setCreated_] = React.useState(created_at);
     const [updated_, setUpdated_] = React.useState(updated_at);
@@ -57,14 +60,20 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
     const handleDelete = () => {
         fetch(apiUrl+`/audiences/${id}`, {
             method: 'DELETE',
-            headers: {
-                // 'Content-Type': 'application/json'
-            },
+            headers: getAuthHeader()
             }
         ).then((res) => {
             if (res.ok) {
                 setInitToReload(true);
                 setIsConfirmDeleteOpen(false);
+            } else {
+                if (res.status === 401) {
+                    logout();
+                    navigate('/login');
+                    throw new Error('Ошибка доступа при удалении аудитории');
+                }
+                else
+                    throw new Error('Ошибка при удалении аудитории');
             }
 
             }
@@ -79,18 +88,25 @@ export default function AudienceCard({ ...audienceData }: AudienceCardProps) {
 const handleDisconnect = () => {
     fetch(apiUrl+`/audiences/${id}/disconnect`,{
         method: 'DELETE',
-        headers: {
-            // 'Content-Type': 'application/json'
-        },
+        headers: getAuthHeader()
     }).then((res) => {
         if (res.ok) {
             setInitToReload(true);
             setIsConfirmDisconnectOpen(false);
         }
+        else {
+            if (res.status === 401) {
+                logout();
+                navigate('/login');
+                throw new Error('Ошибка  доступа при отключении рекламы');
+            }
+            else
+                throw new Error('Ошибка при отключении рекламы');
+        }
     }).
         catch((err) => {
             console.log(err);
-        setIsConfirmDeleteOpen(false);
+            setIsConfirmDeleteOpen(false);
             })
         }
     const [exportClicked, setExportClicked] = useState(false);
@@ -104,11 +120,17 @@ const handleDisconnect = () => {
         const handleExport = async () => {
             await fetch(apiUrl+`/audiences/${id}/export`, {
                 method: 'GET',
-
+                headers: getAuthHeader(),
             }).then(res => {
                 // console.log(res);
                 if (!res.ok) {
-                    throw new Error('Ошибка при получении файла');
+                    if (res.status === 401) {
+                        logout();
+                        navigate('/login');
+                        throw new Error('Ошибка доступа при получении файла');
+                    }
+                    else
+                        throw new Error('Ошибка при получении файла');
                 }
                 return res.blob();
             }).then((blob) => {
@@ -157,13 +179,14 @@ const handleDisconnect = () => {
                            isOpen={isConfirmDeleteOpen}
                            onConfirm={() => handleDelete() }
                            setIsOpen={setIsConfirmDeleteOpen}
-                           title={"Удалить"}/>
+                           title={"Удалить"}
+                />
                 <Confirmed description={"Вы уверены, что хотите отключить рекламу?"}
                            isOpen={isConfirmDisconnectOpen}
                            onConfirm={() => handleDisconnect()}
                            setIsOpen={setIsConfirmDisconnectOpen}
-                           title={"Отключить рекламу"}/>
-
+                           title={"Отключить рекламу"}
+                />
                 <Button
                     as={'div'}
                     className={clsx(styles.settingButton, isOptionsOpen && styles.opened)}
@@ -184,7 +207,8 @@ const handleDisconnect = () => {
                             }>
                                 Подключить рекламу
                             </a>
-                            <a className={styles.item} onClick={() => {
+                            <a className={clsx(styles.item, application_count === 0 && styles.disabled)
+                            } onClick={() => {
                                 handleExportClick()
                             }}>
                             Экспорт аудитории
@@ -199,9 +223,10 @@ const handleDisconnect = () => {
                 </Button>
             </div>
             <div className={styles.content}>
-                <div className={styles.text}>
-                    Время последней отправки: {updated_}
-                </div>
+                <Link to={'/tasks?audience_name=' + name}
+                    className={styles.text}>
+                    Количество заявок: {application_count}
+                </Link>
             </div>
             <div className={styles.footer}>
                 <div className={styles.info}>

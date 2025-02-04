@@ -1,16 +1,22 @@
-.inputContainer{
+.container{
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
   box-sizing: border-box;
   width: 260px;
-  height: 40px;
   padding: 8px 14px;
   border: var(--border-grey-300-regular);
   border-radius: var(--border-radius-xs);
   transition: all 0.3s;
 }
+.inputContainer{
+  height: 40px;
+}
+.textareaContainer{
+  height: 100px;
+}
+
 
 .inputContainer:hover{
   border: var(--border-grey-400-regular);
@@ -24,7 +30,7 @@
   box-shadow: var(--effect-red-shadow);
 }
 
-.focused{
+.focused:not(.readOnly){
     border: var(--border-grey-300-regular);
     box-shadow: var(--effect-grey-shadow);
 }
@@ -49,6 +55,7 @@
 
 textarea.input{
     resize: none;
+    //height: 100px;
 }
 
 .input::placeholder{
@@ -64,5 +71,11 @@ textarea.input{
 .input:focus::placeholder{
   box-sizing: border-box;
   color: rgb(71 84 103 / 100%);
+}
+
+.readOnly{
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-500);
+  cursor: not-allowed;
 }
 

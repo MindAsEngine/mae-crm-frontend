@@ -26,14 +26,18 @@
    color: var(--color-red-300);
  }
 
-.input, .textarea,  .inputDate_{
+.label .input, ,  .labelDate .inputDate_{
 //.labelDate > div > div > div{
   width: 368px;
   height: 46px;
 }
+.labelDate .inputDate_{
+  flex-direction: row-reverse;
+}
 
-.textarea{
+.label .textarea{
     min-height: 140px;
+  width: 368px;
 
  textarea {
    height: 100%;
