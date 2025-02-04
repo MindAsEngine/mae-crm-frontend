@@ -15,7 +15,7 @@ type TableRowProps = {
 };
 
 export default function TableRow({ row,isFooter=false, isChecked, setCheckedRows, header, onClickCell }: TableRowProps) {
-	console.log(header);
+	// console.log(header);
 	return (
 		<tr className={clsx(style.tableRow, row?.is_anomaly && style.anomaly,
 			isFooter && style.footer,

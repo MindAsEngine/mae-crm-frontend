@@ -250,7 +250,7 @@ export default function TasksPage() {
 		+ (filters.start && filters.end ||  filters.start ? 1 : 0) +
 		(filters.daysInStatus ? 1 : 0);
 	const onScrollEnd = () => {
-		// console.log('scroll end');
+		console.log('scroll end');
 		if (page < totalResults) {
 			setPage((prev) => prev + 1);
 		}

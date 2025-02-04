@@ -8,7 +8,6 @@ import clsx from "clsx";
 import {useLocation} from "react-router-dom";
 import Loading from "../Loading/Loading.tsx";
 import ErrorComponent from "../Error/ErrorComponent.tsx";
-import {is} from "date-fns/locale";
 
 type TableProps = {
 	data: Array<object>
@@ -111,8 +110,11 @@ export default function Table({
 		)} ref={tableWrapperRef}
 			 onScroll={event => {
 				 if (tableWrapperRef.current) {
+					 // console.log(tableWrapperRef.current.getBoundingClientRect());
 
-					 if (tableWrapperRef.current.scrollTop + tableWrapperRef.current.clientHeight >= tableWrapperRef.current.scrollHeight) {
+					// console.log(tableWrapperRef.current.scrollTop + tableWrapperRef.current.clientHeight, tableWrapperRef.current.scrollHeight);
+					 if (tableWrapperRef.current.scrollTop + tableWrapperRef.current.clientHeight + 40 >= tableWrapperRef.current.scrollHeight) {
+
 						 if (typeof onScrollEnd === 'function') {
 							 onScrollEnd();
 						 }
