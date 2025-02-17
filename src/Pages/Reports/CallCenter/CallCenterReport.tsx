@@ -174,7 +174,7 @@ export default function CallCenterReport() {
 
 
 				<RangeDate
-					disabled={!(data?.length > 0)}
+					disabled={loading}
 
 					setNeedToReset={setNeedToResetDateTime}
 					needToReset={needToResetDateTime}
